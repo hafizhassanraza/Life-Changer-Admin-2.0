@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.ActivityNewInvestorReqDetails">
+
+
+
+    <RelativeLayout
+        android:id="@+id/v1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cd1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:cardElevation="10dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginLeft="10dp"
+            app:cardCornerRadius="6dp">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_launcher_background"/>
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/cd1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvInvestorName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textprimary"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:text="Muhammad Mujahid"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S/D/O"
+                    android:textSize="10dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/secondary_m"/>
+                <TextView
+                    android:id="@+id/tvInvestorFatherName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mujahid Khokhar"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/teal_200"/>
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tvInvestorCnic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/statusbarcolor"
+                android:text="38464-66146141-4"/>
+            <TextView
+                android:id="@+id/tvInvestorPhoneNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/statusbarcolor"
+                android:text="030303004536"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/v1">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/secondary"
+                app:cardElevation="3dp"
+                      android:layout_below="@+id/v1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_column="0"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_alignParentTop="true"
+                        android:textColor="@color/primary"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="15dp"
+                        android:text="Investor's Primary Bank Account"/>
+                    <TextView
+                        android:id="@+id/tvInvestorBankName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_alignParentTop="true"
+                        android:textColor="@color/SecondaryVariant"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="15dp"
+                        android:text="Bank Name"/>
+
+
+                    <TextView
+                        android:id="@+id/tvInvestorBankAccountTittle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Account Tittle"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="15dp"
+                        android:textColor="@color/SecondaryVariant"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/tvInvestorBankAccountNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="000000000000000"
+                        android:layout_marginBottom="10dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="15dp"
+                        android:textColor="@color/SecondaryVariant"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/secondary"
+                app:cardElevation="3dp"
+                android:layout_marginTop="2dp"
+                android:layout_below="@+id/v1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_column="0"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_alignParentTop="true"
+                        android:textColor="@color/primary"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="15dp"
+                        android:text="Investor's Postal Address"/>
+                    <TextView
+                        android:id="@+id/tvInvestorAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_alignParentTop="true"
+                        android:textColor="@color/SecondaryVariant"
+                        android:layout_marginHorizontal="15dp"
+                        android:text="Address"/>
+
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/secondary"
+                app:cardElevation="3dp"
+                android:layout_marginTop="2dp"
+                android:layout_below="@+id/v1">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvHeader1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_alignParentTop="true"
+                        android:textColor="@color/primary"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="15dp"
+                        android:text="Investor's Nominee (Father)"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvHeader1"
+                        android:orientation="horizontal">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            app:cardCornerRadius="10dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="10dp"
+                            app:cardElevation="4dp">
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="fitCenter"
+                                android:src="@mipmap/ic_launcher"/>
+                        </androidx.cardview.widget.CardView>
+
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_toRightOf="@id/cd1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvNomineeName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/SecondaryVariant"
+                                android:textSize="16dp"
+                                android:textStyle="bold"
+                                android:text="Muhammad Mujahid"/>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="S/D/O"
+                                    android:textSize="10dp"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_alignParentLeft="true"
+                                    android:textColor="@color/gray"/>
+                                <TextView
+                                    android:id="@+id/tvNomineeFatherName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Mujahid Khokhar"
+                                    android:textSize="15dp"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_alignParentLeft="true"
+                                    android:textColor="@color/SecondaryVariant" />
+
+                            </LinearLayout>
+                            <TextView
+                                android:id="@+id/tvNomineeCNIC"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/SecondaryVariant"
+                                android:text="38464-66146141-4"/>
+                            <TextView
+                                android:id="@+id/tvNomineePhone"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/SecondaryVariant"
+                                android:text="030303004536"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/tvNomineeAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_alignParentTop="true"
+                        android:textColor="@color/SecondaryVariant"
+                        android:layout_marginHorizontal="15dp"
+                        android:text="Address"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_column="0"
+                        app:layout_row="0"
+                        app:layout_columnWeight="1"
+                        app:layout_rowWeight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_alignParentTop="true"
+                            android:textColor="@color/primary"
+                            android:layout_marginLeft="15dp"
+                            android:text="Nominee Bank Account"/>
+                        <TextView
+                            android:id="@+id/tvNomineeBankName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_alignParentTop="true"
+                            android:textColor="@color/SecondaryVariant"
+                            android:textStyle="bold"
+                            android:layout_marginLeft="15dp"
+                            android:text="Bank Name"/>
+
+
+                        <TextView
+                            android:id="@+id/tvNomineeBankAccountTittle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Account Tittle"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginLeft="15dp"
+                            android:textColor="@color/SecondaryVariant"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/tvNomineeBankAccountNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="000000000000000"
+                            android:layout_marginBottom="10dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginLeft="15dp"
+                            android:textColor="@color/SecondaryVariant"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cd6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/secondary"
+                app:cardElevation="3dp"
+                android:layout_marginTop="3dp"
+                android:layout_below="@+id/v1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RelativeLayout
+                        android:id="@+id/layUnAssigned"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_column="0"
+                            app:layout_row="0"
+                            app:layout_columnWeight="1"
+                            app:layout_rowWeight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_alignParentTop="true"
+                                android:textColor="@color/primary"
+                                android:textStyle="bold"
+                                android:layout_marginLeft="15dp"
+                                android:text="Investor's Financial Advisor"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="10dp"
+                                android:layout_alignParentTop="true"
+                                android:textColor="@color/SecondaryVariant"
+                                android:layout_marginHorizontal="15dp"
+                                android:text="not yet assigned"/>
+
+
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/btnFAAssigned"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="15dp"
+                            android:text="Assigned"/>
+
+                    </RelativeLayout>
+
+
+
+                    <LinearLayout
+                        android:id="@+id/layAssigned"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:orientation="horizontal">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            app:cardCornerRadius="10dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="10dp"
+                            app:cardElevation="4dp">
+                            <ImageView
+                                android:id="@+id/imgFAProfile"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="fitCenter"
+                                android:src="@mipmap/ic_launcher"/>
+                        </androidx.cardview.widget.CardView>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="vertical"
+                            android:layout_gravity="center_vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:textColor="@color/primary"
+                                android:textSize="12dp"
+                                android:text="Financial Advisor"/>
+                            <TextView
+                                android:id="@+id/tvFAName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mr. Ramzan"
+
+                                android:layout_alignParentTop="true"
+                                android:layout_alignParentLeft="true"
+                                android:textColor="@color/gray"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvDesignation"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Senior Manager"
+                                android:layout_below="@+id/tvUserName"
+                                android:layout_alignParentLeft="true"
+                                android:textColor="@color/SecondaryVariant"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+
+
+
+
+
+                </RelativeLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/btnApprove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Approve Profile"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="80dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+
+
+
+
+</RelativeLayout>

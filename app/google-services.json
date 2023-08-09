@@ -1,0 +1,340 @@
+{
+  "project_info": {
+    "project_number": "62412168385",
+    "project_id": "lifechanger-633f8",
+    "storage_bucket": "lifechanger-633f8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62412168385:android:4450ae371e81bfbf3e4840",
+        "android_client_info": {
+          "package_name": "com.bitsnest.lifechanger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62412168385-5aie1skmt7td536e8n99aefsl21ttu07.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitsnest.lifechanger",
+            "certificate_hash": "03177748b872e629d461881a41f1b577c9bc5fe6"
+          }
+        },
+        {
+          "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5FJL1Ce63V3CZ0XCMJMidDlwvC69MA8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62412168385:android:44ecd783d03b17b73e4840",
+        "android_client_info": {
+          "package_name": "com.bitsnest.lifechanger_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5FJL1Ce63V3CZ0XCMJMidDlwvC69MA8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62412168385:android:65f7c8b2fdeba7fc3e4840",
+        "android_client_info": {
+          "package_name": "com.bitsnest.vca"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5FJL1Ce63V3CZ0XCMJMidDlwvC69MA8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62412168385:android:b43cd238cbced8a33e4840",
+        "android_client_info": {
+          "package_name": "com.enfotrix.adminlifechanger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5FJL1Ce63V3CZ0XCMJMidDlwvC69MA8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62412168385:android:1696fbf47a6c2f463e4840",
+        "android_client_info": {
+          "package_name": "com.enfotrix.agentpanel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5FJL1Ce63V3CZ0XCMJMidDlwvC69MA8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62412168385:android:9f0a0092631a7f793e4840",
+        "android_client_info": {
+          "package_name": "com.enfotrix.lifechanger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62412168385-gv0kuprbubv61la25h0mnldlek8lg4ug.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.enfotrix.lifechanger",
+            "certificate_hash": "c1eea82b1323286eab6d76252ea2d804322b2742"
+          }
+        },
+        {
+          "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5FJL1Ce63V3CZ0XCMJMidDlwvC69MA8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62412168385:android:94149bf7fe9d2ada3e4840",
+        "android_client_info": {
+          "package_name": "com.hassan.statussaver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5FJL1Ce63V3CZ0XCMJMidDlwvC69MA8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62412168385:android:70ebd729ffb249a33e4840",
+        "android_client_info": {
+          "package_name": "dev.bitsnest.lifechanger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62412168385-3r3q3cnh34244eh24aa6jtu7nfvdf92c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.bitsnest.lifechanger",
+            "certificate_hash": "ea371d4b6c0d634c98f8251aeb1004e515d47fd1"
+          }
+        },
+        {
+          "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5FJL1Ce63V3CZ0XCMJMidDlwvC69MA8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62412168385:android:4cff5e764841c18e3e4840",
+        "android_client_info": {
+          "package_name": "dev.devcrew.lifechanger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62412168385-9cjvdrgrev9f7c7vu8uuqaib9bg9nlcr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.devcrew.lifechanger",
+            "certificate_hash": "ea371d4b6c0d634c98f8251aeb1004e515d47fd1"
+          }
+        },
+        {
+          "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5FJL1Ce63V3CZ0XCMJMidDlwvC69MA8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62412168385:android:2930af8351fb65d93e4840",
+        "android_client_info": {
+          "package_name": "dev.enfotrix.lifechanger.agent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62412168385-rhd4611rtuv1btk7r0al7th4n8so0csi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.enfotrix.lifechanger.agent",
+            "certificate_hash": "c1eea82b1323286eab6d76252ea2d804322b2742"
+          }
+        },
+        {
+          "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5FJL1Ce63V3CZ0XCMJMidDlwvC69MA8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62412168385-1acqn8ftedenabcq414naui4tlrtidua.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

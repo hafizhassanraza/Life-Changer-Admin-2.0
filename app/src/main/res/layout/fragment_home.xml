@@ -1,0 +1,878 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Fragments.HomeFragment">
+
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cd1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="15dp"
+        android:elevation="15dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha=".18"
+            android:scaleType="fitXY"
+            android:src="@drawable/cardbg" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="15dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:id="@+id/img1"
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:src="@drawable/visa_"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"/>
+
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/img1"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/chip_"/>
+
+            <LinearLayout
+                android:id="@+id/nametextlayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <LinearLayout
+                android:id="@+id/layActiveInvestmetn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerVertical="true"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Current (Active) Investment"
+                    android:layout_below="@+id/nametextlayout"
+                    android:textColor="@color/gray"
+                    android:textSize="8dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="top"
+                        android:paddingTop="5dp"
+                        android:text="Rs."
+                        android:textColor="@color/gray"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:id="@+id/tvBalance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="20,0000000"
+                        android:textColor="@color/black"
+                        android:textSize="29sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+
+
+
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cd1"
+        android:columnCount="2"
+        android:layout_marginTop="10dp"
+        android:rowCount="2">
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_marginRight="3dp"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                android:layout_marginVertical="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="3dp">
+
+                <RelativeLayout
+                    android:id="@+id/layInvestment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/secondary_m"
+                    android:paddingLeft="16dp">
+
+                    <TextView
+                        android:id="@+id/tvHeader3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_alignParentTop="true"
+                        android:textColor="@color/primary"
+                        android:textStyle="bold"
+                        android:textSize="12dp"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Investment Request"/>
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:src="@drawable/baseline_keyboard_arrow_right_24"
+                        android:tint="@color/primary" />
+
+
+                    <ImageView
+                        android:layout_width="200dp"
+                        android:layout_height="100dp"
+                        android:layout_below="@+id/tvHeader3"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:src="@drawable/ic_launcher_background" />
+
+
+
+                    <LinearLayout
+                        android:layout_width="200dp"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:layout_centerVertical="true"
+                        android:layout_below="@+id/tvHeader3"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="vertical">
+
+
+
+
+
+
+
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="5dp"
+                                android:gravity="top"
+                                android:paddingTop="5dp"
+                                android:text="Rs."
+                                android:textColor="@color/black"
+                                android:textSize="13dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="20,000"
+                                android:textColor="@color/black_m"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pending (Inactive) Investment"
+                            android:textColor="#7C7B7B"
+                            android:textSize="9dp" />
+
+
+
+                        <GridLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="6dp"
+                            android:columnCount="5"
+                            android:rowCount="1">
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_row="0"
+                                android:layout_rowWeight="1"
+                                android:layout_column="0"
+                                android:layout_columnWeight="1"
+                                android:layout_marginRight="3dp"
+                                android:background="@color/primary" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_row="0"
+                                android:layout_rowWeight="1"
+                                android:layout_column="1"
+                                android:layout_columnWeight="1"
+                                android:layout_marginRight="3dp"
+                                android:alpha=".5"
+                                android:background="@color/primary" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_row="0"
+                                android:layout_rowWeight="1"
+                                android:layout_column="2"
+                                android:layout_columnWeight="1"
+                                android:layout_marginRight="3dp"
+                                android:alpha=".5"
+                                android:background="@color/primary" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_row="0"
+                                android:layout_rowWeight="1"
+                                android:layout_column="3"
+                                android:layout_columnWeight="1"
+
+                                android:layout_marginRight="3dp"
+                                android:alpha=".5"
+                                android:background="@color/primary" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_row="0"
+                                android:layout_rowWeight="1"
+                                android:layout_column="4"
+                                android:layout_columnWeight="1"
+                                android:alpha=".5"
+                                android:background="@color/primary" />
+
+                        </GridLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="2dp"
+                            android:text="4 Days Remaining to activate"
+                            android:textColor="@color/gray"
+                            android:textSize="8sp"
+                            android:textStyle="bold" />
+
+
+
+
+
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="5dp"
+                                android:gravity="top"
+                                android:text="Rs."
+                                android:textColor="@color/gray"
+                                android:textSize="9dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="20000"
+                                android:textColor="@color/gray"
+                                android:textSize="11dp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Last Active Investment - 17/5/23"
+                            android:textColor="#7C7B7B"
+                            android:textSize="9sp" />
+
+                    </LinearLayout>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_row="0"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                android:layout_marginVertical="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp">
+
+                <RelativeLayout
+                    android:id="@+id/layProfit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/secondary_m"
+
+                    android:paddingLeft="16dp">
+
+                    <TextView
+                        android:id="@+id/tvHeader4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_alignParentTop="true"
+                        android:textColor="@color/primary"
+                        android:textStyle="bold"
+                        android:textSize="12dp"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Withdraw Request"/>
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:src="@drawable/baseline_keyboard_arrow_right_24"
+                        android:tint="@color/primary" />
+
+
+                    <ImageView
+                        android:layout_width="200dp"
+                        android:layout_height="100dp"
+                        android:layout_below="@+id/tvHeader4"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:src="@drawable/ic_launcher_background" />
+                    <LinearLayout
+                        android:layout_width="200dp"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_below="@+id/tvHeader4"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginRight="20dp"
+                        android:orientation="vertical">
+
+
+
+
+
+
+
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="5dp"
+                                android:gravity="top"
+                                android:paddingTop="5dp"
+                                android:text="Rs."
+                                android:textColor="@color/black"
+                                android:textSize="13dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="20,000"
+                                android:textColor="@color/black_m"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Upcoming (weekly) Profit"
+                            android:textColor="#7C7B7B"
+                            android:textSize="9sp" />
+
+
+
+                        <GridLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="6dp"
+                            android:columnCount="6"
+                            android:rowCount="1">
+
+                            <View
+                                android:id="@+id/firstView"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_row="0"
+                                android:layout_rowWeight="1"
+                                android:layout_column="0"
+                                android:layout_columnWeight="1"
+                                android:layout_marginRight="3dp"
+                                android:background="@color/primary" />
+
+                            <View
+                                android:id="@+id/secondView"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_row="0"
+                                android:layout_rowWeight="1"
+                                android:layout_column="1"
+                                android:layout_columnWeight="1"
+                                android:layout_marginRight="3dp"
+                                android:alpha=".5"
+                                android:background="@color/primary" />
+
+                            <View
+                                android:id="@+id/thirdView"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_row="0"
+                                android:layout_rowWeight="1"
+                                android:layout_column="2"
+                                android:layout_columnWeight="1"
+                                android:layout_marginRight="3dp"
+                                android:alpha=".5"
+                                android:background="@color/primary" />
+
+                            <View
+                                android:id="@+id/fourthView"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_row="0"
+                                android:layout_rowWeight="1"
+                                android:layout_column="3"
+                                android:layout_columnWeight="1"
+
+                                android:layout_marginRight="3dp"
+                                android:alpha=".5"
+                                android:background="@color/primary" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_row="0"
+                                android:layout_rowWeight="1"
+                                android:layout_column="4"
+                                android:layout_columnWeight="1"
+                                android:layout_marginRight="3dp"
+
+                                android:alpha=".5"
+                                android:background="@color/primary" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_row="0"
+                                android:layout_rowWeight="1"
+                                android:layout_column="5"
+                                android:layout_columnWeight="1"
+                                android:alpha=".5"
+                                android:background="@color/primary" />
+
+                        </GridLayout>
+
+                        <TextView
+                            android:id="@+id/remainingDays"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="2dp"
+                            android:text="4 Days Remaining to claim"
+                            android:textColor="@color/gray"
+                            android:textSize="8sp"
+                            android:textStyle="bold" />
+
+
+
+
+
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="5dp"
+                                android:gravity="top"
+                                android:text="Rs."
+                                android:textColor="@color/gray"
+                                android:textSize="9dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="20000"
+                                android:textColor="@color/gray"
+                                android:textSize="11dp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Last Claimed Profit - 17/5/23"
+                            android:textColor="#7C7B7B"
+                            android:textSize="9sp" />
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:id="@+id/firstViewsdffdsg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_row="1"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="3dp">
+                <RelativeLayout
+                    android:id="@+id/layWithdraw"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/secondary_m"
+                    android:paddingLeft="16dp">
+
+                    <TextView
+                        android:id="@+id/tvHeader5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_alignParentTop="true"
+                        android:textColor="@color/primary"
+                        android:textStyle="bold"
+                        android:textSize="12dp"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Withdraw Details"/>
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:src="@drawable/baseline_keyboard_arrow_right_24"
+                        android:tint="@color/primary" />
+
+
+                    <ImageView
+                        android:layout_width="200dp"
+                        android:layout_height="100dp"
+                        android:layout_below="@+id/tvHeader5"
+
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:src="@drawable/ic_launcher_background" />
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_below="@+id/tvHeader5"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+
+                        android:layout_marginBottom="10dp"
+                        android:orientation="vertical">
+
+
+
+
+
+
+
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="5dp"
+                                android:gravity="top"
+                                android:paddingTop="5dp"
+                                android:text="Rs."
+                                android:textColor="@color/gray"
+                                android:textSize="13dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="20,000"
+                                android:textColor="@color/gray"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:text="4 Days ago (12/12/23) to your last successful withdraw"
+                            android:layout_marginTop="5dp"
+                            android:textColor="#7C7B7B"
+                            android:textSize="9sp" />
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_row="1"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="20dp">
+                <RelativeLayout
+                    android:id="@+id/layTax"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/secondary_m"
+                    android:paddingLeft="16dp">
+
+                    <TextView
+                        android:id="@+id/tvHeader6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_alignParentTop="true"
+                        android:textColor="@color/primary"
+                        android:textStyle="bold"
+                        android:textSize="12dp"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Investment Details"/>
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:src="@drawable/baseline_keyboard_arrow_right_24"
+                        android:tint="@color/primary" />
+
+
+                    <ImageView
+                        android:layout_width="200dp"
+                        android:layout_height="100dp"
+                        android:layout_below="@+id/tvHeader6"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:src="@drawable/ic_launcher_background" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:layout_centerVertical="true"
+                        android:layout_below="@+id/tvHeader6"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="vertical">
+
+
+
+
+
+
+
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="5dp"
+                                android:gravity="top"
+                                android:paddingTop="5dp"
+                                android:text="Rs."
+                                android:textColor="@color/gray"
+                                android:textSize="13dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="20,000"
+                                android:textColor="@color/gray"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+
+
+
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4 Days ago(12/12/23) to last tax deduction"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="5dp"
+                            android:textColor="#7C7B7B"
+                            android:textSize="9sp" />
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+
+
+
+
+    </GridLayout>
+
+
+
+
+
+</RelativeLayout>
