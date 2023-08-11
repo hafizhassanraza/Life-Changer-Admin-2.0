@@ -11,6 +11,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.Window
+import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.enfotrix.adminlifechanger.Adapters.AdapterFA
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
+import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.R
@@ -27,10 +30,12 @@ import com.enfotrix.adminlifechanger.databinding.ActivityNewInvestorReqDetailsBi
 import com.enfotrix.adminlifechanger.databinding.ActivityNewInvestorsReqBinding
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
+import com.enfotrix.lifechanger.Models.TransactionModel
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -43,6 +48,7 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
     private val userViewModel: UserViewModel by viewModels()
 
 
+    private lateinit var investmentModel:InvestmentModel
 
 
 
@@ -103,10 +109,17 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
         user= User.fromString( intent.getStringExtra("user").toString())!!
 
 
+        binding.cd7.visibility=View.GONE
+
         if(intent.getStringExtra("from").equals("active")){
 
             binding.cd6.visibility=View.GONE
             binding.btnApprove.visibility=View.GONE
+
+
+            binding.cd7.visibility=View.VISIBLE
+            getInvestment()
+
         }
 
 
@@ -118,10 +131,112 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
 
 
         binding.btnApprove.setOnClickListener { approve() }
+        binding.btnAddInvestment.setOnClickListener {showAddBalanceDialog() }
 
         getUsers_Account_Nominee_FA()
     }
 
+    fun showAddBalanceDialog() {
+
+
+        var dialog = Dialog (mContext)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(R.layout.dialog_add_balance)
+
+        val etBalance = dialog.findViewById<EditText>(R.id.etBalance)
+        val btnAddBalance = dialog.findViewById<Button>(R.id.btnAddBalance)
+
+
+        btnAddBalance.setOnClickListener {
+            dialog.dismiss()
+
+            addInvestment(
+                etBalance.text.toString(),
+                "",
+                investmentModel.investmentBalance,
+                ""
+            )
+
+            binding.tvNewBalance.text=etBalance.text
+        }
+
+        dialog.show()
+    }
+
+    private fun getInvestment() {
+
+        db.collection(constants.INVESTMENT_COLLECTION).document(user.id).get()
+            .addOnCompleteListener{task ->
+                utils.endLoadingAnimation()
+                if(task.result.exists()) {
+
+                    investmentModel = task.result.toObject(InvestmentModel::class.java)!!
+                    binding.tvBalance.text= investmentModel.investmentBalance.toString()
+
+                }
+            }
+    }
+
+    private fun addInvestment(amount:String ,receiverAccountID:String ,previousBalance:String ,senderAccountID:String ,) {
+
+
+
+
+        val newBalance:Int
+
+        newBalance= amount.toInt()+previousBalance.toInt()
+
+
+
+        var transactionModel=TransactionModel(
+            user.id,
+            "Investment",
+            "Approved",
+            amount,
+            receiverAccountID,
+            previousBalance,
+            senderAccountID,
+            "",
+            newBalance.toString(),
+            Timestamp.now(),
+            Timestamp.now()
+        )
+        investmentModel.investmentBalance = newBalance.toString()
+
+
+        /*transactionModel.status=constants.TRANSACTION_STATUS_APPROVED
+        transactionModel.transactionAt= Timestamp.now()
+        val transactionAmount = transactionModel?.amount?.toInt() ?: 0
+        if (investmentModel != null) {
+            val currentBalance = investmentModel.investmentBalance.toInt()
+            val newBalance = currentBalance + transactionAmount
+            investmentModel.investmentBalance = newBalance.toString()
+            transactionModel?.newBalance= newBalance.toString()
+        }*/
+
+        utils.startLoadingAnimation()
+
+        lifecycleScope.launch{
+            investmentViewModel.setInvestment(investmentModel)
+                .addOnCompleteListener{task->
+
+p
+                    db.collection(constants.TRANSACTION_REQ_COLLECTION).add(transactionModel)
+                        .addOnCompleteListener {
+                            utils.endLoadingAnimation()
+                            Toast.makeText(mContext, "Investment Added", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(mContext,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                            finish()
+                        }
+                }
+
+
+        }
+
+
+
+    }
 
 
     fun getUsers_Account_Nominee_FA(){

@@ -64,7 +64,6 @@ class InvestmentViewModel(context: Application) : AndroidViewModel(context) {
         return userRepo.getUserInvestment(ID)
     }
 
-
     suspend fun getPendingWithdrawsReq(): Task<QuerySnapshot> {
         return userRepo.getTransactionReq(constants.TRANSACTION_STATUS_PENDING,constants.TRANSACTION_TYPE_WITHDRAW)
     }
@@ -79,9 +78,5 @@ class InvestmentViewModel(context: Application) : AndroidViewModel(context) {
     suspend fun getApprovedInvestmentsReq(): Task<QuerySnapshot> {
         return userRepo.getTransactionReq(constants.TRANSACTION_STATUS_APPROVED,constants.TRANSACTION_TYPE_INVESTMENT)
     }
-
-
-
-
 
 }

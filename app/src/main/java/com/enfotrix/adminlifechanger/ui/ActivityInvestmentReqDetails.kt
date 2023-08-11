@@ -24,11 +24,22 @@ import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class ActivityInvestmentReqDetails : AppCompatActivity() {
+
+
+
+
+    private val db = Firebase.firestore
+
+
+
+
 
     private val investmentViewModel: InvestmentViewModel by viewModels()
     private val faViewModel: FAViewModel by viewModels()
@@ -41,9 +52,13 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
     private lateinit var utils: Utils
     private lateinit var mContext: Context
     private lateinit var constants: Constants
-    private lateinit var user: User
     private lateinit var sharedPrefManager : SharedPrefManager
     private lateinit var dialog : Dialog
+
+
+    private lateinit var transactionModel:TransactionModel
+    private lateinit var investmentModel:InvestmentModel
+    private lateinit var user: User
 
 
 
@@ -60,116 +75,45 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
 
 
 
-
         binding.btnAccept.setOnClickListener{
             approved()
         }
         setData()
 
 
+        getData()
+    }
+
+    private fun getData() {
+
+        transactionModel= TransactionModel.fromString( intent.getStringExtra("transactionModel").toString())!!
+         user=User.fromString( intent.getStringExtra("User").toString())!!
+
+        Toast.makeText(mContext, user.id, Toast.LENGTH_SHORT).show()
+        utils.startLoadingAnimation()
+
+
+        db.collection(constants.INVESTMENT_COLLECTION).document(user.id).get()
+            .addOnCompleteListener{task ->
+                utils.endLoadingAnimation()
+                if(task.result.exists()) investmentModel = task.result.toObject(InvestmentModel::class.java)!!
+
+            }
+
     }
 
     private fun approved() {
 
-        var transactionModel=TransactionModel.fromString( intent.getStringExtra("transactionModel").toString())
-        var user=User.fromString( intent.getStringExtra("User").toString())
-
-        transactionModel?.status=constants.TRANSACTION_STATUS_APPROVED
 
 
-        transactionModel?.transactionAt= Timestamp.now()
-
-
-        //utils.startLoadingAnimation()
-
-
-
-        if (user != null) {
-
-
-            lifecycleScope.launch{
-                investmentViewModel.getUserInvestment(user.id)
-                    .addOnCompleteListener{task->
-
-                        Toast.makeText(mContext, "d1", Toast.LENGTH_SHORT).show()
-                        val investment = task.result.toObject(InvestmentModel::class.java)
-                        val transactionAmount = transactionModel?.amount?.toInt() ?: 0
-
-                        if (investment != null) {
-                            val currentBalance = investment.investmentBalance.toInt()
-                            val newBalance = currentBalance + transactionAmount
-                            investment.investmentBalance = newBalance.toString()
-                            transactionModel?.newBalance= newBalance.toString()
-                        }
-
-                        lifecycleScope.launch{
-                            if (investment != null) {
-
-                                investmentViewModel.setInvestment(investment)
-                                    .addOnCompleteListener{task->
-
-
-
-
-
-                                        Toast.makeText(mContext, "d2", Toast.LENGTH_SHORT).show()
-
-
-                                        lifecycleScope.launch {
-                                            if (transactionModel != null) {
-
-
-                                                investmentViewModel.setTransactionReq(transactionModel)
-                                                    .addOnCompleteListener{task ->
-                                                        Toast.makeText(mContext, "d3", Toast.LENGTH_SHORT).show()
-
-                                                        utils.endLoadingAnimation()
-                                                        if (task.isSuccessful) {
-
-                                                            Toast.makeText(mContext, "Investment Approved", Toast.LENGTH_SHORT).show()
-
-
-                                                            startActivity(Intent(mContext,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
-                                                            finish()
-
-
-                                                        } else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
-
-                                                    }
-                                                    .addOnFailureListener{
-                                                        utils.endLoadingAnimation()
-                                                        Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
-
-                                                    }
-                                            }
-
-
-
-
-                                        }
-
-
-
-
-
-
-
-
-
-
-
-                                    }
-                            }
-                        }
-
-
-
-
-
-
-                    }
-            }
-
+        transactionModel.status=constants.TRANSACTION_STATUS_APPROVED
+        transactionModel.transactionAt= Timestamp.now()
+        val transactionAmount = transactionModel?.amount?.toInt() ?: 0
+        if (investmentModel != null) {
+            val currentBalance = investmentModel.investmentBalance.toInt()
+            val newBalance = currentBalance + transactionAmount
+            investmentModel.investmentBalance = newBalance.toString()
+            transactionModel?.newBalance= newBalance.toString()
         }
 
 
@@ -178,12 +122,29 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
 
 
 
+        utils.startLoadingAnimation()
+
+        lifecycleScope.launch{
+
+            investmentViewModel.setInvestment(investmentModel)
+                .addOnCompleteListener{task->
+
+
+                    Toast.makeText(mContext, transactionModel.id, Toast.LENGTH_SHORT).show()
 
 
 
+                    db.collection(constants.TRANSACTION_REQ_COLLECTION).document(transactionModel.id).set(transactionModel)
+                        .addOnCompleteListener {
+                            utils.endLoadingAnimation()
+                            Toast.makeText(mContext, "Investment Approved", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(mContext,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                            finish()
+                        }
+                }
 
 
-
+        }
 
 
 
