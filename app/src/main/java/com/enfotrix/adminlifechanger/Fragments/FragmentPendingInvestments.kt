@@ -87,6 +87,7 @@ class FragmentPendingInvestments : Fragment()  ,  TransactionsAdapter.OnItemClic
             investmentViewModel.getPendingInvestmentsReq()
                 .addOnCompleteListener{task ->
                     if (task.isSuccessful) {
+                        utils.endLoadingAnimation()
 
                         val list = ArrayList<TransactionModel>()
                         if(task.result.size()>0){
@@ -104,7 +105,11 @@ class FragmentPendingInvestments : Fragment()  ,  TransactionsAdapter.OnItemClic
                             getAccount()
                         }
                     }
-                    else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                    else {
+                        utils.endLoadingAnimation()
+
+                        Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                    }
 
                 }
                 .addOnFailureListener{
@@ -162,6 +167,7 @@ class FragmentPendingInvestments : Fragment()  ,  TransactionsAdapter.OnItemClic
                 Intent(mContext, ActivityInvestmentReqDetails ::class.java)
                     .putExtra("transactionModel",transactionModel.toString())
                     .putExtra("User",user.toString())
+                    .putExtra("from",constant.FROM_PENDING_INVESTMENT_REQ)
                     .putExtra("FA",it.toString())
             )
         }

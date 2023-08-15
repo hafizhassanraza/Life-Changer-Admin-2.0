@@ -149,7 +149,7 @@ class DashboardFragment : Fragment() {
 
 
 
-        utils.startLoadingAnimation()
+       // utils.startLoadingAnimation()
         db.collection(constants.ACCOUNTS_COLLECTION).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -167,6 +167,7 @@ class DashboardFragment : Fragment() {
                                         for (document in task.result) listNominee.add( document.toObject(ModelNominee::class.java).apply { docID = document.id })
                                         sharedPrefManager.putNomineeList(listNominee)
 
+                                        utils.endLoadingAnimation()
 
                                         db.collection(constants.FA_COLLECTION).get()
                                             .addOnCompleteListener { task ->
@@ -228,7 +229,11 @@ class DashboardFragment : Fragment() {
 
                                     }
                                 }
-                                else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                                else {
+                                    utils.endLoadingAnimation()
+                                    Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+
+                                }
 
                             }
                             .addOnFailureListener{

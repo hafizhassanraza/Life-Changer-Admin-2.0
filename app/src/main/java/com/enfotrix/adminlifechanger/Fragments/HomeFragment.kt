@@ -18,12 +18,16 @@ import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.databinding.FragmentHomeBinding
 import com.enfotrix.adminlifechanger.Models.HomeViewModel
+import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.Models.NomineeViewModel
+import com.enfotrix.adminlifechanger.ui.ActivityAddProfit
+import com.enfotrix.adminlifechanger.ui.ActivityAddTax
 import com.enfotrix.adminlifechanger.ui.ActivityFA
 import com.enfotrix.adminlifechanger.ui.ActivityInvestmentRequest
 import com.enfotrix.adminlifechanger.ui.ActivityNewInvestorReq
+import com.enfotrix.adminlifechanger.ui.ActivityWithdrawRequest
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
 import com.enfotrix.lifechanger.Models.UserViewModel
@@ -100,13 +104,16 @@ class HomeFragment : Fragment() {
 
 
         binding.layInvestment.setOnClickListener { startActivity(Intent(requireContext(),ActivityInvestmentRequest::class.java)) }
+        binding.layWithdraw.setOnClickListener { startActivity(Intent(requireContext(),ActivityWithdrawRequest::class.java)) }
+        binding.layProfit.setOnClickListener { startActivity(Intent(requireContext(),ActivityAddProfit::class.java)) }
+        binding.layTax.setOnClickListener { startActivity(Intent(requireContext(),ActivityAddTax::class.java)) }
 
         mContext=requireContext()
         utils = Utils(mContext)
         constants= Constants()
         sharedPrefManager = SharedPrefManager(mContext)
 
-
+        getInvestment()
 
         getUsers_Account_Nominee_FA()
         return root
@@ -222,6 +229,47 @@ class HomeFragment : Fragment() {
     //set check for primary account not delete
 
 
+    fun getInvestment(){
+
+
+        utils.startLoadingAnimation()
+        db.collection(constants.INVESTMENT_COLLECTION).get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    utils.endLoadingAnimation()
+
+                    val listInvestment = ArrayList<InvestmentModel>()
+                    if(task.result.size()>0){
+
+                        var balance:Int=0
+                        for (document in task.result){
+                            var investmentModel=document.toObject(InvestmentModel::class.java)
+                            listInvestment.add( document.toObject(InvestmentModel::class.java))
+                            if (investmentModel!=null) balance=balance+ investmentModel.investmentBalance.toInt()
+                        }
+
+                        binding.tvBalance.text= balance.toString()
+
+                        sharedPrefManager.putActiveInvestment(listInvestment)
+                        //sharedPrefManager.getAccountList()
+
+
+                    }
+                }
+                else{
+                    Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                    utils.endLoadingAnimation()
+
+                }
+
+            }
+            .addOnFailureListener{
+                Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
+                utils.endLoadingAnimation()
+
+            }
+    }
+
 
 
 
@@ -234,8 +282,8 @@ class HomeFragment : Fragment() {
 
 
 
+        //utils.startLoadingAnimation()
 
-        utils.startLoadingAnimation()
         db.collection(constants.ACCOUNTS_COLLECTION).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -243,6 +291,8 @@ class HomeFragment : Fragment() {
                     if(task.result.size()>0){
                         for (document in task.result)listAccounts.add( document.toObject(ModelBankAccount::class.java).apply { docID = document.id })
                         sharedPrefManager.putAccountList(listAccounts)
+
+                        utils.endLoadingAnimation()
 
 
                         db.collection(constants.NOMINEE_COLLECTION).get()
@@ -277,15 +327,12 @@ class HomeFragment : Fragment() {
                                                                     val listInvestors = ArrayList<User>()
                                                                     if(task.result.size()>0){
                                                                         for (document in task.result)listInvestors.add( document.toObject(User::class.java).apply { id = document.id })
-                                                                        sharedPrefManager.putFAList(listFA)
+                                                                        sharedPrefManager.putUserList(listInvestors)
 
 
                                                                     }
                                                                 }
                                                                 else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
-
-
-
 
                                                             }
                                                             .addOnFailureListener{
@@ -293,14 +340,13 @@ class HomeFragment : Fragment() {
 
                                                             }
 
-
-
                                                     }
                                                 }
-                                                else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                                                else {
+                                                    utils.endLoadingAnimation()
+                                                    Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
 
-
-
+                                                }
 
                                             }
                                             .addOnFailureListener{

@@ -3,19 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Fragments.FragmentActiveInvestors">
-
-
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/svUsers"
-        android:hint="Search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
+    tools:context=".Fragments.FragmentPendingWithdraw">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvInvestors"
+        android:id="@+id/rvInvestmentRequests"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

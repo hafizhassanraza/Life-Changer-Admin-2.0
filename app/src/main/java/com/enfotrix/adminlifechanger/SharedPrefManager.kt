@@ -4,6 +4,7 @@ import User
 import android.content.Context
 import android.content.SharedPreferences
 import android.view.Display.Mode
+import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
@@ -109,6 +110,17 @@ class SharedPrefManager(context: Context) {
 
         val json = sharedPref.getString("ListAccount", "") ?: ""
         val type: Type = object : TypeToken<List<ModelBankAccount?>?>() {}.getType()
+        //return Gson().fromJson(json, type)
+        return if (!json.isNullOrEmpty()) {
+            Gson().fromJson(json, type) ?: emptyList()
+        } else {
+            emptyList()
+        }
+    }
+    fun getActiveInvestmentList(): List<InvestmentModel>{
+
+        val json = sharedPref.getString("ListActiveInvestment", "") ?: ""
+        val type: Type = object : TypeToken<List<InvestmentModel?>?>() {}.getType()
         //return Gson().fromJson(json, type)
         return if (!json.isNullOrEmpty()) {
             Gson().fromJson(json, type) ?: emptyList()
@@ -222,6 +234,10 @@ class SharedPrefManager(context: Context) {
     }
     fun putInvestmentReqList(list: List<TransactionModel>) {
         editor.putString("ListInvestmentReq", Gson().toJson(list))
+        editor.commit()
+    }
+    fun putActiveInvestment(list: List<InvestmentModel>) {
+        editor.putString("ListActiveInvestment", Gson().toJson(list))
         editor.commit()
     }
     fun putInvestorPhoneNumber(IsPhoneNumberAdded: Boolean) {

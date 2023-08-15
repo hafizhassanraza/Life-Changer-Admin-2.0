@@ -86,6 +86,7 @@
                 android:layout_marginHorizontal="20dp">
 
                 <TextView
+                    android:id="@+id/tvHeader22"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Investment"
