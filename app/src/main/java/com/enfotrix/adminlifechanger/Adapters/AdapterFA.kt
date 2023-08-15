@@ -9,51 +9,56 @@ import com.enfotrix.adminlifechanger.databinding.ItemFaBinding
 import com.enfotrix.lifechanger.Models.TransactionModel
 import java.util.Locale
 
-class AdapterFA  ( val data: List<ModelFA>, val listener: AdapterFA.OnItemClickListener) : RecyclerView.Adapter<AdapterFA.ViewHolder>(){
+class AdapterFA(val data: List<ModelFA>, val listener: AdapterFA.OnItemClickListener) :
+    RecyclerView.Adapter<AdapterFA.ViewHolder>() {
 
 
-    var constant= Constants()
+    var constant = Constants()
 
     interface OnItemClickListener {
         fun onItemClick(modelFA: ModelFA)
         fun onDeleteClick(modelFA: ModelFA)
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterFA.ViewHolder {
         return ViewHolder(ItemFaBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
-    override fun onBindViewHolder(holder: AdapterFA.ViewHolder, position: Int) { holder.bind(data[position]) }
-    override fun getItemCount(): Int { return data.size }
 
-    inner class ViewHolder(val itemBinding: ItemFaBinding) : RecyclerView.ViewHolder(itemBinding.root){
+    override fun onBindViewHolder(holder: AdapterFA.ViewHolder, position: Int) {
+        holder.bind(data[position])
+    }
 
-        fun bind(modelFA: ModelFA){
+    override fun getItemCount(): Int {
+        return data.size
+    }
+
+    inner class ViewHolder(val itemBinding: ItemFaBinding) :
+        RecyclerView.ViewHolder(itemBinding.root) {
+
+        fun bind(modelFA: ModelFA) {
 
 
-
-            itemBinding.tvName.text=modelFA.firstName
-            itemBinding.tvCNIC.text=modelFA.cnic
-            itemBinding.tvMobile.text=modelFA.phone
+            itemBinding.tvName.text = modelFA.firstName
+            itemBinding.tvCNIC.text = modelFA.cnic
+            itemBinding.tvMobile.text = modelFA.phone
 
 
             itemBinding.layFA.setOnClickListener { listener.onItemClick(modelFA) }
-           /* itemBinding.tvDate.text= SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(profitTaxModel.createdAt!!.toDate()).toString()
-            itemBinding.tvPreviousBalance.text=profitTaxModel.previousBalance
-            itemBinding.tvNewBalance.text=profitTaxModel.newBalance
+            /* itemBinding.tvDate.text= SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(profitTaxModel.createdAt!!.toDate()).toString()
+             itemBinding.tvPreviousBalance.text=profitTaxModel.previousBalance
+             itemBinding.tvNewBalance.text=profitTaxModel.newBalance
 
 
-            if(activity.equals(constant.FROM_PROFIT)){
-                itemBinding.tvProfitTax.text=profitTaxModel.amount
-                itemBinding.tvProfitTax.setTextColor(0xFF2F9B47.toInt())
-            }
-            else if(activity.equals(constant.FROM_TAX)){
+             if(activity.equals(constant.FROM_PROFIT)){
+                 itemBinding.tvProfitTax.text=profitTaxModel.amount
+                 itemBinding.tvProfitTax.setTextColor(0xFF2F9B47.toInt())
+             }
+             else if(activity.equals(constant.FROM_TAX)){
 
-                itemBinding.tvProfitTax.text= "-"+profitTaxModel.amount
-                itemBinding.tvProfitTax.setTextColor(Color.RED)
+                 itemBinding.tvProfitTax.text= "-"+profitTaxModel.amount
+                 itemBinding.tvProfitTax.setTextColor(Color.RED)
 
-            }*/
-
-
-
+             }*/
 
 
         }

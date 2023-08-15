@@ -42,7 +42,9 @@ class InvestorAdapter (var activity:String, val data: List<User>, val listener: 
             itemBinding.tvCNIC.text=user.cnic
 
             itemBinding.btnAssign.setOnClickListener { listener.onAssignClick(user) }
-            itemBinding.btnRemove.setOnClickListener { listener.onRemoveClick(user) }
+            itemBinding.btnRemove.setOnClickListener {
+                listener.onRemoveClick(user)
+            }
             itemBinding.layUser.setOnClickListener { listener.onItemClick(user) }
 
 

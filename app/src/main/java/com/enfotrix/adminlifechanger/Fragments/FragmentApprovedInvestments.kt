@@ -108,7 +108,11 @@ class FragmentApprovedInvestments : Fragment() ,  TransactionsAdapter.OnItemClic
                             //getAccount()
                         }
                     }
-                    else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                    else {
+                        utils.endLoadingAnimation()
+
+                        Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                    }
 
                 }
                 .addOnFailureListener{

@@ -74,15 +74,23 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
         sharedPrefManager = SharedPrefManager(mContext)
 
 
+        //41//1111
+
 
         binding.btnAccept.setOnClickListener{
-            approved()
+
+            if(intent.getStringExtra("from").toString().equals(constant.FROM_PENDING_WITHDRAW_REQ)) approvedWithdraw()
+            else approved()
+
+
         }
         setData()
 
 
         getData()
     }
+
+
 
     private fun getData() {
 
@@ -99,6 +107,54 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
                 if(task.result.exists()) investmentModel = task.result.toObject(InvestmentModel::class.java)!!
 
             }
+
+    }
+
+    private fun approvedWithdraw() {
+        transactionModel.status=constants.TRANSACTION_STATUS_APPROVED
+        transactionModel.transactionAt= Timestamp.now()
+
+
+        val transactionAmount = transactionModel?.amount?.toInt() ?: 0
+        if (investmentModel != null) {
+            val currentBalance = investmentModel.investmentBalance.toInt()
+            val newBalance = currentBalance - transactionAmount
+            investmentModel.investmentBalance = newBalance.toString()
+            transactionModel?.newBalance= newBalance.toString()
+
+
+        }
+
+
+
+
+
+
+
+        utils.startLoadingAnimation()
+
+        lifecycleScope.launch{
+
+            investmentViewModel.setInvestment(investmentModel)
+                .addOnCompleteListener{task->
+
+
+                    //Toast.makeText(mContext, transactionModel.id, Toast.LENGTH_SHORT).show()
+
+
+                    Toast.makeText(mContext, transactionModel.createdAt.toString(), Toast.LENGTH_SHORT).show()
+
+                    db.collection(constants.TRANSACTION_REQ_COLLECTION).document(transactionModel.id).set(transactionModel)
+                        .addOnCompleteListener {
+                            utils.endLoadingAnimation()
+                            Toast.makeText(mContext, "Withdraw Approved", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(mContext,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                            finish()
+                        }
+                }
+
+
+        }
 
     }
 
@@ -154,6 +210,14 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
 
     fun setData(){
 
+
+
+        if(intent.getStringExtra("from").toString().equals(constant.FROM_PENDING_WITHDRAW_REQ)){
+            binding.tvHeader22.text="Withdraw"
+            supportActionBar?.title = "Withdraw Details"
+
+
+        }
 
         var transactionModel=TransactionModel.fromString( intent.getStringExtra("transactionModel").toString())
         var user=User.fromString( intent.getStringExtra("User").toString())

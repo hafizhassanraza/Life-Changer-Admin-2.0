@@ -95,13 +95,14 @@ class UserViewModel(context: Application) : AndroidViewModel(context) {
         return InvestorAdapter(fromActivity,sharedPrefManager.getUsersList().filter {  it.fa_id.equals(fa_ID) }, listener)
     }
 
-/*
-    fun getInvestorAccountsAdapter( fromActivity:String,listener: InvestorAccountsAdapter.OnItemClickListener): InvestorAccountsAdapter {
-        return InvestorAccountsAdapter(fromActivity,sharedPrefManager.getInvestorBankList(), listener)
-    }
-    fun getAdminAccountsAdapter( fromActivity:String,listener: InvestorAccountsAdapter.OnItemClickListener): InvestorAccountsAdapter {
-        return InvestorAccountsAdapter(fromActivity,sharedPrefManager.getAdminBankList(), listener)
-    }*/
+
+    /*
+        fun getInvestorAccountsAdapter( fromActivity:String,listener: InvestorAccountsAdapter.OnItemClickListener): InvestorAccountsAdapter {
+            return InvestorAccountsAdapter(fromActivity,sharedPrefManager.getInvestorBankList(), listener)
+        }
+        fun getAdminAccountsAdapter( fromActivity:String,listener: InvestorAccountsAdapter.OnItemClickListener): InvestorAccountsAdapter {
+            return InvestorAccountsAdapter(fromActivity,sharedPrefManager.getAdminBankList(), listener)
+        }*/
 
 
     //suspend fun getBalance(): String = userRepo.getBalance()

@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.Adapters.InvestorAdapter
@@ -27,6 +28,7 @@ import com.enfotrix.lifechanger.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 
 class FragmentActiveInvestors : Fragment() ,  InvestorAdapter.OnItemClickListener{
@@ -38,6 +40,7 @@ class FragmentActiveInvestors : Fragment() ,  InvestorAdapter.OnItemClickListene
 
     var constant= Constants()
 
+    private val userlist = ArrayList<User>()
 
 
     private lateinit var utils: Utils
@@ -75,7 +78,49 @@ class FragmentActiveInvestors : Fragment() ,  InvestorAdapter.OnItemClickListene
 
 
 
+
         return root
+    }
+
+
+    private fun filter(text: String) {
+        // creating a new array list to filter our data.
+        val filteredlist = ArrayList<User>()
+
+        if(text.isEmpty()||text.equals("")||text==null){
+            binding.rvInvestors.adapter= InvestorAdapter(
+                constant.FROM_PENDING_INVESTOR_REQ,
+                userlist.filter {  it.status.equals(constant.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.createdAt }, this@FragmentActiveInvestors)
+
+        }
+        else {
+            for (user in userlist) {
+                // checking if the entered string matched with any item of our recycler view.
+                if (user.firstName.toLowerCase().contains(text.lowercase(Locale.getDefault()))) {
+                    // if the item is matched we are
+                    // adding it to our filtered list.
+                    filteredlist.add(user)
+                }
+            }
+            if (filteredlist.isEmpty()) {
+                // if no item is added in filtered list we are
+                // displaying a toast message as no data found.
+                Toast.makeText(mContext, "No Data Found..", Toast.LENGTH_SHORT).show()
+
+            } else {
+
+                // at last we are passing that filtered
+                // list to our adapter class.
+
+                binding.rvInvestors.adapter= InvestorAdapter(
+                    constant.FROM_PENDING_INVESTOR_REQ,
+                    filteredlist.filter {  it.status.equals(constant.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.createdAt },
+                    this@FragmentActiveInvestors)
+
+            }
+        }
+        // running a for loop to compare elements.
+
     }
 
 
@@ -110,20 +155,33 @@ class FragmentActiveInvestors : Fragment() ,  InvestorAdapter.OnItemClickListene
             .addOnCompleteListener{task ->
                 utils.endLoadingAnimation()
                 if (task.isSuccessful) {
-                    val list = ArrayList<User>()
                     if(task.result.size()>0){
                         for (document in task.result) {
 
                             val user =document.toObject(User::class.java)
                             user.id=document.id
-                            list.add( user)
+                            userlist.add( user)
 
                         }
 
                         binding.rvInvestors.adapter= InvestorAdapter(
                             constant.FROM_PENDING_INVESTOR_REQ,
-                            list.filter {  it.status.equals(constant.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.createdAt }, this@FragmentActiveInvestors)
+                            userlist.filter {  it.status.equals(constant.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.createdAt }, this@FragmentActiveInvestors)
 
+
+
+                        binding.svUsers.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                            override fun onQueryTextSubmit(query: String): Boolean {
+                                return false
+                            }
+
+                            override fun onQueryTextChange(newText: String): Boolean {
+                                // inside on query text change method we are
+                                // calling a method to filter our recycler view.
+                                filter(newText)
+                                return false
+                            }
+                        })
 
                         //Toast.makeText(mContext, "d1 : "+ task.result.size(), Toast.LENGTH_SHORT).show()
 

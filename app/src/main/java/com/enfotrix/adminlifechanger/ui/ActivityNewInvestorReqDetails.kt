@@ -13,6 +13,7 @@ import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -110,6 +111,9 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
 
 
         binding.cd7.visibility=View.GONE
+        binding.cd8.visibility=View.GONE
+        binding.cd9.visibility=View.GONE
+        binding.cd10.visibility=View.GONE
 
         if(intent.getStringExtra("from").equals("active")){
 
@@ -118,6 +122,9 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
 
 
             binding.cd7.visibility=View.VISIBLE
+            binding.cd8.visibility=View.VISIBLE
+            binding.cd9.visibility=View.VISIBLE
+            binding.cd10.visibility=View.VISIBLE
             getInvestment()
 
         }
@@ -132,11 +139,16 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
 
         binding.btnApprove.setOnClickListener { approve() }
         binding.btnAddInvestment.setOnClickListener {showAddBalanceDialog() }
+        binding.btnWithdraw.setOnClickListener {showWithdrawBalanceDialog() }
+        binding.btnTax.setOnClickListener {showTaxBalanceDialog() }
+        binding.btnProfit.setOnClickListener {showProfitBalanceDialog() }
 
         getUsers_Account_Nominee_FA()
     }
 
     fun showAddBalanceDialog() {
+
+
 
 
         var dialog = Dialog (mContext)
@@ -160,9 +172,102 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
 
             binding.tvNewBalance.text=etBalance.text
         }
+        dialog.show()
+
+
+
+    }
+    fun showWithdrawBalanceDialog() {
+
+
+        var dialog = Dialog (mContext)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(R.layout.dialog_add_balance)
+
+        val etBalance = dialog.findViewById<EditText>(R.id.etBalance)
+        val btnAddBalance = dialog.findViewById<Button>(R.id.btnAddBalance)
+        val tvHeaderBank = dialog.findViewById<TextView>(R.id.tvHeaderBank)
+        btnAddBalance.text="Withdraw"
+        tvHeaderBank.text="Withdraw"
+
+        btnAddBalance.setOnClickListener {
+            dialog.dismiss()
+
+            withdrawInvestment(
+                etBalance.text.toString(),
+                "",
+                investmentModel.investmentBalance,
+                ""
+            )
+
+            binding.tvNewBalance.text=etBalance.text
+        }
 
         dialog.show()
     }
+    fun showProfitBalanceDialog() {
+
+
+        var dialog = Dialog (mContext)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(R.layout.dialog_add_balance)
+
+        val etBalance = dialog.findViewById<EditText>(R.id.etBalance)
+        val btnAddBalance = dialog.findViewById<Button>(R.id.btnAddBalance)
+        val tvHeaderBank = dialog.findViewById<TextView>(R.id.tvHeaderBank)
+        btnAddBalance.text="Profit"
+        tvHeaderBank.text="Profit"
+
+        btnAddBalance.setOnClickListener {
+            dialog.dismiss()
+
+            addProfit(
+                etBalance.text.toString(),
+                "",
+                investmentModel.investmentBalance,
+                ""
+            )
+
+            binding.tvNewBalance.text=etBalance.text
+        }
+
+        dialog.show()
+    }
+    fun showTaxBalanceDialog() {
+
+
+        var dialog = Dialog (mContext)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(R.layout.dialog_add_balance)
+
+        val etBalance = dialog.findViewById<EditText>(R.id.etBalance)
+        val btnAddBalance = dialog.findViewById<Button>(R.id.btnAddBalance)
+        val tvHeaderBank = dialog.findViewById<TextView>(R.id.tvHeaderBank)
+        btnAddBalance.text="Tax"
+        tvHeaderBank.text="Tax"
+
+        btnAddBalance.setOnClickListener {
+            dialog.dismiss()
+
+            addTax(
+                etBalance.text.toString(),
+                "",
+                investmentModel.investmentBalance,
+                ""
+            )
+
+            binding.tvNewBalance.text=etBalance.text
+        }
+
+        dialog.show()
+    }
+
+
+
+
 
     private fun getInvestment() {
 
@@ -173,9 +278,167 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
 
                     investmentModel = task.result.toObject(InvestmentModel::class.java)!!
                     binding.tvBalance.text= investmentModel.investmentBalance.toString()
+                    binding.tvBalance2.text= investmentModel.investmentBalance.toString()
 
                 }
             }
+    }
+
+    private fun withdrawInvestment(amount:String ,receiverAccountID:String ,previousBalance:String ,senderAccountID:String ,) {
+
+
+
+
+        val newBalance:Int
+
+        newBalance= previousBalance.toInt()-amount.toInt()
+
+
+
+        var transactionModel=TransactionModel(
+            user.id,
+            "Withdraw",
+            "Approved",
+            amount,
+            receiverAccountID,
+            previousBalance,
+            senderAccountID,
+            "",
+            newBalance.toString(),
+            Timestamp.now(),
+            Timestamp.now()
+        )
+        investmentModel.investmentBalance = newBalance.toString()
+
+        utils.startLoadingAnimation()
+
+        lifecycleScope.launch{
+            investmentViewModel.setInvestment(investmentModel)
+                .addOnCompleteListener{task->
+
+
+                    db.collection(constants.TRANSACTION_REQ_COLLECTION).add(transactionModel)
+                        .addOnCompleteListener {
+                            utils.endLoadingAnimation()
+                            Toast.makeText(mContext, "Withdraw Successfully", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(mContext,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                            finish()
+                        }
+                }
+
+
+        }
+
+
+
+    }
+    private fun addTax(amount:String ,receiverAccountID:String ,previousBalance:String ,senderAccountID:String ,) {
+
+
+
+
+        val newBalance:Int
+
+        newBalance= previousBalance.toInt()-amount.toInt()
+
+
+
+        var transactionModel=TransactionModel(
+            user.id,
+            "Tax",
+            "Approved",
+            amount,
+            receiverAccountID,
+            previousBalance,
+            senderAccountID,
+            "",
+            newBalance.toString(),
+            Timestamp.now(),
+            Timestamp.now()
+        )
+        investmentModel.investmentBalance = newBalance.toString()
+
+        utils.startLoadingAnimation()
+
+        lifecycleScope.launch{
+            investmentViewModel.setInvestment(investmentModel)
+                .addOnCompleteListener{task->
+
+
+                    db.collection(constants.TRANSACTION_REQ_COLLECTION).add(transactionModel)
+                        .addOnCompleteListener {
+                            utils.endLoadingAnimation()
+                            Toast.makeText(mContext, "Tax Deduction Successfully", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(mContext,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                            finish()
+                        }
+                }
+
+
+        }
+
+
+
+    }
+
+    private fun addProfit(amount:String ,receiverAccountID:String ,previousBalance:String ,senderAccountID:String ,) {
+
+
+
+
+        val newBalance:Int
+
+        newBalance= amount.toInt()+previousBalance.toInt()
+
+
+
+        var transactionModel=TransactionModel(
+            user.id,
+            "Profit",
+            "Approved",
+            amount,
+            receiverAccountID,
+            previousBalance,
+            senderAccountID,
+            "",
+            newBalance.toString(),
+            Timestamp.now(),
+            Timestamp.now()
+        )
+        investmentModel.investmentBalance = newBalance.toString()
+
+
+        /*transactionModel.status=constants.TRANSACTION_STATUS_APPROVED
+        transactionModel.transactionAt= Timestamp.now()
+        val transactionAmount = transactionModel?.amount?.toInt() ?: 0
+        if (investmentModel != null) {
+            val currentBalance = investmentModel.investmentBalance.toInt()
+            val newBalance = currentBalance + transactionAmount
+            investmentModel.investmentBalance = newBalance.toString()
+            transactionModel?.newBalance= newBalance.toString()
+        }*/
+
+        utils.startLoadingAnimation()
+
+        lifecycleScope.launch{
+            investmentViewModel.setInvestment(investmentModel)
+                .addOnCompleteListener{task->
+
+
+                    db.collection(constants.TRANSACTION_REQ_COLLECTION).add(transactionModel)
+                        .addOnCompleteListener {
+                            utils.endLoadingAnimation()
+                            Toast.makeText(mContext, "Profit Added", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(mContext,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                            finish()
+                        }
+                }
+
+
+        }
+
+
+
     }
 
     private fun addInvestment(amount:String ,receiverAccountID:String ,previousBalance:String ,senderAccountID:String ,) {
@@ -221,7 +484,7 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
             investmentViewModel.setInvestment(investmentModel)
                 .addOnCompleteListener{task->
 
-p
+
                     db.collection(constants.TRANSACTION_REQ_COLLECTION).add(transactionModel)
                         .addOnCompleteListener {
                             utils.endLoadingAnimation()

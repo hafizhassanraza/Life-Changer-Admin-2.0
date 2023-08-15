@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.enfotrix.adminlifechanger.ActivityAnnouncement
 import com.enfotrix.adminlifechanger.Adapters.InvestorAdapter
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.databinding.FragmentDashboardBinding
@@ -33,6 +34,7 @@ import com.enfotrix.lifechanger.Models.ModelNominee
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -46,16 +48,12 @@ import kotlinx.coroutines.launch
 class DashboardFragment : Fragment() {
 
 
-
-
-
-
     private val db = Firebase.firestore
     private val firebaseStorage = Firebase.storage
     private val storageRef = firebaseStorage.reference
 
 
-
+    private lateinit var announcementListener: ListenerRegistration
 
 
     private val userViewModel: UserViewModel by viewModels()
@@ -63,19 +61,15 @@ class DashboardFragment : Fragment() {
     private val investmentViewModel: InvestmentViewModel by viewModels()
     private val faViewModel: FAViewModel by viewModels()
 
-    var constant= Constants()
-
+    var constant = Constants()
 
 
     private lateinit var utils: Utils
     private lateinit var mContext: Context
     private lateinit var constants: Constants
     private lateinit var user: User
-    private lateinit var sharedPrefManager : SharedPrefManager
-    private lateinit var dialog : Dialog
-
-
-
+    private lateinit var sharedPrefManager: SharedPrefManager
+    private lateinit var dialog: Dialog
 
 
     private var _binding: FragmentDashboardBinding? = null
@@ -84,7 +78,11 @@ class DashboardFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val dashboardViewModel =
             ViewModelProvider(this).get(DashboardViewModel::class.java)
 
@@ -99,16 +97,42 @@ class DashboardFragment : Fragment() {
 
 
 
-        mContext=requireContext()
+        mContext = requireContext()
         utils = Utils(mContext)
-        constants= Constants()
+        constants = Constants()
         sharedPrefManager = SharedPrefManager(mContext)
 
 
 
 
-        binding.layInvestors.setOnClickListener{startActivity(Intent(requireContext(), ActivityInvestors::class.java))}
-        binding.layFA.setOnClickListener{startActivity(Intent(requireContext(), ActivityFA::class.java))}
+
+        announce()
+
+
+        binding.laynews.setOnClickListener {
+            startActivity(Intent(requireContext(), ActivityAnnouncement::class.java))
+        }
+
+
+
+
+
+        binding.layInvestors.setOnClickListener {
+            startActivity(
+                Intent(
+                    requireContext(),
+                    ActivityInvestors::class.java
+                )
+            )
+        }
+        binding.layFA.setOnClickListener {
+            startActivity(
+                Intent(
+                    requireContext(),
+                    ActivityFA::class.java
+                )
+            )
+        }
 
 
 
@@ -116,7 +140,6 @@ class DashboardFragment : Fragment() {
 
         return root
     }
-
 
 
     fun runFirestoreRequests() {
@@ -130,7 +153,7 @@ class DashboardFragment : Fragment() {
                 val getFADeferred = async { getFA() }
 
                 // Wait for all deferred coroutines to complete
-                joinAll( getAccountDeferred, getNomineesDeferred, getFADeferred)
+                joinAll(getAccountDeferred, getNomineesDeferred, getFADeferred)
 
                 // All requests have completed
             } catch (e: Exception) {
@@ -141,21 +164,19 @@ class DashboardFragment : Fragment() {
     }
 
 
-
-    fun getUsers_Account_Nominee_FA(){
-
+    fun getUsers_Account_Nominee_FA() {
 
 
-
-
-
-        utils.startLoadingAnimation()
+        // utils.startLoadingAnimation()
         db.collection(constants.ACCOUNTS_COLLECTION).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val listAccounts = ArrayList<ModelBankAccount>()
-                    if(task.result.size()>0){
-                        for (document in task.result)listAccounts.add( document.toObject(ModelBankAccount::class.java).apply { docID = document.id })
+                    if (task.result.size() > 0) {
+                        for (document in task.result) listAccounts.add(
+                            document.toObject(
+                                ModelBankAccount::class.java
+                            ).apply { docID = document.id })
                         sharedPrefManager.putAccountList(listAccounts)
 
 
@@ -163,18 +184,24 @@ class DashboardFragment : Fragment() {
                             .addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
                                     val listNominee = ArrayList<ModelNominee>()
-                                    if(task.result.size()>0){
-                                        for (document in task.result) listNominee.add( document.toObject(ModelNominee::class.java).apply { docID = document.id })
+                                    if (task.result.size() > 0) {
+                                        for (document in task.result) listNominee.add(
+                                            document.toObject(
+                                                ModelNominee::class.java
+                                            ).apply { docID = document.id })
                                         sharedPrefManager.putNomineeList(listNominee)
 
+                                        utils.endLoadingAnimation()
 
                                         db.collection(constants.FA_COLLECTION).get()
                                             .addOnCompleteListener { task ->
                                                 if (task.isSuccessful) {
 
                                                     val listFA = ArrayList<ModelFA>()
-                                                    if(task.result.size()>0){
-                                                        for (document in task.result)listFA.add( document.toObject(ModelFA::class.java).apply { id = document.id })
+                                                    if (task.result.size() > 0) {
+                                                        for (document in task.result) listFA.add(
+                                                            document.toObject(ModelFA::class.java)
+                                                                .apply { id = document.id })
 
                                                         sharedPrefManager.putFAList(listFA)
 
@@ -183,67 +210,90 @@ class DashboardFragment : Fragment() {
 
 
 
-                                                        db.collection(constants.INVESTOR_COLLECTION).get()
+                                                        db.collection(constants.INVESTOR_COLLECTION)
+                                                            .get()
                                                             .addOnCompleteListener { task ->
                                                                 if (task.isSuccessful) {
                                                                     utils.endLoadingAnimation()
 
-                                                                    val listInvestors = ArrayList<User>()
-                                                                    if(task.result.size()>0){
-                                                                        for (document in task.result)listInvestors.add( document.toObject(User::class.java).apply { id = document.id })
-                                                                        sharedPrefManager.putFAList(listFA)
+                                                                    val listInvestors =
+                                                                        ArrayList<User>()
+                                                                    if (task.result.size() > 0) {
+                                                                        for (document in task.result) listInvestors.add(
+                                                                            document.toObject(User::class.java)
+                                                                                .apply {
+                                                                                    id = document.id
+                                                                                })
+                                                                        sharedPrefManager.putFAList(
+                                                                            listFA
+                                                                        )
 
 
                                                                     }
-                                                                }
-                                                                else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
-
-
+                                                                } else Toast.makeText(
+                                                                    mContext,
+                                                                    constants.SOMETHING_WENT_WRONG_MESSAGE,
+                                                                    Toast.LENGTH_SHORT
+                                                                ).show()
 
 
                                                             }
-                                                            .addOnFailureListener{
-                                                                Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
+                                                            .addOnFailureListener {
+                                                                Toast.makeText(
+                                                                    mContext,
+                                                                    it.message + "",
+                                                                    Toast.LENGTH_SHORT
+                                                                ).show()
 
                                                             }
-
 
 
                                                     }
-                                                }
-                                                else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
-
-
+                                                } else Toast.makeText(
+                                                    mContext,
+                                                    constants.SOMETHING_WENT_WRONG_MESSAGE,
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
 
 
                                             }
-                                            .addOnFailureListener{
-                                                Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
+                                            .addOnFailureListener {
+                                                Toast.makeText(
+                                                    mContext,
+                                                    it.message + "",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
 
                                             }
-
-
-
 
 
                                     }
+                                } else {
+                                    utils.endLoadingAnimation()
+                                    Toast.makeText(
+                                        mContext,
+                                        constants.SOMETHING_WENT_WRONG_MESSAGE,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+
                                 }
-                                else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
 
                             }
-                            .addOnFailureListener{
-                                Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
+                            .addOnFailureListener {
+                                Toast.makeText(mContext, it.message + "", Toast.LENGTH_SHORT).show()
 
                             }
-
 
 
                     }
-                }
-                else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                } else Toast.makeText(
+                    mContext,
+                    constants.SOMETHING_WENT_WRONG_MESSAGE,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-            .addOnFailureListener{
-                Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener {
+                Toast.makeText(mContext, it.message + "", Toast.LENGTH_SHORT).show()
 
             }
 
@@ -251,96 +301,121 @@ class DashboardFragment : Fragment() {
     }
 
 
-    suspend fun getAccount(){
+    suspend fun getAccount() {
         //utils.startLoadingAnimation()
         userViewModel.getAccounts()
-            .addOnCompleteListener{task ->
+            .addOnCompleteListener { task ->
                 // utils.endLoadingAnimation()
 
                 if (task.isSuccessful) {
                     val list = ArrayList<ModelBankAccount>()
-                    if(task.result.size()>0){
-                        for (document in task.result)list.add( document.toObject(
-                            ModelBankAccount::class.java).apply { docID = document.id })
+                    if (task.result.size() > 0) {
+                        for (document in task.result) list.add(document.toObject(
+                            ModelBankAccount::class.java
+                        ).apply { docID = document.id })
 
                         sharedPrefManager.putAccountList(list)
-
-
 
 
                         //Toast.makeText(mContext, "d2 : "+ task.result.size(), Toast.LENGTH_SHORT).show()
 
 
                     }
-                }
-                else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                } else Toast.makeText(
+                    mContext,
+                    constants.SOMETHING_WENT_WRONG_MESSAGE,
+                    Toast.LENGTH_SHORT
+                ).show()
 
             }
-            .addOnFailureListener{
-                Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener {
+                Toast.makeText(mContext, it.message + "", Toast.LENGTH_SHORT).show()
 
             }
     }
 
-    suspend fun getNominees(){
+    suspend fun getNominees() {
 
         nomineeViewModel.getNominees()
-            .addOnCompleteListener{task ->
+            .addOnCompleteListener { task ->
                 //utils.endLoadingAnimation()
                 if (task.isSuccessful) {
                     val list = ArrayList<ModelNominee>()
-                    if(task.result.size()>0){
-                        for (document in task.result) list.add( document.toObject(ModelNominee::class.java).apply { docID = document.id })
+                    if (task.result.size() > 0) {
+                        for (document in task.result) list.add(
+                            document.toObject(ModelNominee::class.java)
+                                .apply { docID = document.id })
 
                         sharedPrefManager.putNomineeList(list)
 
                         //Toast.makeText(mContext, "d3 : "+ task.result.size(), Toast.LENGTH_SHORT).show()
 
                     }
-                }
-                else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                } else Toast.makeText(
+                    mContext,
+                    constants.SOMETHING_WENT_WRONG_MESSAGE,
+                    Toast.LENGTH_SHORT
+                ).show()
 
             }
-            .addOnFailureListener{
-                Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener {
+                Toast.makeText(mContext, it.message + "", Toast.LENGTH_SHORT).show()
 
             }
     }
 
 
-    suspend fun getFA(){
+    suspend fun getFA() {
 
         faViewModel.getFA()
-            .addOnCompleteListener{task ->
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val list = ArrayList<ModelFA>()
-                    if(task.result.size()>0){
-                        for (document in task.result)list.add( document.toObject(ModelFA::class.java).apply { id = document.id })
+                    if (task.result.size() > 0) {
+                        for (document in task.result) list.add(
+                            document.toObject(ModelFA::class.java).apply { id = document.id })
 
                         sharedPrefManager.putFAList(list)
 
                     }
-                }
-                else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                } else Toast.makeText(
+                    mContext,
+                    constants.SOMETHING_WENT_WRONG_MESSAGE,
+                    Toast.LENGTH_SHORT
+                ).show()
 
             }
-            .addOnFailureListener{
+            .addOnFailureListener {
                 utils.endLoadingAnimation()
-                Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
+                Toast.makeText(mContext, it.message + "", Toast.LENGTH_SHORT).show()
 
             }
     }
 
 
+    fun announce() {
 
+        announcementListener = db.collection("Admin Announcement")
+            .orderBy("createdAt", com.google.firebase.firestore.Query.Direction.DESCENDING)
+            .limit(1)
+            .addSnapshotListener { querySnapshot, error ->
+                if (error != null) {
+                    // Handle error
+                    return@addSnapshotListener
+                }
 
+                if (querySnapshot != null && !querySnapshot.isEmpty) {
+                    val latestAnnouncement = querySnapshot.documents[0].getString("announcement")
+                    binding.tvAnnouncement.text = latestAnnouncement
+                }
+            }
 
-
-
+    }
 
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        announcementListener?.remove()
     }
 }

@@ -55,7 +55,10 @@ class TransactionsAdapter (
             itemBinding.tvInvestorName.text="${user.firstName}"
             itemBinding.tvPreviousBalance.text="${transactionModel.previousBalance}"
             itemBinding.tvInvestmentDate.text="${SimpleDateFormat( "hh:mm a dd/MM/yy", Locale.getDefault()).format(transactionModel.createdAt!!.toDate()).toString()}"
-            if(activity.equals(constant.FROM_PENDING_WITHDRAW_REQ)) itemBinding.tvInvestWithdrawHeader.text="Withdraw"
+            if(activity.equals(constant.FROM_PENDING_WITHDRAW_REQ) || activity.equals(constant.FROM_APPROVED_WITHDRAW_REQ)) {
+                itemBinding.tvInvestWithdrawHeader.text="Withdraw"
+
+            }
             itemBinding.tvInvestment.text="${transactionModel.amount}"
 
 

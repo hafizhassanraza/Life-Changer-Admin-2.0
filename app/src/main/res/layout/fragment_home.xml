@@ -172,7 +172,7 @@
                         android:textStyle="bold"
                         android:textSize="12dp"
                         android:layout_gravity="center_horizontal"
-                        android:text="Investment Request"/>
+                        android:text="Investment Details"/>
 
                     <ImageView
                         android:layout_width="20dp"
@@ -193,7 +193,7 @@
                         android:layout_centerInParent="true"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="20dp"
-                        android:src="@drawable/ic_launcher_background" />
+                        android:src="@drawable/ic_money" />
 
 
 
@@ -404,7 +404,7 @@
                         android:textStyle="bold"
                         android:textSize="12dp"
                         android:layout_gravity="center_horizontal"
-                        android:text="Withdraw Request"/>
+                        android:text="Profit Details"/>
 
                     <ImageView
                         android:layout_width="20dp"
@@ -425,7 +425,7 @@
                         android:layout_centerInParent="true"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="20dp"
-                        android:src="@drawable/ic_launcher_background" />
+                        android:src="@drawable/ic_investment" />
                     <LinearLayout
                         android:layout_width="200dp"
                         android:visibility="gone"
@@ -677,7 +677,7 @@
                         android:layout_centerInParent="true"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="20dp"
-                        android:src="@drawable/ic_launcher_background" />
+                        android:src="@drawable/ic_withdraw" />
 
                     <LinearLayout
                         android:visibility="gone"
@@ -736,6 +736,7 @@
                     </LinearLayout>
                 </RelativeLayout>
 
+
             </androidx.cardview.widget.CardView>
 
         </LinearLayout>
@@ -778,7 +779,7 @@
                         android:textStyle="bold"
                         android:textSize="12dp"
                         android:layout_gravity="center_horizontal"
-                        android:text="Investment Details"/>
+                        android:text="Tax Details"/>
 
                     <ImageView
                         android:layout_width="20dp"
@@ -799,7 +800,7 @@
                         android:layout_centerInParent="true"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="20dp"
-                        android:src="@drawable/ic_launcher_background" />
+                        android:src="@drawable/_tax" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -843,6 +844,11 @@
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
+
+
+
+
+
 
 
 
