@@ -30,6 +30,15 @@
             android:name=".ui.ActivityWithdrawRequest"
             android:exported="false" />
         <activity
+            android:name=".ui.ActivityAddTax"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ActivityAddProfit"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ActivityWithdrawRequest"
+            android:exported="false" />
+        <activity
             android:name=".ui.ActivityInvestors"
             android:exported="false" />
         <activity

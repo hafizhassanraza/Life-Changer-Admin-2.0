@@ -35,11 +35,9 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
     private var originalFAList: List<User> = emptyList()
     private lateinit var user: User
 
-
+    private val userlist = ArrayList<User>()
     private val faViewModel: FAViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
-
-
     private lateinit var modelFA: ModelFA
 
 
@@ -56,18 +54,18 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityFadetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mContext = this@ActivityFADetails
         utils = Utils(mContext)
         constants = Constants()
         sharedPrefManager = SharedPrefManager(mContext)
+        binding.rvClients.layoutManager = LinearLayoutManager(mContext)
+
+
 
         supportActionBar?.title = "Financial Advisor Details"
-
         modelFA = ModelFA.fromString(intent.getStringExtra("FA").toString())!!
-
         binding.fbAddClient.setOnClickListener {
             showClientDialog()
         }
@@ -78,6 +76,7 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
 
 
 
+        originalFAList = userViewModel.getusers(modelFA.id)
         binding.svClients.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -91,36 +90,17 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
         })
 
 
-
-
     }
 
     fun getData() {
 
-        binding.rvClients.layoutManager = LinearLayoutManager(mContext)
         binding.rvClients.adapter = userViewModel.getAssignedInvestorsAdapter(
             modelFA.id,
             constant.FROM_ASSIGNED_FA,
             this@ActivityFADetails
         )
+
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     fun showClientDialog() {
@@ -150,49 +130,44 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
     }
 
 
-
-
-
-
-
-
-
-
-
     private fun filterclients(text: String) {
-        val filteredList = ArrayList<User>()
-        if (text.isEmpty() || text.isBlank()) {
-            rvInvestors.adapter =
-                InvestorAdapter(constants.FROM_ASSIGNED_FA, filteredList, this@ActivityFADetails)
+        // creating a new array list to filter our data.
+        val filteredlist = ArrayList<User>()
+        if (text.isEmpty() || text.equals("")) {
+            binding.rvClients.adapter =
+                InvestorAdapter(constants.FROM_ASSIGNED_FA, originalFAList, this@ActivityFADetails)
+
         } else {
-            for (User in originalFAList) {
-                if (User.cnic.toLowerCase(Locale.getDefault())
+            for (user in originalFAList) {
+
+                // Toast.makeText(this@ActivityFADetails, user.cnic +"", Toast.LENGTH_SHORT).show()
+                // checking if the entered string matched with any item of our recycler view.
+                if (user.firstName.toLowerCase(Locale.getDefault())
                         .contains(text.toLowerCase(Locale.getDefault()))
                 ) {
-                    filteredList.add(user)
+                    filteredlist.add(user)
                 }
             }
-
-            if (filteredList.isEmpty()) {
+            if (filteredlist.isEmpty()) {
+                // if no item is added in filtered list we are
+                // displaying a toast message as no data found.
                 Toast.makeText(mContext, "No Data Found..", Toast.LENGTH_SHORT).show()
             } else {
-                rvInvestors.adapter = InvestorAdapter(
+                // at last we are passing that filtered
+                // list to our adapter class.
+
+
+                binding.rvClients.adapter = InvestorAdapter(
                     constants.FROM_ASSIGNED_FA,
-                    filteredList,
+                    originalFAList,
                     this@ActivityFADetails
                 )
+
             }
         }
+        // running a for loop to compare elements.
+
     }
-
-
-
-
-
-
-
-
-
 
 
     override fun onItemClick(user: User) {
@@ -262,11 +237,14 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
     private fun filter(text: String) {
         val filteredList = ArrayList<User>()
         if (text.isEmpty() || text.isBlank()) {
-            rvInvestors.adapter =
-                InvestorAdapter(constants.FROM_UN_ASSIGNED_FA, filteredList, this@ActivityFADetails)
+            rvInvestors.adapter = InvestorAdapter(
+                constants.FROM_UN_ASSIGNED_FA,
+                originalFAList,
+                this@ActivityFADetails
+            )
         } else {
-            for (User in originalFAList) {
-                if (User.cnic.toLowerCase(Locale.getDefault())
+            for (user in originalFAList) {
+                if (user.firstName.toLowerCase(Locale.getDefault())
                         .contains(text.toLowerCase(Locale.getDefault()))
                 ) {
                     filteredList.add(user)
@@ -276,9 +254,9 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
             if (filteredList.isEmpty()) {
                 Toast.makeText(mContext, "No Data Found..", Toast.LENGTH_SHORT).show()
             } else {
-                rvInvestors.adapter = InvestorAdapter(
+                binding.rvClients.adapter = InvestorAdapter(
                     constants.FROM_UN_ASSIGNED_FA,
-                    filteredList,
+                    originalFAList,
                     this@ActivityFADetails
                 )
             }
@@ -289,11 +267,9 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
 
 
 
+override fun onRemoveClick(user: User) {
+    Toast.makeText(mContext, "Un Assigned", Toast.LENGTH_SHORT).show()
 
-
-    override fun onRemoveClick(user: User) {
-        Toast.makeText(mContext, "Un Assigned", Toast.LENGTH_SHORT).show()
-
-    }
+}
 
 }
