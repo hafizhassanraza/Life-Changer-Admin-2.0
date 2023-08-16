@@ -28,11 +28,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.launch
 import java.util.Locale
 
-class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListener {
+class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListener, AdapterFA.OnItemClickListener {
 
     private lateinit var rvInvestors: RecyclerView
     private lateinit var dialog: BottomSheetDialog
     private var originalFAList: List<User> = emptyList()
+    private var originallist: List<User> = emptyList()
     private lateinit var user: User
 
     private val userlist = ArrayList<User>()
@@ -63,6 +64,26 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
         binding.rvClients.layoutManager = LinearLayoutManager(mContext)
 
 
+        val modelFAStr = intent.getStringExtra("FA")
+
+        // Convert the string back to a ModelFA instance using your utility function
+        val model: ModelFA? = modelFAStr?.let { ModelFA.fromString(it) }
+
+        if (model != null) {
+            // Now you can access properties of the modelFA object
+            binding.tvInvestorName.text = model.firstName
+            binding.tvInvestorCnic.text = model.cnic
+            binding.tvInvestorPhoneNumber.text = model.phone
+            // Set other details as needed
+        }
+
+
+
+
+
+
+
+
 
         supportActionBar?.title = "Financial Advisor Details"
         modelFA = ModelFA.fromString(intent.getStringExtra("FA").toString())!!
@@ -71,18 +92,15 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
         }
 
 
-
         getData()
 
-
-
         originalFAList = userViewModel.getusers(modelFA.id)
+        originallist = userViewModel.getusers2(modelFA.id)
         binding.svClients.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 return false
             }
-
             override fun onQueryTextChange(newText: String): Boolean {
                 filterclients(newText)
                 return false
@@ -159,7 +177,7 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
 
                 binding.rvClients.adapter = InvestorAdapter(
                     constants.FROM_ASSIGNED_FA,
-                    originalFAList,
+                    filteredlist,
                     this@ActivityFADetails
                 )
 
@@ -171,6 +189,7 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
 
 
     override fun onItemClick(user: User) {
+        Toast.makeText(this, "", Toast.LENGTH_SHORT).show()
     }
 
     override fun onAssignClick(user: User) {
@@ -239,11 +258,11 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
         if (text.isEmpty() || text.isBlank()) {
             rvInvestors.adapter = InvestorAdapter(
                 constants.FROM_UN_ASSIGNED_FA,
-                originalFAList,
+                originallist,
                 this@ActivityFADetails
             )
         } else {
-            for (user in originalFAList) {
+            for (user in originallist) {
                 if (user.firstName.toLowerCase(Locale.getDefault())
                         .contains(text.toLowerCase(Locale.getDefault()))
                 ) {
@@ -254,22 +273,64 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
             if (filteredList.isEmpty()) {
                 Toast.makeText(mContext, "No Data Found..", Toast.LENGTH_SHORT).show()
             } else {
-                binding.rvClients.adapter = InvestorAdapter(
+                rvInvestors.adapter = InvestorAdapter(
                     constants.FROM_UN_ASSIGNED_FA,
-                    originalFAList,
-                    this@ActivityFADetails
-                )
+                    filteredList,
+                    this@ActivityFADetails)
             }
         }
     }
 
 
 
+    override fun onRemoveClick(user: User) {
+        user.fa_id = "" // Set the fa_id to empty to indicate unassigned status
+
+        utils.startLoadingAnimation()
+        lifecycleScope.launch {
+            userViewModel.setUser(user).addOnCompleteListener { task ->
+                lifecycleScope.launch {
+                    userViewModel.getUsers().addOnCompleteListener { task ->
+                        utils.endLoadingAnimation()
+                        if (task.isSuccessful) {
+                            val list = ArrayList<User>()
+                            if (task.result.size() > 0) {
+                                for (document in task.result) list.add(
+                                    document.toObject(User::class.java).apply { id = document.id })
+                                sharedPrefManager.putUserList(list)
+                                Toast.makeText(mContext, "Removed from assigned", Toast.LENGTH_SHORT).show()
+                                getData()
+                            }
+                        } else {
+                            Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                        }
+                    }.addOnFailureListener {
+                        utils.endLoadingAnimation()
+                        Toast.makeText(mContext, it.message + "", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }.addOnFailureListener {
+                utils.endLoadingAnimation()
+                Toast.makeText(mContext, it.message + "", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onItemClick(modelFA: ModelFA) {
 
 
-override fun onRemoveClick(user: User) {
-    Toast.makeText(mContext, "Un Assigned", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "yes inhdgd", Toast.LENGTH_SHORT).show()
+        binding.tvInvestorName.text = modelFA.firstName
+        binding.tvInvestorCnic.text = modelFA.cnic
+        binding.tvInvestorPhoneNumber.text = modelFA.phone
 
-}
+        // You can set other details here if needed
+    }
+
+
+    override fun onDeleteClick(modelFA: ModelFA) {
+        TODO("Not yet implemented")
+    }
+
 
 }

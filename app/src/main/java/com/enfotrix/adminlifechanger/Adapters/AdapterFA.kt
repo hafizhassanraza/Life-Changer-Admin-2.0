@@ -41,10 +41,11 @@ class AdapterFA(val data: List<ModelFA>, val listener: AdapterFA.OnItemClickList
             itemBinding.tvName.text = modelFA.firstName
             itemBinding.tvCNIC.text = modelFA.cnic
             itemBinding.tvMobile.text = modelFA.phone
-
-
-            itemBinding.layFA.setOnClickListener { listener.onItemClick(modelFA) }
-            /* itemBinding.tvDate.text= SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(profitTaxModel.createdAt!!.toDate()).toString()
+            itemBinding.layFA.setOnClickListener {
+                listener.onItemClick(modelFA)
+                /*
+            itemBinding.layFA.setOnClickListener { listener.onItemClick(modelFA) }*/
+                /* itemBinding.tvDate.text= SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(profitTaxModel.createdAt!!.toDate()).toString()
              itemBinding.tvPreviousBalance.text=profitTaxModel.previousBalance
              itemBinding.tvNewBalance.text=profitTaxModel.newBalance
 
@@ -61,7 +62,8 @@ class AdapterFA(val data: List<ModelFA>, val listener: AdapterFA.OnItemClickList
              }*/
 
 
-        }
+            }
 
+        }
     }
 }

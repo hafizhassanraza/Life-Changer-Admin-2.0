@@ -149,6 +149,11 @@ class UserViewModel(context: Application) : AndroidViewModel(context) {
         return sharedPrefManager.getUsersList().filter {
             it.fa_id.equals(fa_ID)
         }
+    }
+        fun getusers2(fa_ID: String): List<User> {
+        return sharedPrefManager.getUsersList().filter {
+            it.fa_id.isEmpty()
+        }
 
 
     }
