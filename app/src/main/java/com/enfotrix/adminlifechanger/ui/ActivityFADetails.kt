@@ -3,6 +3,7 @@ package com.enfotrix.adminlifechanger.ui
 import User
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
@@ -28,7 +29,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.launch
 import java.util.Locale
 
-class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListener, AdapterFA.OnItemClickListener {
+class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListener,
+    AdapterFA.OnItemClickListener {
 
     private lateinit var rvInvestors: RecyclerView
     private lateinit var dialog: BottomSheetDialog
@@ -64,19 +66,6 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
         binding.rvClients.layoutManager = LinearLayoutManager(mContext)
 
 
-        val modelFAStr = intent.getStringExtra("FA")
-
-        // Convert the string back to a ModelFA instance using your utility function
-        val model: ModelFA? = modelFAStr?.let { ModelFA.fromString(it) }
-
-        if (model != null) {
-            // Now you can access properties of the modelFA object
-            binding.tvInvestorName.text = model.firstName
-            binding.tvInvestorCnic.text = model.cnic
-            binding.tvInvestorPhoneNumber.text = model.phone
-            // Set other details as needed
-        }
-
 
 
 
@@ -93,14 +82,39 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
 
 
         getData()
+        setdata()
 
         originalFAList = userViewModel.getusers(modelFA.id)
         originallist = userViewModel.getusers2(modelFA.id)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        binding.tveditfa.setOnClickListener {
+            startActivity(Intent(this@ActivityFADetails, ActivityEditFA::class.java).apply {
+                putExtra("FA", modelFA.toString())
+            })
+        }
+        setdata()
         binding.svClients.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 return false
             }
+
             override fun onQueryTextChange(newText: String): Boolean {
                 filterclients(newText)
                 return false
@@ -189,7 +203,7 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
 
 
     override fun onItemClick(user: User) {
-        Toast.makeText(this, "", Toast.LENGTH_SHORT).show()
+
     }
 
     override fun onAssignClick(user: User) {
@@ -276,11 +290,11 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
                 rvInvestors.adapter = InvestorAdapter(
                     constants.FROM_UN_ASSIGNED_FA,
                     filteredList,
-                    this@ActivityFADetails)
+                    this@ActivityFADetails
+                )
             }
         }
     }
-
 
 
     override fun onRemoveClick(user: User) {
@@ -298,11 +312,19 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
                                 for (document in task.result) list.add(
                                     document.toObject(User::class.java).apply { id = document.id })
                                 sharedPrefManager.putUserList(list)
-                                Toast.makeText(mContext, "Removed from assigned", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    mContext,
+                                    "Removed from assigned",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 getData()
                             }
                         } else {
-                            Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                mContext,
+                                constants.SOMETHING_WENT_WRONG_MESSAGE,
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }.addOnFailureListener {
                         utils.endLoadingAnimation()
@@ -317,14 +339,6 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
     }
 
     override fun onItemClick(modelFA: ModelFA) {
-
-
-        Toast.makeText(this, "yes inhdgd", Toast.LENGTH_SHORT).show()
-        binding.tvInvestorName.text = modelFA.firstName
-        binding.tvInvestorCnic.text = modelFA.cnic
-        binding.tvInvestorPhoneNumber.text = modelFA.phone
-
-        // You can set other details here if needed
     }
 
 
@@ -332,5 +346,15 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
         TODO("Not yet implemented")
     }
 
+    fun setdata() {
+        val modelFAStr = intent.getStringExtra("FA")
+        val model: ModelFA? = modelFAStr?.let { ModelFA.fromString(it) }
+        if (model != null) {
+            binding.tvInvestorName.text = model.firstName
+            binding.tvInvestorCnic.text = model.cnic
+            binding.tvInvestorPhoneNumber.text = model.phone
+            binding.tvInvestordesignation.text = model.designantion
+        }
+    }
 
 }
