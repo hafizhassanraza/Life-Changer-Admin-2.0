@@ -53,7 +53,7 @@ fun update()
             isSuccessLiveData.observe(this@ActivityEditFA) { isSuccess ->
                 if (isSuccess) {
                     // FA details updated successfully
-                    Toast.makeText(this@ActivityEditFA, "FA details updated", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ActivityEditFA,editedFirstName +" FA details updated", Toast.LENGTH_SHORT).show()
 
                 } else {
                     Toast.makeText(this@ActivityEditFA, "Failed to update FA details", Toast.LENGTH_SHORT).show()
