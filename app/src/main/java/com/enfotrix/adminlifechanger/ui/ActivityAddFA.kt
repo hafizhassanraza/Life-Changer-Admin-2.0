@@ -25,78 +25,76 @@ import kotlinx.coroutines.launch
 class ActivityAddFA : AppCompatActivity() {
 
 
-
-    private val faViewModel:FAViewModel by viewModels()
-    private lateinit var binding : ActivityAddFaBinding
-
+    private val faViewModel: FAViewModel by viewModels()
+    private lateinit var binding: ActivityAddFaBinding
 
 
-    var constant= Constants()
+    var constant = Constants()
     private lateinit var utils: Utils
     private lateinit var context: Context
     private lateinit var constants: Constants
     private lateinit var user: User
-    private lateinit var sharedPrefManager : SharedPrefManager
-    private lateinit var dialog : Dialog
+    private lateinit var sharedPrefManager: SharedPrefManager
+    private lateinit var dialog: Dialog
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddFaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        context= this@ActivityAddFA
+        context = this@ActivityAddFA
 
 
         supportActionBar?.title = "Add Financial Advisor"
 
 
-        context=this@ActivityAddFA
+        context = this@ActivityAddFA
         utils = Utils(context)
-        constants= Constants()
+        constants = Constants()
         sharedPrefManager = SharedPrefManager(context)
 
 
 
-        binding.btnProfileRegister.setOnClickListener{
-            if((!IsEmpty()) && IsValid() ) checkCNIC(utils.cnicFormate( binding.etCNIC.editText?.text.toString()))
+        binding.btnProfileRegister.setOnClickListener {
+            if ((!IsEmpty()) && IsValid()) checkCNIC(utils.cnicFormate(binding.etCNIC.editText?.text.toString()))
         }
-
 
 
     }
 
 
-
-    private fun checkCNIC(cnic:String) {
+    private fun checkCNIC(cnic: String) {
 
 
         utils.startLoadingAnimation()
 
 
-        lifecycleScope.launch{
+        lifecycleScope.launch {
 
             faViewModel.isFAExist(cnic)
-                .addOnCompleteListener{task ->
+                .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
 
-                        if(task.result.size()>0){
+                        if (task.result.size() > 0) {
 
                             utils.endLoadingAnimation()
 
-                            Toast.makeText(context, constants.INVESTOR_CNIC_EXIST, Toast.LENGTH_SHORT).show()
-                            binding.etCNIC.editText?.error =constants.INVESTOR_CNIC_EXIST
+                            Toast.makeText(
+                                context,
+                                constants.INVESTOR_CNIC_EXIST,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            binding.etCNIC.editText?.error = constants.INVESTOR_CNIC_EXIST
 
 
-                        }
-                        else {
-                            lifecycleScope.launch{
+                        } else {
+                            lifecycleScope.launch {
                                 faViewModel.addFA(
                                     ModelFA(
                                         cnic,
                                         binding.etFirstName.editText?.text.toString(),
                                         binding.etLastName.editText?.text.toString(),
                                         binding.etAddress.editText?.text.toString(),
-
                                         "",
                                         "",
                                         "",
@@ -105,40 +103,63 @@ class ActivityAddFA : AppCompatActivity() {
                                         "",
                                         "",
                                         binding.etDesignation.editText?.text.toString(),
-                                        Timestamp.now())
+                                        Timestamp.now(),
+                                        binding.etpassword.editText?.text.toString()
+                                    )
                                 ).observe(this@ActivityAddFA) {
                                     if (it == true) {
 
-                                        lifecycleScope.launch{
+                                        lifecycleScope.launch {
                                             faViewModel.getFA()
-                                                .addOnCompleteListener{task ->
+                                                .addOnCompleteListener { task ->
                                                     utils.endLoadingAnimation()
                                                     if (task.isSuccessful) {
                                                         val list = ArrayList<ModelFA>()
-                                                        if(task.result.size()>0){
-                                                            for (document in task.result)list.add( document.toObject(ModelFA::class.java).apply { id = document.id })
+                                                        if (task.result.size() > 0) {
+                                                            for (document in task.result) list.add(
+                                                                document.toObject(ModelFA::class.java)
+                                                                    .apply { id = document.id })
 
                                                             sharedPrefManager.putFAList(list)
 
-                                                            Toast.makeText(context, constants.FA_SIGNUP_MESSAGE, Toast.LENGTH_SHORT).show()
-                                                            startActivity(Intent(context,ActivityFA::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                                                            Toast.makeText(
+                                                                context,
+                                                                constants.FA_SIGNUP_MESSAGE,
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                            startActivity(
+                                                                Intent(
+                                                                    context,
+                                                                    ActivityFA::class.java
+                                                                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                            )
                                                             finish()
                                                         }
-                                                    }
-                                                    else Toast.makeText(context, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                                                    } else Toast.makeText(
+                                                        context,
+                                                        constants.SOMETHING_WENT_WRONG_MESSAGE,
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
 
                                                 }
-                                                .addOnFailureListener{
+                                                .addOnFailureListener {
                                                     utils.endLoadingAnimation()
-                                                    Toast.makeText(context, it.message+"", Toast.LENGTH_SHORT).show()
+                                                    Toast.makeText(
+                                                        context,
+                                                        it.message + "",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
 
                                                 }
 
 
                                         }
 
-                                    }
-                                    else Toast.makeText(context, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                                    } else Toast.makeText(
+                                        context,
+                                        constants.SOMETHING_WENT_WRONG_MESSAGE,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
 
                                 }
 
@@ -149,7 +170,7 @@ class ActivityAddFA : AppCompatActivity() {
 
 
                 }
-                .addOnFailureListener{
+                .addOnFailureListener {
                     utils.endLoadingAnimation()
                     Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
 
@@ -160,32 +181,41 @@ class ActivityAddFA : AppCompatActivity() {
     }
 
 
-
     private fun IsEmpty(): Boolean {
 
         val result = MutableLiveData<Boolean>()
-        result.value=true
-        if (binding.etCNIC.editText?.text.toString().isEmpty()) binding.etCNIC.editText?.error = "Empty CNIC"
-        else if (binding.etAddress.editText?.text.toString().isEmpty()) binding.etAddress.editText?.error = "Empty Address"
-        else if (binding.etFirstName.editText?.text.toString().isEmpty()) binding.etFirstName.editText?.error = "Empty First Name"
-        else if (binding.etLastName.editText?.text.toString().isEmpty()) binding.etLastName.editText?.error = "Empty Last Name"
-        else if (binding.etDesignation.editText?.text.toString().isEmpty()) binding.etDesignation.editText?.error = "Empty Designation"
+        result.value = true
+        if (binding.etCNIC.editText?.text.toString().isEmpty()) binding.etCNIC.editText?.error =
+            "Empty CNIC"
+        else if (binding.etAddress.editText?.text.toString()
+                .isEmpty()
+        ) binding.etAddress.editText?.error = "Empty Address"
+        else if (binding.etFirstName.editText?.text.toString()
+                .isEmpty()
+        ) binding.etFirstName.editText?.error = "Empty First Name"
+        else if (binding.etLastName.editText?.text.toString()
+                .isEmpty()
+        ) binding.etLastName.editText?.error = "Empty Last Name"
+        else if (binding.etDesignation.editText?.text.toString()
+                .isEmpty()
+        ) binding.etDesignation.editText?.error = "Empty Designation"
         //else if (binding.etMobileNumber.editText?.text.toString().isEmpty()) binding.etMobileNumber.editText?.error = "Empty Phone"
         else result.value = false
 
         return result.value!!
     }
+
     private fun IsValid(): Boolean {
 
         val result = MutableLiveData<Boolean>()
-        result.value=false
-        if (binding.etCNIC.editText?.text.toString().length<13) binding.etCNIC.editText?.error = "Invalid CNIC"
+        result.value = false
+        if (binding.etCNIC.editText?.text.toString().length < 13) binding.etCNIC.editText?.error =
+            "Invalid CNIC"
         //else if (binding.etMobileNumber.editText?.text.toString().length<11) binding.etMobileNumber.editText?.error = "Invalid Phone Number"
         else result.value = true
 
         return result.value!!
     }
-
 
 
 }

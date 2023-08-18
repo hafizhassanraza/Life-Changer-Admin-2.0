@@ -354,6 +354,7 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
             binding.tvInvestorCnic.text = model.cnic
             binding.tvInvestorPhoneNumber.text = model.phone
             binding.tvInvestordesignation.text = model.designantion
+
         }
     }
 

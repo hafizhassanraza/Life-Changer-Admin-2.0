@@ -22,31 +22,44 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_launcher_background"/>
-            <LinearLayout
-                android:layout_toRightOf="@+id/imgUserProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/tvName"
+                    android:textStyle="bold"
+                    android:layout_toRightOf="@+id/imgUserProfile"
+                    android:textColor="@color/primary"
+                    android:paddingStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Mr. xYZ"/>
                 <TextView
                     android:id="@+id/tvCNIC"
-
+                    android:paddingStart="20dp"
+                    android:layout_toRightOf="@+id/imgUserProfile"
+                    android:layout_below="@+id/tvName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="CNIC"/>
                 <TextView
                     android:id="@+id/tvMobile"
-
+                    android:paddingStart="20dp"
+                    android:layout_toRightOf="@+id/imgUserProfile"
+                    android:layout_below="@+id/tvCNIC"
+                    android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Phone"/>
-            </LinearLayout>
-
+            <TextView
+                android:id="@+id/tvtimestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="time stamp when created"
+                android:layout_below="@+id/tvMobile"
+                android:paddingHorizontal="10dp"
+                android:paddingBottom="5dp"/>
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

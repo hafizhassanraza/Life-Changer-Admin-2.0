@@ -31,10 +31,11 @@
                     android:layout_margin="10dp"
                     app:cardElevation="4dp">
                     <ImageView
+                        android:id="@+id/ivprofile"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="fitCenter"
-                        android:src="@mipmap/ic_launcher"/>
+                       android:src="@drawable/ic_launcher_background"/>
                 </androidx.cardview.widget.CardView>
 
 

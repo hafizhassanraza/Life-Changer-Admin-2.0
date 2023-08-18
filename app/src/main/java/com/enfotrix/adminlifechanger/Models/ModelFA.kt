@@ -4,7 +4,7 @@ import com.enfotrix.lifechanger.Models.TransactionModel
 import com.google.firebase.Timestamp
 import com.google.gson.Gson
 
-data class ModelFA  @JvmOverloads constructor(
+data class ModelFA @JvmOverloads constructor(
     var cnic: String = "",
     var firstName: String = "",
     var lastName: String = "",
@@ -17,8 +17,9 @@ data class ModelFA  @JvmOverloads constructor(
     var pin: String = "",
     var id: String = "",
     var designantion: String = "",
-    val createdAt: Timestamp = Timestamp.now() // Creation timestamp
-){
+    val createdAt: Timestamp = Timestamp.now(), // Creation timestamp
+    val password: String = ""
+) {
 
     override fun toString(): String {
         val gson = Gson()
