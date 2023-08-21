@@ -100,11 +100,11 @@ class ActivityAddFA : AppCompatActivity() {
                                         "",
                                         "",
                                         "",
-                                        "",
+                                        binding.etpassword.editText?.text.toString(),
                                         "",
                                         binding.etDesignation.editText?.text.toString(),
-                                        Timestamp.now(),
-                                        binding.etpassword.editText?.text.toString()
+                                        Timestamp.now()
+
                                     )
                                 ).observe(this@ActivityAddFA) {
                                     if (it == true) {

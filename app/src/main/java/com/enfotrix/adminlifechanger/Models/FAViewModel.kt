@@ -49,14 +49,15 @@ class FAViewModel(context: Application) : AndroidViewModel(context) {
     fun getFAAdapter(listener: AdapterFA.OnItemClickListener): AdapterFA {
         return AdapterFA(sharedPrefManager.getFAList(), listener)
     }
-    fun updateFADetails(id: String, firstName: String, lastName: String, designation: String, cnic: String, password: String): MutableLiveData<Boolean> {
+    fun updateFADetails(id: String, firstName: String, lastName: String, designation: String, cnic: String, password: String,addres:String): MutableLiveData<Boolean> {
         val result = MutableLiveData<Boolean>()
         val faUpdate = mapOf(
             "firstName" to firstName,
             "lastName" to lastName,
             "designantion" to designation,
             "cnic" to cnic,
-        "password" to password
+        "pin" to password,
+           "address" to addres
         )
         FACollection.document(id).update(faUpdate)
             .addOnSuccessListener {

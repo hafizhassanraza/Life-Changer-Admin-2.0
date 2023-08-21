@@ -43,6 +43,7 @@ fun update()
         val editedDesignation = binding.etDesignation.editText?.text.toString()
         val editedCNIC = binding.etCNIC.editText?.text.toString()
         val editedpassword = binding.etpassword.editText?.text.toString()
+        val editaddress = binding.etAddress.editText?.text.toString()
         lifecycleScope.launch {
             val isSuccessLiveData = faViewModel.updateFADetails(
                 model!!.id,
@@ -50,7 +51,8 @@ fun update()
                 editedLastName,
                 editedDesignation,
                 editedCNIC,
-                editedpassword
+                editedpassword,
+                editaddress
             )
             isSuccessLiveData.observe(this@ActivityEditFA) { isSuccess ->
                 if (isSuccess) {
@@ -74,6 +76,8 @@ fun update()
             binding.etLastName.editText?.setText(model.lastName)
             binding.etDesignation.editText?.setText(model.designantion)
             binding.etCNIC.editText?.setText(model.cnic)
+            binding.etpassword.editText?.setText(model.pin)
+            binding.etAddress.editText?.setText(model.address)
         }
     }
 
