@@ -117,6 +117,9 @@ dependencies {
     //country code picker
     implementation 'com.hbb20:ccp:2.6.1'
 
+    /////////////////// In App Update /////////////////////
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
+
 
 
 
