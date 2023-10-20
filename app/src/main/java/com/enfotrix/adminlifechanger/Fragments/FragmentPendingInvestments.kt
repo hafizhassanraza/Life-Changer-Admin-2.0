@@ -81,6 +81,51 @@ class FragmentPendingInvestments : Fragment()  ,  TransactionsAdapter.OnItemClic
 
 
 
+    fun getAgentRequests(){
+        utils.startLoadingAnimation()
+        lifecycleScope.launch{
+            investmentViewModel.getPendingInvestmentsReq()
+                .addOnCompleteListener{task ->
+                    if (task.isSuccessful) {
+                        utils.endLoadingAnimation()
+
+                        val list = ArrayList<TransactionModel>()
+                        if(task.result.size()>0){
+                            for (document in task.result) {
+                                Toast.makeText(mContext, ""+document.toObject(TransactionModel::class.java).type, Toast.LENGTH_SHORT).show()
+                                var transactionModel= document.toObject(TransactionModel::class.java)
+                                transactionModel.id=document.id
+                                list.add(transactionModel)
+                            }
+                            binding.rvInvestmentRequests.adapter=TransactionsAdapter(
+                                constant.FROM_PENDING_INVESTMENT_REQ,
+                                list.sortedByDescending { it.createdAt },
+                                sharedPrefManager.getUsersList(),
+                                sharedPrefManager.getFAList(),
+                                this@FragmentPendingInvestments)
+                            getAccount()
+                        }
+                    }
+                    else {
+                        utils.endLoadingAnimation()
+
+                        Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+                .addOnFailureListener{
+                    utils.endLoadingAnimation()
+                    Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
+
+                }
+
+
+        }
+    }
+
+
+
+
     fun getRequests(){
         utils.startLoadingAnimation()
         lifecycleScope.launch{
@@ -92,6 +137,7 @@ class FragmentPendingInvestments : Fragment()  ,  TransactionsAdapter.OnItemClic
                         val list = ArrayList<TransactionModel>()
                         if(task.result.size()>0){
                             for (document in task.result) {
+                                Toast.makeText(mContext, ""+document.toObject(TransactionModel::class.java).type, Toast.LENGTH_SHORT).show()
                                 var transactionModel= document.toObject(TransactionModel::class.java)
                                 transactionModel.id=document.id
                                 list.add(transactionModel)

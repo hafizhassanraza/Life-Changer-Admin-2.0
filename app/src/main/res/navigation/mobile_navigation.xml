@@ -18,8 +18,8 @@
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.enfotrix.adminlifechanger.Fragments.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_Fa"
+        android:name="com.enfotrix.adminlifechanger.Fragments.FaFragment"
+        android:label="Financial Advisor"
+        tools:layout="@layout/fragment_fa" />
 </navigation>

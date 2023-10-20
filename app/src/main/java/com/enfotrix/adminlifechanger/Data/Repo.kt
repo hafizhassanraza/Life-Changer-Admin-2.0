@@ -2,20 +2,19 @@ package com.enfotrix.lifechanger.Data
 
 import com.enfotrix.lifechanger.SharedPrefManager
 import User
-import android.app.Application
 import android.content.Context
 import android.net.Uri
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.enfotrix.adminlifechanger.Constants
+import com.enfotrix.adminlifechanger.Models.AgentTransactionModel
+import com.enfotrix.adminlifechanger.Models.AgentWithdrawModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
 import com.enfotrix.lifechanger.Models.TransactionModel
 import com.google.android.gms.tasks.Task
-import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
@@ -47,6 +46,7 @@ class Repo(val context: Context) {
 
     private var InvestorsCollection = db.collection(constants.INVESTOR_COLLECTION)
     private var FACollection = db.collection(constants.FA_COLLECTION)
+    private var AgentTransactionCollection = db.collection(constants.AGENT_TRANSACTION)
     private val NomineesCollection = db.collection(constants.NOMINEE_COLLECTION)
     private val AccountsCollection = db.collection(constants.ACCOUNTS_COLLECTION)
     private val InvestmentCollection = db.collection(constants.INVESTMENT_COLLECTION)
@@ -124,15 +124,56 @@ class Repo(val context: Context) {
     suspend fun registerFA(modelFA:ModelFA): LiveData<Boolean> {
         val result = MutableLiveData<Boolean>()
         modelFA.status= constants.INVESTOR_STATUS_INCOMPLETE
-        modelFA.id= FACollection.id
+        modelFA.id= FACollection.document().id
+
+
         FACollection.add(modelFA).addOnSuccessListener { documents ->
+modelFA.id=documents.id
+            updateFA(modelFA,documents.id)
             result.value =true
         }.addOnFailureListener {
             result.value = false
         }
         return result
     }
+    /*suspend fun addFaProfit(agentTransactionModel: AgentTransactionModel,modelFA: ModelFA): LiveData<Boolean> {
+        val result = MutableLiveData<Boolean>()
 
+
+        FAProfitCollection.add(agentTransactionModel).addOnSuccessListener { documents ->
+            FAProfitCollection.document(modelFA.id).set(AgentTransactionModel(modelFA.id))
+            result.value =true
+        }.addOnFailureListener {
+            result.value = false
+        }
+        return result
+    }*/
+
+
+    suspend fun addFaProfit(agentTransactionModel: AgentTransactionModel): LiveData<Boolean> {
+        val result = MutableLiveData<Boolean>()
+        // Use the specified document reference to set the data in FAProfitCollection
+        AgentTransactionCollection.add(agentTransactionModel)
+            .addOnSuccessListener {
+                result.value = true
+            }
+            .addOnFailureListener {
+                result.value = false
+            }
+
+        return result
+    }
+
+
+    fun updateFA(user: ModelFA,id:String): LiveData<Boolean> {
+        val result = MutableLiveData<Boolean>()
+        FACollection.document(id).set(user).addOnSuccessListener { documents ->
+            result.value =true
+        }.addOnFailureListener {
+            result.value = false
+        }
+        return result
+    }
 
 
     suspend fun registerUser(user: User): LiveData<Boolean> {
@@ -145,6 +186,10 @@ class Repo(val context: Context) {
         }
         return result
     }
+
+
+
+
     suspend fun updateUser(user: User): LiveData<Boolean> {
         val result = MutableLiveData<Boolean>()
         InvestorsCollection.document(sharedPrefManager.getToken()).set(user).addOnSuccessListener { documents ->
@@ -184,6 +229,10 @@ class Repo(val context: Context) {
     }
     suspend fun getFA(): Task<QuerySnapshot> {
         return FACollection.get()
+    } suspend fun getAgentTransactions(): Task<QuerySnapshot> {
+        return AgentTransactionCollection.get()
+    }suspend fun getAgentWithdraw(): Task<QuerySnapshot> {
+        return WithdrawCollection.get()
     }
     suspend fun registerNominee(nominee: ModelNominee): LiveData<Boolean> {
         val result = MutableLiveData<Boolean>()
@@ -254,6 +303,16 @@ class Repo(val context: Context) {
         return InvestmentCollection.document(investment.investorID).set(investment)
 
     }
+    suspend fun setAgentWithdraw(agentWithdrawModel: AgentWithdrawModel): Task<Void> {
+
+        return WithdrawCollection.document(agentWithdrawModel.id).set(agentWithdrawModel)
+
+    }
+    suspend fun setAgentTransaction(agentTransactionModel: AgentTransactionModel): Task<DocumentReference> {
+      /*  return AgentTransactionCollection.document(gentTransactionModel.fa_id).set(gentTransactionModel)*/
+        return  AgentTransactionCollection.add(agentTransactionModel)
+    }
+
     suspend fun addInvestment(investment: InvestmentModel): LiveData<Boolean> {
         val result = MutableLiveData<Boolean>()
         InvestmentCollection.document(investment.investorID).set(investment)
@@ -427,9 +486,14 @@ class Repo(val context: Context) {
     suspend fun getTransactionReq(status:String, type:String ): Task<QuerySnapshot> {
         return TransactionsReqCollection.whereEqualTo(constants.TRANSACTION_STATUS,status).whereEqualTo(constants.TRANSACTION_TYPE,type).get()
     }
+    suspend fun getTransactionAgentReq( ): Task<QuerySnapshot> {
+        return WithdrawCollection.get()
+    }
 
     suspend fun getUserInvestment(ID:String): Task<DocumentSnapshot> {
         return TransactionsReqCollection.document(ID).get()
+    }   suspend fun getAgentTransaction(): Task<QuerySnapshot> {
+        return AgentTransactionCollection.get()
     }
 
 

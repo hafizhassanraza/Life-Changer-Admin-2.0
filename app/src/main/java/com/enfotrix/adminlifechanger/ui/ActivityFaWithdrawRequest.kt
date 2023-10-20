@@ -6,20 +6,20 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.enfotrix.adminlifechanger.Adapters.InvestmentViewPagerAdapter
+import com.enfotrix.adminlifechanger.Adapters.FaWithdrawViewPagerAdapter
 import com.enfotrix.adminlifechanger.Adapters.WithdrawViewPagerAdapter
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.NomineeViewModel
 import com.enfotrix.adminlifechanger.R
-import com.enfotrix.adminlifechanger.databinding.ActivityInvestmentRequestBinding
+import com.enfotrix.adminlifechanger.databinding.ActivityFaWithdrawRequestBinding
 import com.enfotrix.adminlifechanger.databinding.ActivityWithdrawRequestBinding
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import com.google.android.material.tabs.TabLayoutMediator
 
-class ActivityWithdrawRequest : AppCompatActivity() {
+class ActivityFaWithdrawRequest : AppCompatActivity() {
 
 
     private val userViewModel: UserViewModel by viewModels()
@@ -29,7 +29,7 @@ class ActivityWithdrawRequest : AppCompatActivity() {
 
 
 
-    private lateinit var binding: ActivityWithdrawRequestBinding
+    private lateinit var binding: ActivityFaWithdrawRequestBinding
     private lateinit var utils: Utils
     private lateinit var mContext: Context
     private lateinit var constants: Constants
@@ -38,13 +38,17 @@ class ActivityWithdrawRequest : AppCompatActivity() {
     private lateinit var dialog : Dialog
 
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityWithdrawRequestBinding.inflate(layoutInflater)
+
+
+        binding = ActivityFaWithdrawRequestBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.title = "Investment Request"
 
-        mContext=this@ActivityWithdrawRequest
+        mContext=this@ActivityFaWithdrawRequest
         utils = Utils(mContext)
         constants= Constants()
         sharedPrefManager = SharedPrefManager(mContext)
@@ -64,7 +68,7 @@ class ActivityWithdrawRequest : AppCompatActivity() {
     }
 
     private fun setupViewPager() {
-        val adapter = WithdrawViewPagerAdapter(this, 2)
+        val adapter = FaWithdrawViewPagerAdapter(this, 2)
         binding.viewPager.adapter = adapter
     }
 
@@ -79,5 +83,4 @@ class ActivityWithdrawRequest : AppCompatActivity() {
             viewPager.currentItem = viewPager.currentItem - 1
         }
     }
-
 }

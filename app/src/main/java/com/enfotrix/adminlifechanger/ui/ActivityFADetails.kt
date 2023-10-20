@@ -9,6 +9,8 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
+import android.widget.Button
+import android.widget.EditText
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -18,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.enfotrix.adminlifechanger.Adapters.AdapterFA
 import com.enfotrix.adminlifechanger.Adapters.InvestorAdapter
 import com.enfotrix.adminlifechanger.Constants
+import com.enfotrix.adminlifechanger.Models.AgentTransactionModel
+import com.enfotrix.adminlifechanger.Models.AgentTransactionviewModel
 import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.R
@@ -26,6 +30,7 @@ import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -41,6 +46,7 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
     private val userlist = ArrayList<User>()
     private val faViewModel: FAViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
+    private val agentTransactionviewModel: AgentTransactionviewModel by viewModels()
     private lateinit var modelFA: ModelFA
 
 
@@ -92,7 +98,9 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
 
 
 
-
+        binding.tvAddProfit.setOnClickListener {
+            showProfitDialog()
+        }
 
 
 
@@ -122,6 +130,93 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
         })
 
 
+    }
+
+
+    fun showProfitDialog() {
+        var agentTransactionModel=AgentTransactionModel()
+
+        var list=ArrayList<AgentTransactionModel>()
+
+        lifecycleScope.launch {
+            agentTransactionviewModel.getAgentTransaction()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val list = mutableListOf<AgentTransactionModel>()
+
+                        for (document in task.result) {
+                            val transactionModel = document.toObject(AgentTransactionModel::class.java)
+                            if (transactionModel.fa_id == modelFA.id && transactionModel.type == constants.PROFIT_TYPE) {
+                                list.add(transactionModel)
+                            }
+                        }
+
+                        // Sort the list by transactionAt in descending order
+                        val sortedList = list.sortedByDescending { it.transactionAt }
+
+                        // Get the first element, which is the latest transaction
+                        if (sortedList.isNotEmpty()) {
+                            agentTransactionModel = sortedList[0]
+                            Toast.makeText(mContext, "${agentTransactionModel?.previousBalance} ${agentTransactionModel?.newBalance}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(mContext, constant.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                }
+        }
+
+
+        var dialog = Dialog(mContext)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(R.layout.dialog_add_profit)
+
+        val profit = dialog.findViewById<EditText>(R.id.etBalance)
+        val remarks = dialog.findViewById<EditText>(R.id.etRemarks)
+        val addProfit = dialog.findViewById<Button>(R.id.AddProfit)
+        addProfit.setOnClickListener {
+var amount=profit.text.toString()
+
+
+        /*    for(listagent in listagentTransactionModel)
+            {
+                Toast.makeText(mContext, ""+listagent.newBalance, Toast.LENGTH_SHORT).show()
+            }*/
+            var oldbalance=agentTransactionModel.newBalance
+            agentTransactionModel.salary=profit.text.toString()
+            agentTransactionModel.newBalance=(amount.toInt()+agentTransactionModel.newBalance.toInt()).toString()
+            agentTransactionModel.previousBalance=oldbalance.toString()
+            agentTransactionModel.remarks=remarks.text.toString()
+            agentTransactionModel.fa_id=modelFA.id
+            agentTransactionModel.receiverAccountID=modelFA.id
+            agentTransactionModel.amount=profit.text.toString()
+            agentTransactionModel.type=constant.PROFIT_TYPE
+            agentTransactionModel.status=constant.TRANSACTION_STATUS_APPROVED
+            agentTransactionModel.senderAccountID=sharedPrefManager.getToken()
+            agentTransactionModel.transactionAt=Timestamp.now()
+            lifecycleScope.launch {
+                faViewModel.addFaProfit(
+                   agentTransactionModel
+                )
+                    .observe(this@ActivityFADetails)
+                    { isSuccess ->
+                        if (isSuccess) {
+                            Toast.makeText(
+                                mContext,
+                                "Profit Added Successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            dialog.dismiss()
+                            startActivity(Intent(mContext,MainActivity::class.java))
+                        } else Toast.makeText(mContext, "Failed to Add profit", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+            }
+
+
+        }
+        dialog.show()
     }
 
     fun getData() {

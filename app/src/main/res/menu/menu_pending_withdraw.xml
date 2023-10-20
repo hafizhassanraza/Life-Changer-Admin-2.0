@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:id="@+id/investor"
+    android:title="Investor"
+    android:icon="@drawable/ic_launcher_background"/>
+    <item
+    android:id="@+id/fA"
+    android:title="Financial Advisor"
+    android:icon="@drawable/ic_launcher_background"/>
+</menu>

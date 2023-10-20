@@ -102,6 +102,7 @@ class ActivitySplash : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        appUpdateManager = AppUpdateManagerFactory.create(mContext)
         if (updateType == AppUpdateType.IMMEDIATE){
             appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
                 if(info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS){

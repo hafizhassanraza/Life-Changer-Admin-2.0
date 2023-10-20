@@ -21,6 +21,7 @@ class FAViewModel(context: Application) : AndroidViewModel(context) {
     private var FACollection = db.collection(constants.FA_COLLECTION)
 
 
+
     private val userRepo = Repo(context)
     private val sharedPrefManager = SharedPrefManager(context)
 
@@ -34,12 +35,18 @@ class FAViewModel(context: Application) : AndroidViewModel(context) {
 
     suspend fun addFA(modelFA: ModelFA): LiveData<Boolean> {
         return userRepo.registerFA(modelFA)
+    } suspend fun addFaProfit(agentTransactionModel: AgentTransactionModel): LiveData<Boolean>
+    {
+        return userRepo.addFaProfit(agentTransactionModel)
+
     }
 
     suspend fun getFA(): Task<QuerySnapshot> {
         return userRepo.getFA()
     }
-
+    suspend fun getAgentTransactions(): Task<QuerySnapshot> {
+        return userRepo.getAgentTransactions()
+    }
 
     fun getOriginalFAList(): List<ModelFA> {
         return sharedPrefManager.getFAList() // Replace this with your actual data source
@@ -68,6 +75,8 @@ class FAViewModel(context: Application) : AndroidViewModel(context) {
 
         return result
     }
+
+
 
 
 

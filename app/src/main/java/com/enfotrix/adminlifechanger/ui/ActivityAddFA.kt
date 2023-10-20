@@ -89,6 +89,8 @@ class ActivityAddFA : AppCompatActivity() {
 
                         } else {
                             lifecycleScope.launch {
+
+
                                 faViewModel.addFA(
                                     ModelFA(
                                         cnic,

@@ -8,12 +8,13 @@ public class Constants  {
 
     public var INVESTOR_COLLECTION="Investors"
     public var FA_COLLECTION="Financial Advisor"
+    public var AGENT_TRANSACTION="Agent Transaction"
     public var NOMINEE_COLLECTION="Nominees"
     public var ACCOUNTS_COLLECTION="Accounts"
     public var INVESTMENT_COLLECTION="Investment"
     public var TRANSACTION_REQ_COLLECTION="Transactions"
     public var PROFIT_TAX_COLLECTION="ProfitTax"
-    public var WITHDRAW_COLLECTION="Withdraw"
+    public var WITHDRAW_COLLECTION="Agent Withdraw"
     public var NOTIFICATION_COLLECTION="Notification"
 
 

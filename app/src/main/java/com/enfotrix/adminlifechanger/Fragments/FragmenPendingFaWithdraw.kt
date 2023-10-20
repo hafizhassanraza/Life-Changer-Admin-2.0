@@ -7,9 +7,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -17,28 +14,24 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.Constants
-import com.enfotrix.adminlifechanger.Models.AgentTransactionModel
 import com.enfotrix.adminlifechanger.Models.AgentTransactionviewModel
 import com.enfotrix.adminlifechanger.Models.AgentWithdrawModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.Models.NomineeViewModel
 import com.enfotrix.adminlifechanger.R
+import com.enfotrix.adminlifechanger.databinding.FragmentFragmenPendingFaWithdrawBinding
 import com.enfotrix.adminlifechanger.databinding.FragmentPendingWithdrawBinding
 import com.enfotrix.adminlifechanger.ui.ActivityAgentWithdrawReqDetails
-import com.enfotrix.adminlifechanger.ui.ActivityInvestmentReqDetails
 import com.enfotrix.lifechanger.Adapters.AgentTransactionsAdapter
-import com.enfotrix.lifechanger.Adapters.TransactionsAdapter
 import com.enfotrix.lifechanger.Models.ModelBankAccount
-import com.enfotrix.lifechanger.Models.TransactionModel
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import kotlinx.coroutines.launch
 
-//
-class FragmentPendingWithdraw : Fragment(), TransactionsAdapter.OnItemClickListener {
 
+class FragmenPendingFaWithdraw : Fragment(), AgentTransactionsAdapter.OnItemClickListener  {
 
     private val userViewModel: UserViewModel by viewModels()
     private val nomineeViewModel: NomineeViewModel by viewModels()
@@ -56,7 +49,7 @@ class FragmentPendingWithdraw : Fragment(), TransactionsAdapter.OnItemClickListe
     private lateinit var dialog : Dialog
 
 
-    private var _binding: FragmentPendingWithdrawBinding? = null
+    private var _binding: FragmentFragmenPendingFaWithdrawBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -67,7 +60,7 @@ class FragmentPendingWithdraw : Fragment(), TransactionsAdapter.OnItemClickListe
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentPendingWithdrawBinding.inflate(inflater, container, false)
+        _binding = FragmentFragmenPendingFaWithdrawBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
 
@@ -81,74 +74,51 @@ class FragmentPendingWithdraw : Fragment(), TransactionsAdapter.OnItemClickListe
 
 
 
-        binding.rvInvestmentRequests.layoutManager = LinearLayoutManager(mContext)
+        binding.rvWithdrawRequests.layoutManager = LinearLayoutManager(mContext)
 
-     getInvestor()
+       getFaWithdraw()
 
         return root
     }
-
-
-
-
-
-
-    fun getInvestor()
-
+    fun getFaWithdraw()
     {
-        utils.startLoadingAnimation()
-        lifecycleScope.launch {
-            investmentViewModel.getPendingWithdrawsReq()
-                .addOnCompleteListener { task ->
-                    utils.endLoadingAnimation()
+        lifecycleScope.launch{
+            agentWithdrawReqDetails.getPendingWithdrawsAgentReq()
+                .addOnCompleteListener{task ->
                     if (task.isSuccessful) {
-                        val list = ArrayList<TransactionModel>()
+                        utils.endLoadingAnimation()
+                        val list = ArrayList<AgentWithdrawModel>()
+                        if(task.result.size()>0){
+                            for (document in task.result) {
+                                if(document.toObject(AgentWithdrawModel::class.java).status==constant.TRANSACTION_STATUS_PENDING)
+                                {
 
-                        for (document in task.result) {
-                            val transactionModel = document.toObject(TransactionModel::class.java)
-                            transactionModel.id = document.id
-                            list.add(transactionModel)
-                        }
+                                    var agentWithdrawModel= document.toObject(AgentWithdrawModel::class.java)
+                                    list.add(agentWithdrawModel)
 
-                        if (list.isEmpty()) {
-                            // Handle the case when the list is empty
-                            Toast.makeText(mContext, "emptylist", Toast.LENGTH_SHORT).show()
-                            val emptyList = ArrayList<TransactionModel>() // Create an empty list
-                            binding.rvInvestmentRequests.adapter = TransactionsAdapter(
+                                }
+                            }
+                            binding.rvWithdrawRequests.adapter= AgentTransactionsAdapter(
                                 constant.FROM_PENDING_WITHDRAW_REQ,
-                                emptyList, // Pass the empty list to the adapter
-                                sharedPrefManager.getUsersList(),
+                                list.sortedByDescending { it.lastWithdrawReqDate },
                                 sharedPrefManager.getFAList(),
-                                this@FragmentPendingWithdraw
-                            )
-                        } else {
-                            // Handle the case when the list is not empty
-                            Toast.makeText(mContext, "list is not empty", Toast.LENGTH_SHORT).show()
-
-                            binding.rvInvestmentRequests.adapter = TransactionsAdapter(
-                                constant.FROM_PENDING_WITHDRAW_REQ,
-                                list.sortedByDescending { it.createdAt },
-                                sharedPrefManager.getUsersList(),
-                                sharedPrefManager.getFAList(),
-                                this@FragmentPendingWithdraw
-                            )
+                                this@FragmenPendingFaWithdraw)
+                            getAccount()
                         }
-
-                        getAccount()
-                    } else {
-                        // Handle the case when the task is not successful
+                    }
+                    else {
+                        utils.endLoadingAnimation()
                         Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
                     }
+
                 }
-                .addOnFailureListener { e ->
-                    // Handle the case when an exception occurs
+                .addOnFailureListener{
                     utils.endLoadingAnimation()
-                    Toast.makeText(mContext, e.message + "", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
                 }
 
         }
     }
-
     fun getAccount(){
         lifecycleScope.launch{
             userViewModel.getAccounts()
@@ -173,33 +143,15 @@ class FragmentPendingWithdraw : Fragment(), TransactionsAdapter.OnItemClickListe
         }
     }
 
+    override fun onAgentItemClick(agentWithdrawModel: AgentWithdrawModel, modelFA: ModelFA) {
+        startActivity(
+            Intent(mContext, ActivityAgentWithdrawReqDetails ::class.java)
+                .putExtra("agentwithdrawmodel",agentWithdrawModel.toString())
+                .putExtra("FA",modelFA.toString())
+                .putExtra("from",constant.FROM_PENDING_WITHDRAW_REQ)
 
+        )
 
-
-    override fun onItemClick(transactionModel: TransactionModel, user: User) {
-
-
-        //Toast.makeText(mContext, "debug1", Toast.LENGTH_SHORT).show()
-
-        sharedPrefManager.getFAList().find { it.id.equals(user.fa_id)}?.let {
-
-            Toast.makeText(mContext, transactionModel.receiverAccountID, Toast.LENGTH_SHORT).show()
-            Toast.makeText(mContext, transactionModel.receiverAccountID, Toast.LENGTH_SHORT).show()
-
-            startActivity(
-                Intent(mContext, ActivityInvestmentReqDetails ::class.java)
-                    .putExtra("transactionModel",transactionModel.toString())
-                    .putExtra("User",user.toString())
-                    .putExtra("from",constant.FROM_PENDING_WITHDRAW_REQ)
-                    .putExtra("FA",it.toString())
-            )
-
-        }
-    }
-
-
-
-    override fun onDeleteClick(transactionModel: TransactionModel) {
     }
 
 

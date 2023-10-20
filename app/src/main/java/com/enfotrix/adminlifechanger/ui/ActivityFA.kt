@@ -135,7 +135,7 @@ class ActivityFA : AppCompatActivity(), AdapterFA.OnItemClickListener {
                 Toast.makeText(mContext, "No Data Found..", Toast.LENGTH_SHORT).show()
             } else {
                 // Update the RecyclerView with the filtered list
-                binding.rvFA.adapter = AdapterFA(filteredList, this@ActivityFA)
+                binding.rvFA.adapter =AdapterFA(filteredList, this@ActivityFA)
             }
         }
     }
