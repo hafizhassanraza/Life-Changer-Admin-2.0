@@ -18,6 +18,7 @@ import com.enfotrix.lifechanger.Models.TransactionModel
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -76,6 +77,7 @@ class ActivityAddProfit : AppCompatActivity() {
         }*/
 
 
+
         getData()
 
         binding.btnAddProfit.setOnClickListener{
@@ -84,10 +86,148 @@ class ActivityAddProfit : AppCompatActivity() {
 
             addProfit(percentage.toDouble() / 100)
         }
+        binding.btnConvertProfit.setOnClickListener{
+
+
+            convertProfit()
+        }
+        binding.btnConvertInvestment.setOnClickListener{
+
+
+            convertInvestment()
+        }
 
     }
 
+
     private fun addProfit(percentage: Double) {
+        utils.startLoadingAnimation()
+
+        val totalInvestments = listInvestmentModel.size
+
+        for ((index, investmentModel) in listInvestmentModel.withIndex()) {
+            val previousBalance = investmentModel.investmentBalance
+            var previousProfit = investmentModel.lastProfit
+
+            if (!previousBalance.isNullOrEmpty()) {
+
+
+
+                if(previousProfit.isNullOrEmpty()) previousProfit="0"
+
+                val previousBalance_ = previousBalance.toInt()
+                val previousProfit_ = previousProfit.toInt()
+                val profit = (previousBalance_ * percentage).toInt()
+                val newProfit = previousProfit_ + profit
+
+                investmentModel.lastProfit = newProfit.toString()
+
+                val profitModel = TransactionModel(
+                    investmentModel.investorID,
+                    "Profit",
+                    "Approved",
+                    profit.toString(),  // Current (weekly) Profit
+                    "",
+                    previousProfit_.toString(), // Previous profit
+                    "",
+                    "",
+                    newProfit.toString(),  //  New profit
+                    Timestamp.now(),
+                    Timestamp.now()
+                )
+
+                lifecycleScope.launch {
+                    val setInvestmentTask = investmentViewModel.setInvestment(investmentModel)
+                    val addTransactionTask = db.collection(constants.TRANSACTION_REQ_COLLECTION).add(profitModel)
+
+                    Tasks.whenAllComplete(setInvestmentTask, addTransactionTask)
+                        .addOnCompleteListener {
+
+                            if (index == totalInvestments - 1) {
+                                utils.endLoadingAnimation()
+                                Toast.makeText(mContext, "Profit Added Successfully!", Toast.LENGTH_SHORT).show()
+                            }
+
+                        }
+                }
+            }
+        }
+    }
+    private fun convertProfit() {
+        utils.startLoadingAnimation()
+
+        val totalInvestments = listInvestmentModel.size
+
+        for ((index, investmentModel) in listInvestmentModel.withIndex()) {
+
+
+
+            val previousBalance = investmentModel.investmentBalance
+            val previousProfit = investmentModel.lastProfit
+
+            if (!previousProfit.isNullOrEmpty()) {
+
+
+                var previousBalance_ = previousBalance.toInt()
+                val previousProfit_ = previousProfit.toInt()
+
+                var newBalance = previousBalance_+ previousProfit_
+
+                investmentModel.lastProfit = "0"
+                investmentModel.investmentBalance= (newBalance.toInt()).toString()
+
+
+
+                lifecycleScope.launch {
+                    val setInvestmentTask = investmentViewModel.setInvestment(investmentModel)
+
+                    Tasks.whenAllComplete(setInvestmentTask)
+                        .addOnCompleteListener {
+
+                            if (index == totalInvestments - 1) {
+                                utils.endLoadingAnimation()
+                                Toast.makeText(mContext, "Profit Converted Successfully!", Toast.LENGTH_SHORT).show()
+                            }
+
+                        }
+                }
+
+            }
+        }
+    }
+    private fun convertInvestment() {
+        utils.startLoadingAnimation()
+
+        val totalInvestments = listInvestmentModel.size
+
+        for ((index, investmentModel) in listInvestmentModel.withIndex()) {
+
+            var inActiveInvestment = "0"
+            if (!investmentModel.lastInvestment.isNullOrEmpty()) inActiveInvestment = investmentModel.lastInvestment
+            val activeInvestment = investmentModel.investmentBalance
+
+
+            val inActiveInvestment_ = inActiveInvestment?.toInt() ?: 0
+            val activeInvestment_ = activeInvestment?.toInt() ?: 0
+            val newBalance = inActiveInvestment_ + activeInvestment_
+
+            investmentModel.lastInvestment="0"
+            investmentModel.investmentBalance = newBalance.toString()
+
+            lifecycleScope.launch {
+                val setInvestmentTask = investmentViewModel.setInvestment(investmentModel)
+
+                setInvestmentTask.addOnCompleteListener {
+                    if (index == totalInvestments - 1) {
+                        utils.endLoadingAnimation()
+                        Toast.makeText(mContext, "Investment Converted Successfully!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
+
+/*    private fun addProfit(percentage: Double) {
 
 
         utils.startLoadingAnimation()
@@ -99,14 +239,21 @@ class ActivityAddProfit : AppCompatActivity() {
 
 
             var previousBalance = investmentModel.investmentBalance
+            var previousProfit = investmentModel.lastProfit
 
             if (previousBalance != null && previousBalance != "") {
                 var profit: Double=0.0
 
                 var previousBalance_ = previousBalance.toInt()
+                var previousProfit_ = previousProfit.toInt()
                 profit = previousBalance_ * percentage
-                var newBalance = previousBalance_ + profit.toInt()
-                investmentModel.investmentBalance = newBalance.toString()
+
+                //var newBalance = previousBalance_ + profit.toInt()
+                var newProfit = previousProfit_ + profit.toInt()
+
+
+
+                investmentModel.lastProfit = (newProfit.toInt()).toString()
 
 
                 var profit_=profit.toInt()
@@ -115,12 +262,12 @@ class ActivityAddProfit : AppCompatActivity() {
                     investmentModel.investorID,
                     "Profit",
                     "Approved",
-                    profit_.toString(),
+                    profit_.toString(), // current (weekly) Profit
                     "",
-                    previousBalance_.toString(),
+                    previousProfit_.toString(), //  previous profit
                     "",
                     "",
-                    newBalance.toString(),
+                    (newProfit.toInt()).toString(),// new balance -> new profit
                     Timestamp.now(),
                     Timestamp.now()
                 )
@@ -143,95 +290,12 @@ class ActivityAddProfit : AppCompatActivity() {
 
                 }
 
-                /*Toast.makeText(
-                    mContext,
-                    previousBalance_.toString() + " " + newBalance.toString(),
-                    Toast.LENGTH_SHORT
-                ).show()*/
+
             }
         }
 
 
-
-/*
-
-            var amount//profit amount
-
-
-
-            val newBalance:Int
-
-            newBalance= amount.toInt()+previousBalance.toInt()
-
-            var transactionModel=TransactionModel(
-                user.id,
-                "Profit",
-                "Approved",
-                amount,
-                "",
-                previousBalance,
-                "",
-                "",
-                newBalance.toString(),
-                Timestamp.now(),
-                Timestamp.now()
-            )
-            investmentModel.investmentBalance = newBalance.toString()
-
-
-
-        }
-
-
-        etBalance.text.toString(),
-        "",
-        investmentModel.investmentBalance,
-        ""
-
-
-
-
-
-
-
-
-
-        */
-/*transactionModel.status=constants.TRANSACTION_STATUS_APPROVED
-        transactionModel.transactionAt= Timestamp.now()
-        val transactionAmount = transactionModel?.amount?.toInt() ?: 0
-        if (investmentModel != null) {
-            val currentBalance = investmentModel.investmentBalance.toInt()
-            val newBalance = currentBalance + transactionAmount
-            investmentModel.investmentBalance = newBalance.toString()
-            transactionModel?.newBalance= newBalance.toString()
-        }*//*
-
-
-        utils.startLoadingAnimation()
-
-        lifecycleScope.launch{
-            investmentViewModel.setInvestment(investmentModel)
-                .addOnCompleteListener{task->
-
-
-                    db.collection(constants.TRANSACTION_REQ_COLLECTION).add(transactionModel)
-                        .addOnCompleteListener {
-                            utils.endLoadingAnimation()
-                            Toast.makeText(mContext, "Profit Added", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(mContext,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
-                            finish()
-                        }
-                }
-
-
-        }
-*/
-
-
-
-
-    }
+    }*/
 
     private fun getData() {
         db.collection(constants.INVESTMENT_COLLECTION).get()

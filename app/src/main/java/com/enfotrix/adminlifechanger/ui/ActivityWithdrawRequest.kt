@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.enfotrix.adminlifechanger.Adapters.InvestmentViewPagerAdapter
 import com.enfotrix.adminlifechanger.Adapters.WithdrawViewPagerAdapter
@@ -42,7 +43,7 @@ class ActivityWithdrawRequest : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityWithdrawRequestBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.title = "Investment Request"
+        supportActionBar?.title = "Withdraw Request"
 
         mContext=this@ActivityWithdrawRequest
         utils = Utils(mContext)
@@ -54,6 +55,8 @@ class ActivityWithdrawRequest : AppCompatActivity() {
         setTitle("WithDraw")
         setupViewPager()
         setupTabLayout()
+
+        Toast.makeText(mContext, "Debug 1", Toast.LENGTH_SHORT).show()
 
     }
     private fun setupTabLayout() {

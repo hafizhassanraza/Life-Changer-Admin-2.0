@@ -38,6 +38,7 @@ import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
@@ -235,49 +236,29 @@ class HomeFragment : Fragment() {
 
     fun getInvestment(){
 
-
-        utils.startLoadingAnimation()
-        db.collection(constants.INVESTMENT_COLLECTION).get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    utils.endLoadingAnimation()
-
-                    val listInvestment = ArrayList<InvestmentModel>()
-                    if(task.result.size()>0){
-
-                        var balance:Int=0
-                        for (document in task.result){
-                            var investmentModel=document.toObject(InvestmentModel::class.java)
-                            listInvestment.add( document.toObject(InvestmentModel::class.java))
-                            if (investmentModel!=null) balance=balance+ investmentModel.investmentBalance.toInt()
-                        }
-
-                        binding.tvBalance.text= balance.toString()
-
-                        sharedPrefManager.putActiveInvestment(listInvestment)
-                        //sharedPrefManager.getAccountList()
-
-
-                    }
+        db.collection(constants.INVESTMENT_COLLECTION)
+            .addSnapshotListener { snapshot, firebaseFirestoreException ->
+                firebaseFirestoreException?.let {
+                    Toast.makeText(mContext, it.message.toString(), Toast.LENGTH_SHORT).show()
+                    return@addSnapshotListener
                 }
-                else{
-                    Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
-                    utils.endLoadingAnimation()
+                snapshot?.let { documents ->
+                    val listInvestmentModel = documents.map { it.toObject(InvestmentModel::class.java) }
+
+
+                    var balance= listInvestmentModel.sumOf { it.investmentBalance.takeIf { it.isNotBlank() }?.toInt() ?: 0 }
+                    var InActiveBalance= listInvestmentModel.sumOf { it.lastInvestment.takeIf { it.isNotBlank() }?.toInt() ?: 0 }
+                    var profit= listInvestmentModel.sumOf { it.lastProfit.takeIf { it.isNotBlank() }?.toInt() ?: 0 }
+
+                    binding.tvBalance.text= balance.toString()
+                    binding.tvProfit.text= profit.toString()
+                    binding.tvInActiveInvestment.text= InActiveBalance.toString()
+
+                    sharedPrefManager.putActiveInvestment(listInvestmentModel)
 
                 }
-
-            }
-            .addOnFailureListener{
-                Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
-                utils.endLoadingAnimation()
-
             }
     }
-
-
-
-
-
 
 
     fun getUsers_Account_Nominee_FA(){

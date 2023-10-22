@@ -115,13 +115,32 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
         transactionModel.transactionAt= Timestamp.now()
 
 
-        val transactionAmount = transactionModel?.amount?.toInt() ?: 0
-        if (investmentModel != null) {
-            val currentBalance = investmentModel.investmentBalance.toInt()
-            val newBalance = currentBalance - transactionAmount
-            investmentModel.investmentBalance = newBalance.toString()
-            transactionModel?.newBalance= newBalance.toString()
+        var transactionAmount = transactionModel?.amount?.toInt() ?: 0
 
+        investmentModel?.let {
+            var investment = it.investmentBalance.toInt()
+            var profit = it.lastProfit.toInt()
+
+            var previousBalance= investment+profit
+
+
+            if (transactionAmount <= profit) {
+                profit -= transactionAmount
+            } else {
+                profit = 0
+                transactionAmount=transactionAmount-profit
+                investment -= transactionAmount
+            }
+
+            //
+            var newBalance= investment+profit
+
+
+            transactionModel?.previousBalance = previousBalance.toString()
+            transactionModel?.newBalance = newBalance.toString()
+
+            it.investmentBalance = investment.toString()
+            it.lastProfit = profit.toString()
 
         }
 
@@ -139,10 +158,6 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
                 .addOnCompleteListener{task->
 
 
-                    //Toast.makeText(mContext, transactionModel.id, Toast.LENGTH_SHORT).show()
-
-
-                    Toast.makeText(mContext, transactionModel.createdAt.toString(), Toast.LENGTH_SHORT).show()
 
                     db.collection(constants.TRANSACTION_REQ_COLLECTION).document(transactionModel.id).set(transactionModel)
                         .addOnCompleteListener {
@@ -166,15 +181,16 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
         transactionModel.transactionAt= Timestamp.now()
         val transactionAmount = transactionModel?.amount?.toInt() ?: 0
         if (investmentModel != null) {
-            val currentBalance = investmentModel.investmentBalance.toInt()
-            val newBalance = currentBalance + transactionAmount
-            investmentModel.investmentBalance = newBalance.toString()
-            transactionModel?.newBalance= newBalance.toString()
+
+            var inActiveInvestment=0
+            if(!investmentModel.lastInvestment.isNullOrEmpty())
+                inActiveInvestment = investmentModel.lastInvestment.toInt()
+
+
+            val newInActiveInvestment = inActiveInvestment + transactionAmount
+            investmentModel.lastInvestment = newInActiveInvestment.toString()
+            transactionModel?.newBalance= newInActiveInvestment.toString()
         }
-
-
-
-
 
 
 
@@ -186,7 +202,7 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
                 .addOnCompleteListener{task->
 
 
-                    Toast.makeText(mContext, transactionModel.id, Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(mContext, transactionModel.id, Toast.LENGTH_SHORT).show()
 
 
 

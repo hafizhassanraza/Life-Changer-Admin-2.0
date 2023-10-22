@@ -308,7 +308,53 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
             Timestamp.now(),
             Timestamp.now()
         )
-        investmentModel.investmentBalance = newBalance.toString()
+
+
+
+        //5263 + 105
+
+
+        var transactionAmount = amount?.toInt() ?: 0
+
+        investmentModel?.let {
+            var investment = it.investmentBalance.toInt()
+            var profit = it.lastProfit.toInt()
+
+            var previousBalance= investment+profit
+
+
+            if (transactionAmount <= profit) {
+                profit -= transactionAmount
+            } else {
+                profit = 0
+                transactionAmount=transactionAmount-profit // profit deduction from transaction amount to match profit= 0
+                investment -= transactionAmount
+            }
+
+            //
+            var newBalance= investment+profit
+
+
+            transactionModel?.previousBalance = previousBalance.toString()
+            transactionModel?.newBalance = newBalance.toString()
+
+            it.investmentBalance = investment.toString()
+            it.lastProfit = profit.toString()
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         utils.startLoadingAnimation()
 
@@ -321,8 +367,8 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
                         .addOnCompleteListener {
                             utils.endLoadingAnimation()
                             Toast.makeText(mContext, "Withdraw Successfully", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(mContext,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
-                            finish()
+                            //startActivity(Intent(mContext,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                            //finish()
                         }
                 }
 
@@ -448,7 +494,8 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
 
         val newBalance:Int
 
-        newBalance= amount.toInt()+previousBalance.toInt()
+        newBalance= previousBalance.toInt()
+        //newBalance= amount.toInt()+previousBalance.toInt()
 
 
 
@@ -465,7 +512,12 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
             Timestamp.now(),
             Timestamp.now()
         )
-        investmentModel.investmentBalance = newBalance.toString()
+
+        //investmentModel.lastInvestment = (investmentModel.lastInvestment?.toIntOrNull() ?: 0 + amount.toInt()?: 0).toString()
+
+         var previousInActiveInvestment= 0
+         if(!investmentModel.lastInvestment.isNullOrEmpty()) previousInActiveInvestment= investmentModel.lastInvestment.toInt()
+         investmentModel.lastInvestment = (previousInActiveInvestment+amount.toInt()).toString()
 
 
         /*transactionModel.status=constants.TRANSACTION_STATUS_APPROVED
@@ -489,8 +541,8 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
                         .addOnCompleteListener {
                             utils.endLoadingAnimation()
                             Toast.makeText(mContext, "Investment Added", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(mContext,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
-                            finish()
+                            //startActivity(Intent(mContext,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                            //finish()
                         }
                 }
 

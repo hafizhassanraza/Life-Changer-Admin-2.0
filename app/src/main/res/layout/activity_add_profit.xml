@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context=".ui.ActivityAddProfit">
 
+
     <EditText
         android:id="@+id/etProfit"
         android:layout_width="match_parent"
@@ -19,4 +20,28 @@
         android:text="Add Profit"/>
 
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Convert Profit to Investments"/>
+    <Button
+        android:id="@+id/btnConvertProfit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Convert" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Convert InActive to Active Investments"/>
+    <Button
+        android:id="@+id/btnConvertInvestment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Convert" />
 </LinearLayout>
