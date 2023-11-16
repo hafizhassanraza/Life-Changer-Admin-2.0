@@ -33,20 +33,11 @@ import java.util.Locale
 class ActivityInvestmentReqDetails : AppCompatActivity() {
 
 
-
-
     private val db = Firebase.firestore
-
-
-
-
-
     private val investmentViewModel: InvestmentViewModel by viewModels()
     private val faViewModel: FAViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
     var constant= Constants()
-
-
 
     private lateinit var binding: ActivityInvestmentReqDetailsBinding
     private lateinit var utils: Utils
@@ -55,13 +46,11 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
     private lateinit var sharedPrefManager : SharedPrefManager
     private lateinit var dialog : Dialog
 
-
     private lateinit var transactionModel:TransactionModel
     private lateinit var investmentModel:InvestmentModel
     private lateinit var user: User
 
-
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityInvestmentReqDetailsBinding.inflate(layoutInflater)
@@ -119,9 +108,13 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
 
         investmentModel?.let {
             var investment = it.investmentBalance.toInt()
-            var profit = it.lastProfit.toInt()
+
+            var profit = 0
+            if(it.lastProfit!="") profit=it.lastProfit.toInt()
 
             var previousBalance= investment+profit
+
+
 
 
             if (transactionAmount <= profit) {
