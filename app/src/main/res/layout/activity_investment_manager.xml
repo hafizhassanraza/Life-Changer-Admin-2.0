@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ActivityInvestors">
-
-
-
-
-
+    android:orientation="vertical"
+    tools:context=".ui.ActivityInvestmentManager">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cd2"
@@ -19,7 +15,8 @@
         app:cardCornerRadius="8dp"
         android:layout_marginVertical="5dp"
         app:cardBackgroundColor="@color/secondary_m"
-        android:layout_marginHorizontal="50dp">
+        android:layout_marginHorizontal="50dp"
+        android:layout_below="@+id/v1">
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
@@ -43,14 +40,15 @@
     </androidx.cardview.widget.CardView>
 
 
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="40dp"
-        android:layout_below="@+id/cd2"
+        android:paddingTop="5dp"
+        android:layout_below="@+id/v2"
         android:layout_alignParentBottom="true">
     </androidx.viewpager2.widget.ViewPager2>
 
 
-</RelativeLayout>
+</LinearLayout>

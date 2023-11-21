@@ -100,6 +100,9 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
     }
 
     private fun approvedWithdraw() {
+
+
+
         transactionModel.status=constants.TRANSACTION_STATUS_APPROVED
         transactionModel.transactionAt= Timestamp.now()
 
@@ -120,13 +123,14 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
             if (transactionAmount <= profit) {
                 profit -= transactionAmount
             } else {
-                profit = 0
+
                 transactionAmount=transactionAmount-profit
+                profit = 0
                 investment -= transactionAmount
             }
 
             //
-            var newBalance= investment+profit
+            var newBalance= investment
 
 
             transactionModel?.previousBalance = previousBalance.toString()

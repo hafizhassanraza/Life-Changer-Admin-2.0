@@ -33,15 +33,5 @@
         android:layout_marginTop="10dp"
         android:text="Convert" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Convert InActive to Active Investments"/>
-    <Button
-        android:id="@+id/btnConvertInvestment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Convert" />
+
 </LinearLayout>

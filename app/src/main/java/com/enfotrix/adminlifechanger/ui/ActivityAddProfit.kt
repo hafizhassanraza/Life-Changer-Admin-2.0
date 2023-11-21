@@ -91,11 +91,11 @@ class ActivityAddProfit : AppCompatActivity() {
 
             convertProfit()
         }
-        binding.btnConvertInvestment.setOnClickListener{
+        /*binding.btnConvertInvestment.setOnClickListener{
 
 
             convertInvestment()
-        }
+        }*/
 
     }
 

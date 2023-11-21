@@ -76,14 +76,13 @@ class ActivityAddTax : AppCompatActivity() {
          }*/
 
 
-        getData()
 
-        binding.btnAddProfit.setOnClickListener{
+       /* binding.btnAddProfit.setOnClickListener{
 
             val percentage = binding.etProfit.text.toString()
 
             addProfit(percentage.toDouble() / 100)
-        }
+        }*/
     }
 
     private fun getData() {

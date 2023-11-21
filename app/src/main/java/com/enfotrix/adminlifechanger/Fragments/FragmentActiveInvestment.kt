@@ -3,18 +3,19 @@ package com.enfotrix.adminlifechanger.Fragments
 import User
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.Adapters.AdapterActiveInvestment
-import com.enfotrix.adminlifechanger.Adapters.AdapterActiveInvestors
 import com.enfotrix.adminlifechanger.Adapters.InvestorAdapter
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
@@ -22,10 +23,8 @@ import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.NomineeViewModel
 import com.enfotrix.adminlifechanger.R
+import com.enfotrix.adminlifechanger.databinding.FragmentActiveInvestmentBinding
 import com.enfotrix.adminlifechanger.databinding.FragmentActiveInvestorsBinding
-import com.enfotrix.adminlifechanger.databinding.FragmentNewInvestersBinding
-import com.enfotrix.adminlifechanger.ui.ActivityInvestorDetails
-import com.enfotrix.adminlifechanger.ui.ActivityNewInvestorReqDetails
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
@@ -38,12 +37,17 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 
 
-class FragmentActiveInvestors : Fragment() ,  AdapterActiveInvestors.OnItemClickListener{
+class FragmentActiveInvestment : Fragment() {
+
+
+
 
 
     private val db = Firebase.firestore
     private val firebaseStorage = Firebase.storage
     private val storageRef = firebaseStorage.reference
+
+
 
     private val userViewModel: UserViewModel by viewModels()
     private val nomineeViewModel: NomineeViewModel by viewModels()
@@ -65,14 +69,16 @@ class FragmentActiveInvestors : Fragment() ,  AdapterActiveInvestors.OnItemClick
 
 
 
-    private var _binding: FragmentActiveInvestorsBinding? = null
+    private var _binding: FragmentActiveInvestmentBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentActiveInvestorsBinding.inflate(inflater, container, false)
+        // Inflate the layout for this fragment
+        _binding = FragmentActiveInvestmentBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
 
@@ -95,13 +101,12 @@ class FragmentActiveInvestors : Fragment() ,  AdapterActiveInvestors.OnItemClick
         return root
     }
 
-
     private fun filter(text: String) {
         // creating a new array list to filter our data.
         val filteredlist = ArrayList<User>()
-
         if(text.isEmpty()||text.equals("")||text==null){
-            binding.rvInvestors.adapter= AdapterActiveInvestors(userlist.filter {  it.status.equals(constant.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.createdAt }, listInvestment,this@FragmentActiveInvestors)
+            binding.rvInvestors.adapter= AdapterActiveInvestment(userlist.filter {  it.status.equals(constant.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.createdAt }, listInvestment)
+
 
         }
         else {
@@ -123,7 +128,10 @@ class FragmentActiveInvestors : Fragment() ,  AdapterActiveInvestors.OnItemClick
                 // at last we are passing that filtered
                 // list to our adapter class.
 
-                binding.rvInvestors.adapter= AdapterActiveInvestors(filteredlist.filter {  it.status.equals(constant.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.createdAt }, listInvestment,this@FragmentActiveInvestors)
+
+
+                binding.rvInvestors.adapter= AdapterActiveInvestment(filteredlist.filter {  it.status.equals(constant.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.createdAt }, listInvestment)
+
 
             }
         }
@@ -132,6 +140,8 @@ class FragmentActiveInvestors : Fragment() ,  AdapterActiveInvestors.OnItemClick
     }
 
 
+
+    @RequiresApi(Build.VERSION_CODES.N)
     fun runFirestoreRequests() {
         // Start a coroutine
         utils.startLoadingAnimation()
@@ -158,18 +168,24 @@ class FragmentActiveInvestors : Fragment() ,  AdapterActiveInvestors.OnItemClick
 
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     suspend  fun getRequests(){
         userViewModel.getUsers()
             .addOnCompleteListener{task ->
+                utils.endLoadingAnimation()
                 if (task.isSuccessful) {
-                    if(task.result.size()>0){
+                    if(task.result.size()>0) {
+
                         for (document in task.result) {
 
-                            val user =document.toObject(User::class.java)
-                            user.id=document.id
-                            userlist.add( user)
+                            val user = document.toObject(User::class.java)
+                            user.id = document.id
+                            userlist.add(user)
 
                         }
+
+
+
 
                         db.collection(constants.INVESTMENT_COLLECTION)
                             .addSnapshotListener { snapshot, firebaseFirestoreException ->
@@ -179,11 +195,31 @@ class FragmentActiveInvestors : Fragment() ,  AdapterActiveInvestors.OnItemClick
                                 }
                                 snapshot?.let { documents ->
 
-                                    utils.endLoadingAnimation()
-
                                     listInvestment = documents.map { it.toObject(InvestmentModel::class.java) } as ArrayList<InvestmentModel>
                                     sharedPrefManager.putActiveInvestment(listInvestment)
-                                    binding.rvInvestors.adapter= AdapterActiveInvestors(userlist.filter {  it.status.equals(constant.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.createdAt }, listInvestment,this@FragmentActiveInvestors)
+
+
+
+
+                                    listInvestment
+                                        .filter { investment ->
+                                            val activeInvestment = investment.investmentBalance.takeIf { !it.isNullOrEmpty() } ?: "0"
+                                            val activeInvestment_ = activeInvestment.toIntOrNull() ?: 0
+                                            activeInvestment_ <= 0
+                                        }
+                                        .sortedBy { investment ->
+                                            val activeInvestment = investment.investmentBalance.takeIf { !it.isNullOrEmpty() } ?: "0"
+                                            activeInvestment.toIntOrNull() ?: 0
+                                        }
+                                        .forEach { investment ->
+                                            userlist.removeIf { it.id == investment.investorID }
+                                        }
+
+
+                                    binding.rvInvestors.adapter= AdapterActiveInvestment(userlist.filter {  it.status.equals(constant.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.createdAt }, listInvestment)
+
+
+
                                     binding.svUsers.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                                         override fun onQueryTextSubmit(query: String): Boolean {
                                             return false
@@ -204,6 +240,9 @@ class FragmentActiveInvestors : Fragment() ,  AdapterActiveInvestors.OnItemClick
 
 
 
+
+
+
                         //Toast.makeText(mContext, "d1 : "+ task.result.size(), Toast.LENGTH_SHORT).show()
 
                     }
@@ -219,12 +258,6 @@ class FragmentActiveInvestors : Fragment() ,  AdapterActiveInvestors.OnItemClick
         /*lifecycleScope.launch{}*/
     }
 
-    override fun onItemClick(user: User) {
-
-        startActivity(Intent(mContext, ActivityInvestorDetails::class.java).putExtra("user",user.toString()))
-
-
-    }
 
 
 

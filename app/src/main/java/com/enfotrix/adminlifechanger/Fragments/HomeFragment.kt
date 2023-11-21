@@ -29,7 +29,9 @@ import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.ui.ActivityAddProfit
 import com.enfotrix.adminlifechanger.ui.ActivityAddTax
 import com.enfotrix.adminlifechanger.ui.ActivityFA
+import com.enfotrix.adminlifechanger.ui.ActivityInvestmentManager
 import com.enfotrix.adminlifechanger.ui.ActivityInvestmentRequest
+import com.enfotrix.adminlifechanger.ui.ActivityInvestors
 import com.enfotrix.adminlifechanger.ui.ActivityNewInvestorReq
 import com.enfotrix.adminlifechanger.ui.ActivityWithdrawRequest
 import com.enfotrix.lifechanger.Models.ModelBankAccount
@@ -108,8 +110,11 @@ class HomeFragment : Fragment() {
         binding.btnNewInvestorReq.setOnClickListener { startActivity(Intent(requireContext(),ActivityNewInvestorReq::class.java)) }*/
 
 
-        binding.layInvestment.setOnClickListener { startActivity(Intent(requireContext(),ActivityInvestmentRequest::class.java)) }
-        binding.layWithdraw.setOnClickListener { startActivity(Intent(requireContext(),ActivityWithdrawRequest::class.java)) }
+        binding.btnInvestmentReq.setOnClickListener { startActivity(Intent(requireContext(),ActivityInvestmentRequest::class.java)) }
+        binding.btnWithdrawReq.setOnClickListener { startActivity(Intent(requireContext(),ActivityWithdrawRequest::class.java)) }
+
+        binding.layInvestment.setOnClickListener { startActivity(Intent(requireContext(),ActivityInvestmentManager::class.java)) }
+        binding.layInvestors.setOnClickListener { startActivity(Intent(requireContext(), ActivityInvestors::class.java)) }
         binding.layProfit.setOnClickListener { startActivity(Intent(requireContext(),ActivityAddProfit::class.java)) }
         binding.layTax.setOnClickListener { startActivity(Intent(requireContext(),ActivityAddTax::class.java)) }
 

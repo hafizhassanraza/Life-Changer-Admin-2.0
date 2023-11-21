@@ -13,6 +13,21 @@
         android:theme="@style/Theme.LifeChanger"
         tools:targetApi="31">
         <activity
+            android:name=".ui.ActivityInvestorDetailsTransactions"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ActivityInvestorDetailsProfile"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ActivityInvestorDetails"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ActivityInvestorManager"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ActivityInvestmentManager"
+            android:exported="false" />
+        <activity
             android:name=".ui.ActivityFaIncome"
             android:exported="false" />
         <activity

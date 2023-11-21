@@ -264,11 +264,6 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
 
         dialog.show()
     }
-
-
-
-
-
     private fun getInvestment() {
 
         db.collection(constants.INVESTMENT_COLLECTION).document(user.id).get()
@@ -553,7 +548,6 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
 
     }
 
-
     fun getUsers_Account_Nominee_FA(){
 
 
@@ -664,23 +658,46 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
 
 
     }
+    fun setData(user: User){
+
+        binding.tvInvestorName.text = user.firstName
+        binding.tvInvestorFatherName.text = user.lastName
+        binding.tvInvestorCnic.text = user.cnic
+        binding.tvInvestorPhoneNumber.text = user.phone
+        binding.tvInvestorAddress.text = user.address
+
+
+        var bankAccount=sharedPrefManager.getAccountList().find { it.account_holder.equals(user.id)}
+
+
+        binding.tvInvestorBankName.text = bankAccount?.bank_name
+        binding.tvInvestorBankAccountNumber.text = bankAccount?.account_number
+        binding.tvInvestorBankAccountTittle.text = bankAccount?.account_tittle
+
+
+        var nominee=sharedPrefManager.getNomineeList().find { it.nominator.equals(user.id)}
+
+        Toast.makeText(mContext, sharedPrefManager.getNomineeList().size.toString(), Toast.LENGTH_SHORT).show()
+        if (nominee != null) {
+            Log.d("d1",nominee.nominator)
+        }
+        Log.d("d2",user.id)
+        //Toast.makeText(mContext, nominee!!.nominator, Toast.LENGTH_SHORT).show()
+
+        binding.tvNomineeAddress.text=nominee?.address
+        binding.tvNomineeCNIC.text=nominee?.cnic
+        binding.tvNomineeBankName.text=nominee?.bank_name
+        binding.tvNomineeName.text=nominee?.firstName
+        binding.tvNomineePhone.text=nominee?.phone
+        binding.tvNomineeBankAccountNumber.text=nominee?.acc_number
+        binding.tvNomineeBankAccountTittle.text=nominee?.acc_tittle
+        binding.tvNomineeFatherName.text=nominee?.lastName
+
+        binding.tvHeader1.text= "Investor's Nominee (${nominee?.nominator_relation})"
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 
     fun approve(){
@@ -735,46 +752,6 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
 
     }
 
-    fun setData(user: User){
-
-        binding.tvInvestorName.text = user.firstName
-        binding.tvInvestorFatherName.text = user.lastName
-        binding.tvInvestorCnic.text = user.cnic
-        binding.tvInvestorPhoneNumber.text = user.phone
-        binding.tvInvestorAddress.text = user.address
-
-
-        var bankAccount=sharedPrefManager.getAccountList().find { it.account_holder.equals(user.id)}
-
-
-        binding.tvInvestorBankName.text = bankAccount?.bank_name
-        binding.tvInvestorBankAccountNumber.text = bankAccount?.account_number
-        binding.tvInvestorBankAccountTittle.text = bankAccount?.account_tittle
-
-
-        var nominee=sharedPrefManager.getNomineeList().find { it.nominator.equals(user.id)}
-
-        Toast.makeText(mContext, sharedPrefManager.getNomineeList().size.toString(), Toast.LENGTH_SHORT).show()
-        if (nominee != null) {
-            Log.d("d1",nominee.nominator)
-        }
-        Log.d("d2",user.id)
-        //Toast.makeText(mContext, nominee!!.nominator, Toast.LENGTH_SHORT).show()
-
-        binding.tvNomineeAddress.text=nominee?.address
-        binding.tvNomineeCNIC.text=nominee?.cnic
-        binding.tvNomineeBankName.text=nominee?.bank_name
-        binding.tvNomineeName.text=nominee?.firstName
-        binding.tvNomineePhone.text=nominee?.phone
-        binding.tvNomineeBankAccountNumber.text=nominee?.acc_number
-        binding.tvNomineeBankAccountTittle.text=nominee?.acc_tittle
-        binding.tvNomineeFatherName.text=nominee?.lastName
-
-        binding.tvHeader1.text= "Investor's Nominee (${nominee?.nominator_relation})"
-
-
-
-    }
 
     override fun onItemClick(modelFA: ModelFA) {
 
