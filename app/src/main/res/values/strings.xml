@@ -53,6 +53,7 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="describe_your_announcement">Describe your Announcement</string>
+    <string name="title_activity_assigned_investors">ActivityAssignedInvestors</string>
 
 
 </resources>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/secondary_m"
+        android:layout_marginBottom="3dp"
+        android:layout_below="@+id/v1">
+
+        <RelativeLayout
+            android:id="@+id/layItem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.gridlayout.widget.GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:columnCount="5"
+                app:rowCount="1">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_column="0"
+                    app:layout_row="0"
+                    app:layout_columnWeight="0.85"
+                    app:layout_rowWeight="1">
+
+                    <TextView
+                        android:id="@+id/tvReqDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="12/5/23"
+                        android:textColor="@color/SecondaryVariant"
+                        android:textSize="15sp" />
+
+
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_column="1"
+                    app:layout_row="0"
+
+                    app:layout_columnWeight="1.17"
+                    app:layout_rowWeight="0"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_height="30dp"
+                            android:alpha="0.3"
+                            android:layout_alignParentLeft="true"
+                            android:background="@color/gray"/>
+
+                        <TextView
+                            android:id="@+id/tvPreviousBalance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="400"
+                            android:gravity="center_horizontal"
+                            android:textColor="@color/SecondaryVariant"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_height="30dp"
+                            android:alpha="0.3"
+                            android:layout_alignParentRight="true"
+                            android:background="@color/gray"/>
+                    </RelativeLayout>
+
+
+
+                </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_column="2"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvReqAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="50"
+                        android:textColor="@color/red"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_column="3"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_height="30dp"
+                            android:alpha="0.3"
+                            android:layout_alignParentLeft="true"
+                            android:background="@color/gray"/>
+
+                        <TextView
+                            android:id="@+id/tvApprovedDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text=""
+                            android:textColor="@color/SecondaryVariant"
+                            android:textSize="15sp" />
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_height="30dp"
+                            android:alpha="0.3"
+                            android:layout_alignParentRight="true"
+                            android:background="@color/gray"/>
+                    </RelativeLayout>
+                </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_column="4"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvNewBalance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="50"
+                        android:textColor="@color/red"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+
+
+                </RelativeLayout>
+
+            </androidx.gridlayout.widget.GridLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

@@ -35,8 +35,7 @@ import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
 import java.util.Locale
 
-class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListener,
-    AdapterFA.OnItemClickListener {
+class ActivityFADetails : AppCompatActivity() {
 
     private lateinit var rvInvestors: RecyclerView
     private lateinit var dialog: BottomSheetDialog
@@ -66,6 +65,7 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
         super.onCreate(savedInstanceState)
         binding = ActivityFadetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+/*
         mContext = this@ActivityFADetails
         utils = Utils(mContext)
         constants = Constants()
@@ -76,10 +76,14 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
 
 
 
+binding.layInvest.setOnClickListener(){
+   // startActivity(Intent(mContext,ActivityAssignedInvestors::class.java))
+}
 
 
 
-        supportActionBar?.title = "Financial Advisor Details"
+
+     //   supportActionBar?.title = "Financial Advisor Details"
         modelFA = ModelFA.fromString(intent.getStringExtra("FA").toString())!!
 
         Glide.with(mContext).load(modelFA.photo).centerCrop().placeholder(R.drawable.ic_launcher_background).into(binding.userPhoto)
@@ -90,9 +94,11 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
 
 
 
-        /*binding.fbAddClient.setOnClickListener {
+        */
+/*binding.fbAddClient.setOnClickListener {
             showClientDialog()
-        }*/
+        }*//*
+
 
 
         getData()
@@ -101,6 +107,7 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
         originalFAList = userViewModel.getusers(modelFA.id)
         originallist = userViewModel.getusers2(modelFA.id)
 
+*/
 
 
 /*        binding.rvClients.layoutManager = LinearLayoutManager(mContext)
@@ -231,7 +238,7 @@ var amount=profit.text.toString()
     }
 
 
-    fun showClientDialog() {
+/*    fun showClientDialog() {
         dialog = BottomSheetDialog(mContext)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -255,7 +262,7 @@ var amount=profit.text.toString()
         })
 
 
-    }
+    }*/
 
 
     /*private fun filterclients(text: String) {
@@ -297,7 +304,7 @@ var amount=profit.text.toString()
 
     }*/
 
-
+/*
     override fun onItemClick(user: User) {
 
     }
@@ -439,19 +446,19 @@ var amount=profit.text.toString()
 
 
     override fun onDeleteClick(modelFA: ModelFA) {
-        TODO("Not yet implemented")
+
     }
 
     fun setdata() {
         val modelFAStr = intent.getStringExtra("FA")
         val model: ModelFA? = modelFAStr?.let { ModelFA.fromString(it) }
-       /* if (model != null) {
+       *//* if (model != null) {
             binding.tvInvestorName.text = model.firstName
             binding.tvInvestorCnic.text = model.cnic
             binding.tvInvestorPhoneNumber.text = model.phone
             binding.tvInvestordesignation.text = model.designantion
 
-        }*/
-    }
+        }*//*
+    }*/
 
 }

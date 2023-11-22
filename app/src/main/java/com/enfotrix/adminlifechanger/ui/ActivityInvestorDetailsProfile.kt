@@ -37,7 +37,7 @@ class ActivityInvestorDetailsProfile : AppCompatActivity() {
     private val firebaseStorage = Firebase.storage
     private val storageRef = firebaseStorage.reference
 
-    var constant= Constants()
+    lateinit var constant: Constants
 
     private lateinit var binding: ActivityInvestorDetailsProfileBinding
     private lateinit var utils: Utils
@@ -56,6 +56,7 @@ class ActivityInvestorDetailsProfile : AppCompatActivity() {
         utils = Utils(mContext)
         constants= Constants()
         sharedPrefManager = SharedPrefManager(mContext)
+/*
 
         user= User.fromString( intent.getStringExtra("user").toString())!!
 
@@ -66,6 +67,7 @@ class ActivityInvestorDetailsProfile : AppCompatActivity() {
         binding.tvInvestorFatherName.text = user.lastName
         binding.tvInvestorCnic.text = user.cnic
         binding.tvInvestorPhoneNumber.text = user.phone
+*/
 
 
 

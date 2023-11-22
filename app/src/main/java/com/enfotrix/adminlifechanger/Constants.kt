@@ -50,6 +50,8 @@ public class Constants  {
     public var TRANSACTION_STATUS_APPROVED= "Approved"
     public var TRANSACTION_STATUS_REJECT= "Reject"
     public var TRANSACTION_TYPE_WITHDRAW= "Withdraw"
+    public var TRANSACTION_TYPE_Profit= "Profit"
+    public var TRANSACTION_TYPE_Tax= "Tax"
     public var TRANSACTION_TYPE_INVESTMENT= "Investment"
     public var PROFIT_TYPE= "Profit"
     public var TAX_TYPE= "Tax"

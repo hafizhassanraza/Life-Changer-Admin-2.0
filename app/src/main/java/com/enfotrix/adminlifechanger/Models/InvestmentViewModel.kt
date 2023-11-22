@@ -1,5 +1,6 @@
 package com.enfotrix.adminlifechanger.Models
 
+import User
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -77,6 +78,12 @@ class InvestmentViewModel(context: Application) : AndroidViewModel(context) {
 
     suspend fun getApprovedInvestmentsReq(): Task<QuerySnapshot> {
         return userRepo.getTransactionReq(constants.TRANSACTION_STATUS_APPROVED,constants.TRANSACTION_TYPE_INVESTMENT)
+    }    suspend fun getApprovedProfitsReq(): Task<QuerySnapshot> {
+        return userRepo.getTransactionReq(constants.TRANSACTION_STATUS_APPROVED,constants.TRANSACTION_TYPE_Profit)
+    } suspend fun getApprovedTaxReq(): Task<QuerySnapshot> {
+        return userRepo.getTransactionReq(constants.TRANSACTION_STATUS_APPROVED,constants.TRANSACTION_TYPE_Tax)
     }
+
+
 
 }

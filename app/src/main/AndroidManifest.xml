@@ -13,6 +13,11 @@
         android:theme="@style/Theme.LifeChanger"
         tools:targetApi="31">
         <activity
+            android:name=".ui.ActivityAssignedInvestors"
+            android:exported="false"
+            android:label="@string/title_activity_assigned_investors"
+            android:theme="@style/Theme.LifeChanger" />
+        <activity
             android:name=".ui.ActivityFaDetailsInvestors"
             android:exported="false" />
         <activity

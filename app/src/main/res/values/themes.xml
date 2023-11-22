@@ -16,16 +16,20 @@
         <item name="android:textColor">@color/black</item>
         <!-- Customize your theme here. -->
     </style>
+
     <style name="CustomTabLayoutTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">12sp</item>
     </style>
+
     <style name="Theme.LifeChanger.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="Theme.LifeChanger.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="Theme.LifeChanger.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-  <!-- Base application theme. -->
+    <!-- Base application theme. -->
     <style name="Base.Theme.LifeChanger" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
