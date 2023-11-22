@@ -64,14 +64,6 @@ class HomeFragment : Fragment() {
 
 
 
-
-
-
-
-
-
-
-
     private val userViewModel: UserViewModel by viewModels()
     private val nomineeViewModel: NomineeViewModel by viewModels()
     private val investmentViewModel: InvestmentViewModel by viewModels()
@@ -116,13 +108,13 @@ class HomeFragment : Fragment() {
         binding.layInvestment.setOnClickListener { startActivity(Intent(requireContext(),ActivityInvestmentManager::class.java)) }
         binding.layInvestors.setOnClickListener { startActivity(Intent(requireContext(), ActivityInvestors::class.java)) }
         binding.layProfit.setOnClickListener { startActivity(Intent(requireContext(),ActivityAddProfit::class.java)) }
-        binding.layTax.setOnClickListener { startActivity(Intent(requireContext(),ActivityAddTax::class.java)) }
+        binding.layAgent.setOnClickListener { startActivity(Intent(requireContext(),ActivityFA::class.java)) }
 
         mContext=requireContext()
         utils = Utils(mContext)
         constants= Constants()
         sharedPrefManager = SharedPrefManager(mContext)
-
+2
         getInvestment()
 
         getUsers_Account_Nominee_FA()

@@ -17,6 +17,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.enfotrix.adminlifechanger.Adapters.AdapterFA
 import com.enfotrix.adminlifechanger.Adapters.InvestorAdapter
 import com.enfotrix.adminlifechanger.Constants
@@ -69,8 +70,6 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
         utils = Utils(mContext)
         constants = Constants()
         sharedPrefManager = SharedPrefManager(mContext)
-        binding.rvClients.layoutManager = LinearLayoutManager(mContext)
-
 
 
 
@@ -82,9 +81,18 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
 
         supportActionBar?.title = "Financial Advisor Details"
         modelFA = ModelFA.fromString(intent.getStringExtra("FA").toString())!!
-        binding.fbAddClient.setOnClickListener {
+
+        Glide.with(mContext).load(modelFA.photo).centerCrop().placeholder(R.drawable.ic_launcher_background).into(binding.userPhoto)
+
+        binding.tvName.text= modelFA.firstName
+        binding.tvDesignantion.text= modelFA.designantion
+        binding.tvPay.text=modelFA.profit
+
+
+
+        /*binding.fbAddClient.setOnClickListener {
             showClientDialog()
-        }
+        }*/
 
 
         getData()
@@ -95,20 +103,13 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
 
 
 
+/*        binding.rvClients.layoutManager = LinearLayoutManager(mContext)
 
 
 
         binding.tvAddProfit.setOnClickListener {
             showProfitDialog()
         }
-
-
-
-
-
-
-
-
 
 
         binding.tveditfa.setOnClickListener {
@@ -127,7 +128,7 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
                 filterclients(newText)
                 return false
             }
-        })
+        })*/
 
 
     }
@@ -221,11 +222,11 @@ var amount=profit.text.toString()
 
     fun getData() {
 
-        binding.rvClients.adapter = userViewModel.getAssignedInvestorsAdapter(
+       /* binding.rvClients.adapter = userViewModel.getAssignedInvestorsAdapter(
             modelFA.id,
             constant.FROM_ASSIGNED_FA,
             this@ActivityFADetails
-        )
+        )*/
 
     }
 
@@ -257,7 +258,7 @@ var amount=profit.text.toString()
     }
 
 
-    private fun filterclients(text: String) {
+    /*private fun filterclients(text: String) {
         // creating a new array list to filter our data.
         val filteredlist = ArrayList<User>()
         if (text.isEmpty() || text.equals("")) {
@@ -294,7 +295,7 @@ var amount=profit.text.toString()
         }
         // running a for loop to compare elements.
 
-    }
+    }*/
 
 
     override fun onItemClick(user: User) {
@@ -444,13 +445,13 @@ var amount=profit.text.toString()
     fun setdata() {
         val modelFAStr = intent.getStringExtra("FA")
         val model: ModelFA? = modelFAStr?.let { ModelFA.fromString(it) }
-        if (model != null) {
+       /* if (model != null) {
             binding.tvInvestorName.text = model.firstName
             binding.tvInvestorCnic.text = model.cnic
             binding.tvInvestorPhoneNumber.text = model.phone
             binding.tvInvestordesignation.text = model.designantion
 
-        }
+        }*/
     }
 
 }

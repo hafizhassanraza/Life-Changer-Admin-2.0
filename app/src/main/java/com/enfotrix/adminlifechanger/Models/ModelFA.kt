@@ -18,7 +18,8 @@ data class ModelFA @JvmOverloads constructor(
     var id: String = "",
     var designantion: String = "",
     val createdAt: Timestamp = Timestamp.now(), // Creation timestamp
-) {
+    var profit: String = "0"
+    ) {
 
     override fun toString(): String {
         val gson = Gson()

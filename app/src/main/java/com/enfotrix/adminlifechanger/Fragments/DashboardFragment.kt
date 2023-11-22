@@ -117,7 +117,7 @@ class DashboardFragment : Fragment() {
 
 
 
-        binding.layInvestors.setOnClickListener {
+        /*binding.layInvestors.setOnClickListener {
             startActivity(
                 Intent(
                     requireContext(),
@@ -132,7 +132,7 @@ class DashboardFragment : Fragment() {
                     ActivityFA::class.java
                 )
             )
-        }
+        }*/
 
 
 

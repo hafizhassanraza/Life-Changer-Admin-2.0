@@ -28,38 +28,137 @@
                     android:textStyle="bold"
                     android:layout_toRightOf="@+id/imgUserProfile"
                     android:textColor="@color/primary"
-                    android:paddingStart="20dp"
-                    android:layout_marginTop="20dp"
+                    android:paddingStart="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Mr. xYZ"/>
-                <TextView
-                    android:id="@+id/tvCNIC"
-                    android:paddingStart="20dp"
-                    android:layout_toRightOf="@+id/imgUserProfile"
-                    android:layout_below="@+id/tvName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="CNIC"/>
-                <TextView
-                    android:id="@+id/tvMobile"
-                    android:paddingStart="20dp"
-                    android:layout_toRightOf="@+id/imgUserProfile"
-                    android:layout_below="@+id/tvCNIC"
-                    android:layout_marginTop="4dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Phone"/>
-            <TextView
-                android:id="@+id/tvtimestamp"
+            <LinearLayout
+                android:paddingStart="10dp"
+                android:layout_toRightOf="@+id/imgUserProfile"
+                android:layout_below="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="time stamp when created"
-                android:layout_below="@+id/tvMobile"
-                android:paddingHorizontal="10dp"
-                android:paddingBottom="5dp"/>
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="top"
+                        android:paddingTop="5dp"
+                        android:text="Rs."
+                        android:textColor="@color/gray"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/tvActiveInvestment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="00"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="(Active)"
+                        android:textColor="@color/gray"
+                        android:textSize="9sp"
+                        android:layout_marginLeft="3dp"
+                        android:textStyle="bold" />
+
+
+
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="top"
+                        android:paddingTop="5dp"
+                        android:text="Rs."
+                        android:textColor="@color/gray"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/tvInActiveInvestment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="00"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="(In-Active)"
+                        android:textColor="@color/gray"
+                        android:textSize="9sp"
+                        android:layout_marginLeft="3dp"
+                        android:textStyle="bold" />
+
+
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="top"
+                        android:paddingTop="5dp"
+                        android:text="Rs."
+                        android:textColor="@color/gray"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/tvProfit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="00"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="(Profit)"
+                        android:textColor="@color/gray"
+                        android:textSize="9sp"
+                        android:layout_marginLeft="3dp"
+                        android:textStyle="bold" />
+
+
+
+
+
+                </LinearLayout>
+            </LinearLayout>
+
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

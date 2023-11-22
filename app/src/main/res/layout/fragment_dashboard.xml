@@ -109,59 +109,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/primary"
-                    android:text="Profit"/>
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-
-                android:id="@+id/layInvestors"
-                app:layout_column="1"
-                app:layout_row="0"
-                app:layout_columnWeight="1"
-                app:layout_rowWeight="1"
-
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:tint="@color/primary"
-                    android:src="@drawable/investor"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/primary"
-                    android:text="Investors"/>
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:id="@+id/layFA"
-
-                app:layout_column="2"
-                app:layout_row="0"
-                app:layout_columnWeight="1"
-                app:layout_rowWeight="1"
-
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:tint="@color/primary"
-                    android:src="@drawable/agent"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/primary"
-                    android:text="Agents"/>
+                    android:text="Accounts"/>
 
 
             </LinearLayout>
@@ -170,7 +118,7 @@
                 android:id="@+id/laynews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_column="3"
+                app:layout_column="1"
                 app:layout_row="0"
                 app:layout_columnWeight="1"
                 app:layout_rowWeight="1"
@@ -187,56 +135,6 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/primary"
                     android:text="News"/>
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                app:layout_column="0"
-                app:layout_row="1"
-                app:layout_columnWeight="1"
-                app:layout_rowWeight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:tint="@color/primary"
-                    android:src="@drawable/feedback"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/primary"
-                    android:text="Tax"/>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                app:layout_column="1"
-                app:layout_columnWeight="1"
-                app:layout_row="1"
-                app:layout_rowWeight="1">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/share"
-                    android:tint="@color/primary" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Accounts"
-                    android:textColor="@color/primary" />
 
 
             </LinearLayout>
