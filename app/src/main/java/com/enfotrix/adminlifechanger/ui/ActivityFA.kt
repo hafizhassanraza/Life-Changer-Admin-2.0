@@ -149,10 +149,10 @@ class ActivityFA : AppCompatActivity(), AdapterFA.OnItemClickListener {
                                                                 var InActiveInvestment_Counter= 0
                                                                 var ActiveInvestment_Counter= 0
                                                                 var Profit_Counter= 0
-
+var totalinvestors=0
                                                                 for(investor in userlist){
                                                                     if(investor.fa_id.equals(modelFA.id)){
-
+totalinvestors++
 
 
                                                                         var investment= listInvestment.find { it.investorID.equals(investor.id) }
@@ -175,6 +175,7 @@ class ActivityFA : AppCompatActivity(), AdapterFA.OnItemClickListener {
                                                                 modelFA.phone=InActiveInvestment_Counter.toString()
                                                                 modelFA.cnic=ActiveInvestment_Counter.toString()
                                                                 modelFA.address=Profit_Counter.toString()
+                                                                modelFA.cnic_back=totalinvestors.toString()
 
                                                                 listFA.add(modelFA)
 

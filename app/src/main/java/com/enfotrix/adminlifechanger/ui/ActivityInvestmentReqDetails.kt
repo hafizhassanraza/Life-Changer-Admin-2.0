@@ -2,10 +2,13 @@ package com.enfotrix.adminlifechanger.ui
 
 import User
 import android.app.Dialog
+import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -65,6 +68,10 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
 
         //41//1111
 
+binding.receiptimage.setOnClickListener {
+downloadImageUsingDownloadManager("receipturl")
+}
+
 
         binding.btnAccept.setOnClickListener{
 
@@ -80,6 +87,17 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
     }
 
 
+    private fun downloadImageUsingDownloadManager(imageUrl: String) {
+        val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val request = DownloadManager.Request(Uri.parse(imageUrl))
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+            .setTitle("Image Download") // Set your desired title here
+            .setDescription("Downloading") // Set your desired description here
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "Cnic.jpg")
+
+        downloadManager.enqueue(request)
+    }
 
     private fun getData() {
 

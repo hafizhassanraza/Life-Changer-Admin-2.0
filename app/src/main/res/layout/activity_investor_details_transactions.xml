@@ -47,7 +47,6 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="40dp"
         android:layout_below="@+id/cd2"
         android:layout_alignParentBottom="true">
     </androidx.viewpager2.widget.ViewPager2>

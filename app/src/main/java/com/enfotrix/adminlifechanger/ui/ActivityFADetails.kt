@@ -82,6 +82,10 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
         supportActionBar?.title = "Financial Advisor Details"
         modelFA = ModelFA.fromString(intent.getStringExtra("FA").toString())!!
 
+        binding.editfa.setOnClickListener {
+            startActivity(Intent(mContext,ActivityEditFA::class.java).putExtra("FA",modelFA.toString()))
+        }
+
         Glide.with(mContext).load(modelFA.photo).centerCrop().placeholder(R.drawable.ic_launcher_background).into(binding.userPhoto)
 
         binding.tvName.text= modelFA.firstName
@@ -448,13 +452,17 @@ binding.layInvest.setOnClickListener()
     fun setdata() {
         val modelFAStr = intent.getStringExtra("FA")
         val model: ModelFA? = modelFAStr?.let { ModelFA.fromString(it) }
-        /* if (model != null) {
-             binding.tvInvestorName.text = model.firstName
-             binding.tvInvestorCnic.text = model.cnic
-             binding.tvInvestorPhoneNumber.text = model.phone
-             binding.tvInvestordesignation.text = model.designantion
+         if (model != null) {
+             binding.tvName.text = model.firstName
+             binding.tvDesignantion.text = model.designantion
+             binding.tvPay.text = model.profit
+             binding.tvBalance.text = model.cnic
+             binding.tvInActiveInvestment.text = model.phone
+             binding.availableProfit.text = model.address
+             binding.tvTotalInvestors.text = model.cnic_back
 
-         }*/
+
+         }
     }
 
 }

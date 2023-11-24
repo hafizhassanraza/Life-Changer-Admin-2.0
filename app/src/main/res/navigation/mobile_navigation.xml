@@ -17,9 +17,4 @@
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
-    <fragment
-        android:id="@+id/navigation_Fa"
-        android:name="com.enfotrix.adminlifechanger.Fragments.FaFragment"
-        android:label="Financial Advisor"
-        tools:layout="@layout/fragment_fa" />
 </navigation>

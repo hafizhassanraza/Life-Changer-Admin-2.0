@@ -88,6 +88,8 @@ class ActivityAddFA : AppCompatActivity() {
 
 
                         } else {
+
+
                             lifecycleScope.launch {
 
 
@@ -199,8 +201,10 @@ class ActivityAddFA : AppCompatActivity() {
                 .isEmpty()
         ) binding.etLastName.editText?.error = "Empty Last Name"
         else if (binding.etDesignation.editText?.text.toString()
+                .isEmpty() )
+        else if (binding.etpassword.editText?.text.toString()
                 .isEmpty()
-        ) binding.etDesignation.editText?.error = "Empty Designation"
+        ) binding.etDesignation.editText?.error = "Empty Password"
         //else if (binding.etMobileNumber.editText?.text.toString().isEmpty()) binding.etMobileNumber.editText?.error = "Empty Phone"
         else result.value = false
 

@@ -43,12 +43,16 @@
 
 
         <ImageView
+            android:id="@+id/editfa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_margin="10dp"
-            android:tint="@color/white"
-            android:src="@drawable/edit_icon"/>
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/edit_icon"
+            android:tint="@color/white" />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

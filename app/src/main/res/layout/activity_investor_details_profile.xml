@@ -112,6 +112,7 @@
                 android:text=" Address             : "
                 android:textColor="@color/gray"/>
             <TextView
+                android:id="@+id/postalAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -136,6 +137,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/investorcnicfront"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
@@ -161,6 +163,8 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/investorcnicback"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
@@ -195,6 +199,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="XYZ"
+                android:id="@+id/nomineename"
                 android:textColor="@color/black_m"/>
         </LinearLayout>
         <LinearLayout
@@ -211,6 +216,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+                android:id="@+id/nomineAddress"
                 android:text="Postal Address jklasflkasflkfslkalkasf laslkaflkaslsdkasldkkd"
                 android:textColor="@color/black_m"/>
         </LinearLayout>
@@ -232,6 +238,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/nomineecnicfront"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
@@ -257,6 +264,8 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/nomineecnicback"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
@@ -290,6 +299,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="XYZ"
+                android:id="@+id/bankName"
                 android:textColor="@color/black_m"/>
         </LinearLayout>
         <LinearLayout
@@ -307,6 +317,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="XYZ"
+                android:id="@+id/accountTitle"
                 android:textColor="@color/black_m"/>
         </LinearLayout>
         <LinearLayout
@@ -324,6 +335,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="XYZ"
+                android:id="@+id/account"
                 android:textColor="@color/black_m"/>
         </LinearLayout>
 
