@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace 'com.enfotrix.adminlifechanger'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.enfotrix.adminlifechanger"
