@@ -199,4 +199,15 @@
 
     </LinearLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/pdfTaxRecord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:elevation="12dp"
+        android:layout_margin="16dp"
+        app:backgroundTint="@color/primary"
+        app:srcCompat="@drawable/downloadpdficon" />
+
+
 </FrameLayout>

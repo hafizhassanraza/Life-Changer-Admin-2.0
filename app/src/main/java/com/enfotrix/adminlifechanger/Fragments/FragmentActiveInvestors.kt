@@ -1,6 +1,7 @@
 package com.enfotrix.adminlifechanger.Fragments
 
 import User
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -21,6 +22,8 @@ import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.NomineeViewModel
+import com.enfotrix.adminlifechanger.Pdf.PdfTransaction
+import com.enfotrix.adminlifechanger.Pdf.PdfUsers
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.FragmentActiveInvestorsBinding
 import com.enfotrix.adminlifechanger.databinding.FragmentNewInvestersBinding
@@ -62,6 +65,9 @@ class FragmentActiveInvestors : Fragment() ,  AdapterActiveInvestors.OnItemClick
     private lateinit var user: User
     private lateinit var sharedPrefManager : SharedPrefManager
     private lateinit var dialog : Dialog
+    private val CREATE_PDF_REQUEST_CODE = 123
+    val filteredlist = ArrayList<User>()
+
 
 
 
@@ -84,6 +90,8 @@ class FragmentActiveInvestors : Fragment() ,  AdapterActiveInvestors.OnItemClick
 
         binding.rvInvestors.layoutManager = LinearLayoutManager(mContext)
 
+        binding.pdfInvesters.setOnClickListener { generatePDF() }
+
         runFirestoreRequests()
 
 
@@ -95,10 +103,41 @@ class FragmentActiveInvestors : Fragment() ,  AdapterActiveInvestors.OnItemClick
         return root
     }
 
+    private fun generatePDF() {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/pdf"
+            putExtra(Intent.EXTRA_TITLE, "Investors List.pdf")
+        }
+        startActivityForResult(intent, CREATE_PDF_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CREATE_PDF_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            data?.data?.let { uri ->
+                val outputStream = requireContext().contentResolver.openOutputStream(uri)
+                if (outputStream != null) {
+
+                    val success =
+                        PdfUsers(userlist.filter {  it.status.equals(constant.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.createdAt }).generatePdf(
+                            outputStream
+                        )
+                    outputStream.close()
+                    if (success) {
+                        Toast.makeText(requireContext(), "Saved successfully", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(requireContext(), "Failed to save", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }
+        }
+    }
 
     private fun filter(text: String) {
         // creating a new array list to filter our data.
-        val filteredlist = ArrayList<User>()
 
         if(text.isEmpty()||text.equals("")||text==null){
             binding.rvInvestors.adapter= AdapterActiveInvestors(userlist.filter {  it.status.equals(constant.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.createdAt }, listInvestment,this@FragmentActiveInvestors)

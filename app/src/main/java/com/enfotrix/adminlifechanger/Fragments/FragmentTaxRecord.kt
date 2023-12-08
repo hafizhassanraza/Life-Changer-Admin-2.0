@@ -1,8 +1,10 @@
 package com.enfotrix.adminlifechanger.Fragments
 
 import User
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.Adapters.InvestorTransactionsAdapter
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
+import com.enfotrix.adminlifechanger.Pdf.PdfTransaction
 import com.enfotrix.adminlifechanger.databinding.FragmentInvestRecordBinding
 import com.enfotrix.adminlifechanger.databinding.FragmentTaxRecordBinding
 import com.enfotrix.lifechanger.Adapters.TransactionsAdapter
@@ -34,6 +37,9 @@ class FragmentTaxRecord : Fragment() {
     private lateinit var sharedPrefManager : SharedPrefManager
     private val investmentViewModel: InvestmentViewModel by viewModels()
     private lateinit var dialog : Dialog
+    private val CREATE_PDF_REQUEST_CODE = 123
+    val list = ArrayList<TransactionModel>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,11 +56,44 @@ class FragmentTaxRecord : Fragment() {
         user = requireArguments().getParcelable("user")!!
 
         binding.rvTax.layoutManager = LinearLayoutManager(mContext)
+        binding.pdfTaxRecord.setOnClickListener { generatePDF() }
 
         getRequests()
         return root
     }
 
+    private fun generatePDF() {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/pdf"
+            putExtra(Intent.EXTRA_TITLE, "tax-record.pdf")
+        }
+        startActivityForResult(intent, CREATE_PDF_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CREATE_PDF_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            data?.data?.let { uri ->
+                val outputStream = requireContext().contentResolver.openOutputStream(uri)
+                if (outputStream != null) {
+
+                    val success =
+                        PdfTransaction(list.sortedByDescending { it.createdAt },user).generatePdf(
+                            outputStream
+                        )
+                    outputStream.close()
+                    if (success) {
+                        Toast.makeText(requireContext(), "Saved successfully", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(requireContext(), "Failed to save", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }
+        }
+    }
 
     fun getRequests() {
         utils.startLoadingAnimation()
@@ -64,7 +103,6 @@ class FragmentTaxRecord : Fragment() {
                     if (task.isSuccessful) {
                         utils.endLoadingAnimation()
 
-                        val list = ArrayList<TransactionModel>()
                         if (task.result.size() > 0) {
 
 
