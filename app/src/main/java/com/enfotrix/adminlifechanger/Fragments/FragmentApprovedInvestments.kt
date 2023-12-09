@@ -1,6 +1,7 @@
 package com.enfotrix.adminlifechanger.Fragments
 
 import User
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -16,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.NomineeViewModel
+import com.enfotrix.adminlifechanger.Pdf.PdfAllTransactions
+import com.enfotrix.adminlifechanger.Pdf.PdfTransaction
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.FragmentApprovedInvestmentsBinding
 import com.enfotrix.adminlifechanger.databinding.FragmentPendingInvestmentsBinding
@@ -58,6 +61,10 @@ class FragmentApprovedInvestments : Fragment() ,  TransactionsAdapter.OnItemClic
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private val CREATE_PDF_REQUEST_CODE = 123
+    val list = ArrayList<TransactionModel>()
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         _binding = FragmentApprovedInvestmentsBinding.inflate(inflater, container, false)
@@ -72,9 +79,45 @@ class FragmentApprovedInvestments : Fragment() ,  TransactionsAdapter.OnItemClic
 
         binding.rvInvestmentRequests.layoutManager = LinearLayoutManager(mContext)
 
+        binding.pdfInvestments.setOnClickListener { generatePDF() }
+
         getRequests()
 
         return root
+    }
+
+    private fun generatePDF() {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/pdf"
+            putExtra(Intent.EXTRA_TITLE, "All Investments.pdf")
+        }
+        startActivityForResult(intent, CREATE_PDF_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CREATE_PDF_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            data?.data?.let { uri ->
+                val outputStream = requireContext().contentResolver.openOutputStream(uri)
+                if (outputStream != null) {
+
+                    val success =
+                        PdfAllTransactions(list.sortedByDescending { it.createdAt },
+                            sharedPrefManager.getUsersList()).generatePdf(
+                            outputStream
+                        )
+                    outputStream.close()
+                    if (success) {
+                        Toast.makeText(requireContext(), "Saved successfully", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(requireContext(), "Failed to save", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }
+        }
     }
 
     fun getRequests(){
@@ -85,7 +128,6 @@ class FragmentApprovedInvestments : Fragment() ,  TransactionsAdapter.OnItemClic
                     if (task.isSuccessful) {
                         utils.endLoadingAnimation()
 
-                        val list = ArrayList<TransactionModel>()
                         if(task.result.size()>0){
 
 

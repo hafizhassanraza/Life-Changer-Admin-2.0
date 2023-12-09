@@ -5,21 +5,17 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.NomineeViewModel
-import com.enfotrix.adminlifechanger.R
-import com.enfotrix.adminlifechanger.databinding.ActivityInvestmentRequestBinding
-import com.enfotrix.adminlifechanger.databinding.FragmentNewInvestersBinding
 import com.enfotrix.adminlifechanger.databinding.FragmentPendingInvestmentsBinding
 import com.enfotrix.adminlifechanger.ui.ActivityInvestmentReqDetails
 import com.enfotrix.lifechanger.Adapters.TransactionsAdapter
@@ -92,7 +88,7 @@ class FragmentPendingInvestments : Fragment()  ,  TransactionsAdapter.OnItemClic
                         val list = ArrayList<TransactionModel>()
                         if(task.result.size()>0){
                             for (document in task.result) {
-                                Toast.makeText(mContext, ""+document.toObject(TransactionModel::class.java).type, Toast.LENGTH_SHORT).show()
+                                //Toast.makeText(mContext, ""+document.toObject(TransactionModel::class.java).type, Toast.LENGTH_SHORT).show()
                                 var transactionModel= document.toObject(TransactionModel::class.java)
                                 transactionModel.id=document.id
                                 list.add(transactionModel)
@@ -137,7 +133,7 @@ class FragmentPendingInvestments : Fragment()  ,  TransactionsAdapter.OnItemClic
                         val list = ArrayList<TransactionModel>()
                         if(task.result.size()>0){
                             for (document in task.result) {
-                                Toast.makeText(mContext, ""+document.toObject(TransactionModel::class.java).type, Toast.LENGTH_SHORT).show()
+                               // Toast.makeText(mContext, ""+document.toObject(TransactionModel::class.java).type, Toast.LENGTH_SHORT).show()
                                 var transactionModel= document.toObject(TransactionModel::class.java)
                                 transactionModel.id=document.id
                                 list.add(transactionModel)

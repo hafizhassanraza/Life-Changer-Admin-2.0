@@ -1,6 +1,7 @@
 package com.enfotrix.adminlifechanger.Fragments
 
 import User
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.NomineeViewModel
+import com.enfotrix.adminlifechanger.Pdf.PdfAllTransactions
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.FragmentApprovedWithdrawBinding
 import com.enfotrix.adminlifechanger.databinding.FragmentPendingWithdrawBinding
@@ -47,6 +49,9 @@ class FragmentApprovedWithdraw : Fragment() , TransactionsAdapter.OnItemClickLis
 
 
     private var _binding: FragmentApprovedWithdrawBinding? = null
+    private val CREATE_PDF_REQUEST_CODE = 123
+    val list = ArrayList<TransactionModel>()
+
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -66,10 +71,47 @@ class FragmentApprovedWithdraw : Fragment() , TransactionsAdapter.OnItemClickLis
 
         binding.rvInvestmentRequests.layoutManager = LinearLayoutManager(mContext)
 
+        binding.pdfWithDraw.setOnClickListener { generatePDF() }
+
         getRequests()
 
         return root
     }
+
+    private fun generatePDF() {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/pdf"
+            putExtra(Intent.EXTRA_TITLE, "All WithDraw.pdf")
+        }
+        startActivityForResult(intent, CREATE_PDF_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CREATE_PDF_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            data?.data?.let { uri ->
+                val outputStream = requireContext().contentResolver.openOutputStream(uri)
+                if (outputStream != null) {
+
+                    val success =
+                        PdfAllTransactions(list.sortedByDescending { it.createdAt },
+                            sharedPrefManager.getUsersList()).generatePdf(
+                            outputStream
+                        )
+                    outputStream.close()
+                    if (success) {
+                        Toast.makeText(requireContext(), "Saved successfully", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(requireContext(), "Failed to save", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }
+        }
+    }
+
     fun getRequests(){
         utils.startLoadingAnimation()
         lifecycleScope.launch{
@@ -78,7 +120,6 @@ class FragmentApprovedWithdraw : Fragment() , TransactionsAdapter.OnItemClickLis
                     if (task.isSuccessful) {
 
                         utils.endLoadingAnimation()
-                        val list = ArrayList<TransactionModel>()
                         if(task.result.size()>0){
                             for (document in task.result) {
                                 var transactionModel= document.toObject(TransactionModel::class.java)
