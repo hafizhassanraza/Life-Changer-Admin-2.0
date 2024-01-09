@@ -43,7 +43,7 @@ class ActivityInvestorDetails : AppCompatActivity() {
     private lateinit var investmentModel: InvestmentModel
 
 
-    private val db = Firebase.firestore
+    private val db  = Firebase.firestore
     private val firebaseStorage = Firebase.storage
     private val storageRef = firebaseStorage.reference
 
@@ -307,6 +307,7 @@ class ActivityInvestorDetails : AppCompatActivity() {
 
     private fun addInvestment(amount: Int ,receiverAccountID:String ,previousBalance:String ,senderAccountID:String ) {
 
+        val previousTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
 
 
 
@@ -322,10 +323,10 @@ class ActivityInvestorDetails : AppCompatActivity() {
             "Approved",
             amount.toString(),
             receiverAccountID,
-            previousBalance,
+            previousTotalBalance.toString(),
             senderAccountID,
             "",
-            newBalance.toString(),
+            "",
             Timestamp.now(),
             Timestamp.now()
         )
@@ -347,6 +348,9 @@ class ActivityInvestorDetails : AppCompatActivity() {
             investmentModel.investmentBalance = newBalance.toString()
             transactionModel?.newBalance= newBalance.toString()
         }*/
+
+        val newTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
+        transactionModel.newBalance=newTotalBalance.toString()
 
         utils.startLoadingAnimation()
 
@@ -373,14 +377,10 @@ class ActivityInvestorDetails : AppCompatActivity() {
     }
 
 
-    private fun withdrawInvestment(
-        amount: Int,
-        receiverAccountID: String,
-        previousBalance: String,
-        senderAccountID: String
-    ) {
+    private fun withdrawInvestment(amount: Int, receiverAccountID: String, previousBalance: String, senderAccountID: String) {
 
 
+        val previousTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
 
         var transactionAmount =amount//var transactionAmount = transactionModel?.amount?.toInt() ?: 0
 
@@ -397,10 +397,10 @@ class ActivityInvestorDetails : AppCompatActivity() {
             "Approved",
             transactionAmount.toString(),
             receiverAccountID,
-            previousBalance,
+            previousTotalBalance.toString(),
             senderAccountID,
             "",
-            newBalance.toString(),
+            "",
             Timestamp.now(),
             Timestamp.now()
         )
@@ -444,6 +444,8 @@ class ActivityInvestorDetails : AppCompatActivity() {
 
 
 
+        val newTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
+        transactionModel.newBalance=newTotalBalance.toString()
 
         utils.startLoadingAnimation()
 
@@ -467,14 +469,11 @@ class ActivityInvestorDetails : AppCompatActivity() {
 
 
     }
-    private fun addTax(
-        amount: Int,
-        receiverAccountID: String,
-        previousBalance: String,
-        senderAccountID: String
-    )                                                                         {
+    private fun addTax(amount: Int, receiverAccountID: String, previousBalance: String, senderAccountID: String)                                                                         {
 
 
+
+        val previousTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
 
 
         val newBalance:Int
@@ -489,14 +488,17 @@ class ActivityInvestorDetails : AppCompatActivity() {
             "Approved",
             amount.toString(),
             receiverAccountID,
-            previousBalance,
+            previousTotalBalance.toString(),
             senderAccountID,
             "",
-            newBalance.toString(),
+            "",
             Timestamp.now(),
             Timestamp.now()
         )
         investmentModel.investmentBalance = newBalance.toString()
+
+        val newTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
+        transactionModel.newBalance=newTotalBalance.toString()
 
         utils.startLoadingAnimation()
 
@@ -520,12 +522,7 @@ class ActivityInvestorDetails : AppCompatActivity() {
 
     }
 
-    private fun addProfit(
-        amount: Int,
-        receiverAccountID: String,
-        previousBalance: String,
-        senderAccountID: String
-    ) {
+    private fun addProfit(amount: Int, receiverAccountID: String, previousBalance: String, senderAccountID: String) {
 
 
 
@@ -533,6 +530,8 @@ class ActivityInvestorDetails : AppCompatActivity() {
         val newBalance:Int
 
         newBalance= previousBalance.toInt()
+
+        val previousTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
 
 
 
@@ -542,10 +541,10 @@ class ActivityInvestorDetails : AppCompatActivity() {
             "Approved",
             amount.toString(),
             receiverAccountID,
-            previousBalance,
+            previousTotalBalance.toString(),
             senderAccountID,
             "",
-            newBalance.toString(),
+            "",
             Timestamp.now(),
             Timestamp.now()
         )
@@ -558,7 +557,8 @@ class ActivityInvestorDetails : AppCompatActivity() {
         investmentModel.lastProfit = newProfit_.toString()
 
 
-
+        val newTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
+        transactionModel.newBalance=newTotalBalance.toString()
 
         utils.startLoadingAnimation()
 
@@ -585,7 +585,9 @@ class ActivityInvestorDetails : AppCompatActivity() {
 
 
 
-
+    fun getTextFromInvestment(value: String?): String {
+        return if (value.isNullOrEmpty()) "0" else value
+    }
 
 
 }

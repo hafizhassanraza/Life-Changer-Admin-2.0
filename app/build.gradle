@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace 'com.enfotrix.adminlifechanger'
-    compileSdk 34
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.enfotrix.adminlifechanger"
@@ -34,7 +34,7 @@ android {
     buildFeatures {
         viewBinding true
     }
-    buildToolsVersion '34.0.0 rc2'
+    buildToolsVersion '33.0.1'
 }
 
 dependencies {

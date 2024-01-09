@@ -107,6 +107,8 @@ class ActivityAddProfit : AppCompatActivity() {
 
         for ((index, investmentModel) in listInvestmentModel.withIndex()) {
             val previousBalance = investmentModel.investmentBalance
+            val previousTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
+
             var previousProfit = investmentModel.lastProfit
 
             if (!previousBalance.isNullOrEmpty()) {
@@ -125,6 +127,8 @@ class ActivityAddProfit : AppCompatActivity() {
 
 
 
+                val newTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
+
 
                 val profitModel = TransactionModel(
                     investmentModel.investorID,
@@ -132,10 +136,10 @@ class ActivityAddProfit : AppCompatActivity() {
                     "Approved",
                     profit.toString(),  // Current (weekly) Profit
                     "",
-                    previousProfit_.toString(), // Previous profit
+                    previousTotalBalance.toString(), // Previous Total (Investment + profit + inactiveInvestment)
                     "",
                     "",
-                    newProfit.toString(),  //  New profit
+                    newTotalBalance.toString(),  //  New Total (Investment + profit + inactiveInvestment)
                     Timestamp.now(),
                     Timestamp.now()
                 )
@@ -157,6 +161,10 @@ class ActivityAddProfit : AppCompatActivity() {
             }
         }
     }
+    fun getTextFromInvestment(value: String?): String {
+        return if (value.isNullOrEmpty()) "0" else value
+    }
+
     private fun convertProfit() {
         utils.startLoadingAnimation()
 
