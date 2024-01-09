@@ -68,9 +68,9 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
 
         //41//1111
 
-binding.receiptimage.setOnClickListener {
-downloadImageUsingDownloadManager("receipturl")
-}
+        binding.receiptimage.setOnClickListener {
+        downloadImageUsingDownloadManager("receipturl")
+        }
 
 
         binding.btnAccept.setOnClickListener{
@@ -151,8 +151,8 @@ downloadImageUsingDownloadManager("receipturl")
             var newBalance= investment
 
 
-            transactionModel?.previousBalance = previousBalance.toString()
-            transactionModel?.newBalance = newBalance.toString()
+            //transactionModel?.previousBalance = previousBalance.toString()
+            //transactionModel?.newBalance = newBalance.toString()
 
             it.investmentBalance = investment.toString()
             it.lastProfit = profit.toString()
@@ -161,8 +161,8 @@ downloadImageUsingDownloadManager("receipturl")
 
 
 
-
-
+        val newTotal = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
+        transactionModel.newBalance= newTotal.toInt().toString()
 
 
         utils.startLoadingAnimation()
@@ -188,6 +188,10 @@ downloadImageUsingDownloadManager("receipturl")
 
     }
 
+    fun getTextFromInvestment(value: String?): String {
+        return if (value.isNullOrEmpty()) "0" else value
+    }
+
     private fun approved() {
 
 
@@ -204,8 +208,12 @@ downloadImageUsingDownloadManager("receipturl")
 
             val newInActiveInvestment = inActiveInvestment + transactionAmount
             investmentModel.lastInvestment = newInActiveInvestment.toString()
-            transactionModel?.newBalance= newInActiveInvestment.toString()
+            //transactionModel?.newBalance= newInActiveInvestment.toString()
         }
+
+
+        val newTotal = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
+        transactionModel.newBalance= newTotal.toInt().toString()
 
 
 

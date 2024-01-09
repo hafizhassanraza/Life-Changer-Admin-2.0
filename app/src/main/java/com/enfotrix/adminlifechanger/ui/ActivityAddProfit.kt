@@ -122,6 +122,10 @@ class ActivityAddProfit : AppCompatActivity() {
 
                 investmentModel.lastProfit = newProfit.toString()
 
+
+
+
+
                 val profitModel = TransactionModel(
                     investmentModel.investorID,
                     "Profit",
