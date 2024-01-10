@@ -94,7 +94,6 @@ class FragmentPendingWithdraw : Fragment(), TransactionsAdapter.OnItemClickListe
 
 
     fun getInvestor()
-
     {
         utils.startLoadingAnimation()
         lifecycleScope.launch {
@@ -112,7 +111,7 @@ class FragmentPendingWithdraw : Fragment(), TransactionsAdapter.OnItemClickListe
 
                         if (list.isEmpty()) {
                             // Handle the case when the list is empty
-                            Toast.makeText(mContext, "emptylist", Toast.LENGTH_SHORT).show()
+                            //Toast.makeText(mContext, "emptylist", Toast.LENGTH_SHORT).show()
                             val emptyList = ArrayList<TransactionModel>() // Create an empty list
                             binding.rvInvestmentRequests.adapter = TransactionsAdapter(
                                 constant.FROM_PENDING_WITHDRAW_REQ,
@@ -123,7 +122,7 @@ class FragmentPendingWithdraw : Fragment(), TransactionsAdapter.OnItemClickListe
                             )
                         } else {
                             // Handle the case when the list is not empty
-                            Toast.makeText(mContext, "list is not empty", Toast.LENGTH_SHORT).show()
+                           // Toast.makeText(mContext, "list is not empty", Toast.LENGTH_SHORT).show()
 
                             binding.rvInvestmentRequests.adapter = TransactionsAdapter(
                                 constant.FROM_PENDING_WITHDRAW_REQ,
@@ -150,6 +149,7 @@ class FragmentPendingWithdraw : Fragment(), TransactionsAdapter.OnItemClickListe
     }
 
     fun getAccount(){
+        utils.startLoadingAnimation()
         lifecycleScope.launch{
             userViewModel.getAccounts()
                 .addOnCompleteListener{task ->
@@ -183,8 +183,8 @@ class FragmentPendingWithdraw : Fragment(), TransactionsAdapter.OnItemClickListe
 
         sharedPrefManager.getFAList().find { it.id.equals(user.fa_id)}?.let {
 
-            Toast.makeText(mContext, transactionModel.receiverAccountID, Toast.LENGTH_SHORT).show()
-            Toast.makeText(mContext, transactionModel.receiverAccountID, Toast.LENGTH_SHORT).show()
+            //Toast.makeText(mContext, transactionModel.receiverAccountID, Toast.LENGTH_SHORT).show()
+            //Toast.makeText(mContext, transactionModel.receiverAccountID, Toast.LENGTH_SHORT).show()
 
             startActivity(
                 Intent(mContext, ActivityInvestmentReqDetails ::class.java)

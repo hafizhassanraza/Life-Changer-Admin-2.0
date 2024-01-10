@@ -68,37 +68,6 @@ class ActivityInvestmentRequest : AppCompatActivity(){
     }
 
 
-    fun getNominees(){
-        Toast.makeText(mContext, "d1", Toast.LENGTH_SHORT).show()
-        lifecycleScope.launch{
-            nomineeViewModel.getNominees()
-                .addOnCompleteListener{task ->
-                    utils.endLoadingAnimation()
-                    if (task.isSuccessful) {
-                        val list = ArrayList<ModelNominee>()
-                        if(task.result.size()>0){
-                            for (document in task.result) {
-                                list.add( document.toObject(ModelNominee::class.java).apply { docID = document.id })
-
-                            Toast.makeText(mContext, document.id, Toast.LENGTH_SHORT).show()}
-                            sharedPrefManager.putNomineeList(list)
-
-                        }
-                    }
-                    else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
-
-                }
-                .addOnFailureListener{
-                    utils.endLoadingAnimation()
-                    Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
-
-                }
-        }
-    }
-
-
-
-
 
     private fun setupTabLayout() {
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->

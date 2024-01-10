@@ -88,6 +88,7 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
 
 
     private fun downloadImageUsingDownloadManager(imageUrl: String) {
+        utils.startLoadingAnimation()
         val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val request = DownloadManager.Request(Uri.parse(imageUrl))
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
@@ -97,6 +98,7 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "Cnic.jpg")
 
         downloadManager.enqueue(request)
+        utils.endLoadingAnimation()
     }
 
     private fun getData() {
@@ -104,7 +106,7 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
         transactionModel= TransactionModel.fromString( intent.getStringExtra("transactionModel").toString())!!
          user=User.fromString( intent.getStringExtra("User").toString())!!
 
-        Toast.makeText(mContext, user.id, Toast.LENGTH_SHORT).show()
+        //Toast.makeText(mContext, user.id, Toast.LENGTH_SHORT).show()
         utils.startLoadingAnimation()
 
 
@@ -171,9 +173,6 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
 
             investmentViewModel.setInvestment(investmentModel)
                 .addOnCompleteListener{task->
-
-
-
                     db.collection(constants.TRANSACTION_REQ_COLLECTION).document(transactionModel.id).set(transactionModel)
                         .addOnCompleteListener {
                             utils.endLoadingAnimation()

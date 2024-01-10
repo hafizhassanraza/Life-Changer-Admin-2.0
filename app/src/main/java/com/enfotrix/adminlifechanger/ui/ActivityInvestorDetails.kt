@@ -382,6 +382,7 @@ class ActivityInvestorDetails : AppCompatActivity() {
 
         val previousTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
 
+        Toast.makeText(mContext, ""+ previousBalance.toInt().toString(), Toast.LENGTH_SHORT).show()
         var transactionAmount =amount//var transactionAmount = transactionModel?.amount?.toInt() ?: 0
 
 
@@ -397,7 +398,7 @@ class ActivityInvestorDetails : AppCompatActivity() {
             "Approved",
             transactionAmount.toString(),
             receiverAccountID,
-            previousTotalBalance.toString(),
+            previousTotalBalance.toInt().toString(),
             senderAccountID,
             "",
             "",
@@ -431,8 +432,7 @@ class ActivityInvestorDetails : AppCompatActivity() {
             var newBalance= investment
 
 
-            transactionModel?.previousBalance = previousBalance.toString()
-            transactionModel?.newBalance = newBalance.toString()
+
 
             it.investmentBalance = investment.toString()
             it.lastProfit = profit.toString()

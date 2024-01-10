@@ -38,19 +38,17 @@ class ActivityAddProfit : AppCompatActivity() {
     var constant= Constants()
 
 
-
     private lateinit var binding: ActivityAddProfitBinding
     private lateinit var utils: Utils
     private lateinit var mContext: Context
     private lateinit var constants: Constants
     private lateinit var sharedPrefManager : SharedPrefManager
     private lateinit var dialog : Dialog
-
-
     private lateinit var transactionModel: TransactionModel
     private lateinit var user: User
-
     private  var listInvestmentModel= ArrayList<InvestmentModel>()
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

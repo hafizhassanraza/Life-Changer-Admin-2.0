@@ -165,6 +165,7 @@ class FragmentPendingInvestments : Fragment()  ,  TransactionsAdapter.OnItemClic
     }
 
     fun getAccount(){
+        utils.startLoadingAnimation()
         lifecycleScope.launch{
             userViewModel.getAccounts()
                 .addOnCompleteListener{task ->
