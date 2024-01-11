@@ -37,7 +37,8 @@ class AdapterInActiveInvestment (val listInvestor: List<User>, val listInvestmen
         fun bind(investor: User) {
             val context = itemBinding.root.context
 
-            val investment= listInvestment.first { it.investorID.equals(investor.id)}
+            val investment= listInvestment.find { it.investorID.equals(investor.id)}
+
 
 
 
@@ -49,10 +50,13 @@ class AdapterInActiveInvestment (val listInvestor: List<User>, val listInvestmen
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(itemBinding.imgUserProfile)
 
-            itemBinding.tvActiveInvestment.text = investment.investmentBalance
-            itemBinding.tvInActiveInvestment.text = investment.lastInvestment
-            itemBinding.btnActive.setOnClickListener { listener.onItemClick(investment) }
-            //itemBinding.btnAdd.setOnClickListener { listener.addInvestment(investment) }
+            if (investment != null) {
+                itemBinding.tvActiveInvestment.text = investment.investmentBalance
+                itemBinding.tvInActiveInvestment.text = investment.lastInvestment
+                itemBinding.btnActive.setOnClickListener { listener.onItemClick(investment) }
+            }
+
+
 
         }
     }

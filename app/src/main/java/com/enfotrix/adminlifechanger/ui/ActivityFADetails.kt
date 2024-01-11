@@ -216,7 +216,7 @@ binding.layInvest.setOnClickListener()
                                 Toast.LENGTH_SHORT
                             ).show()
                             dialog.dismiss()
-                            startActivity(Intent(mContext,MainActivity::class.java))
+                            startActivity(Intent(mContext,ActivityHome::class.java))
                         } else Toast.makeText(mContext, "Failed to Add profit", Toast.LENGTH_SHORT)
                             .show()
                     }

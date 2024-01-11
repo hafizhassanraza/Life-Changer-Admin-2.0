@@ -136,6 +136,8 @@ class FragmentActiveInvestors : Fragment() ,  AdapterActiveInvestors.OnItemClick
         }
     }
 
+
+
     private fun filter(text: String) {
         // creating a new array list to filter our data.
 
@@ -169,8 +171,6 @@ class FragmentActiveInvestors : Fragment() ,  AdapterActiveInvestors.OnItemClick
         // running a for loop to compare elements.
 
     }
-
-
     fun runFirestoreRequests() {
         // Start a coroutine
         utils.startLoadingAnimation()

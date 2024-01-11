@@ -182,7 +182,7 @@ class ActivityAgentWithdrawReqDetails : AppCompatActivity() {
                 startActivity(
                     Intent(
                         this@ActivityAgentWithdrawReqDetails,
-                        MainActivity::class.java
+                        ActivityHome::class.java
                     )
                 )
             }

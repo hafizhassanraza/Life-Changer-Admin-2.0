@@ -18,4 +18,15 @@
     <color name="secondary_l">#32DFDEDE</color>
     <color name="textprimary">#EDF8F5</color>
     <color name="statusbarcolor">#006747</color>
+
+
+
+    <color name="green">#4CAF50</color>
+    <color name="lightGray">#EAF0F0</color>
+    <color name="textGrey">#808F96</color>
+
+    <!--    <color name="primary">#2F9B47</color>-->
+
+    <color name="skyBlus">#2DACEF</color>
+    <color name="skyblueShade">#DEF4FF</color>
 </resources>

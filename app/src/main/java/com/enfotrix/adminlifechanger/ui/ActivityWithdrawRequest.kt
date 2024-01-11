@@ -3,10 +3,12 @@ package com.enfotrix.adminlifechanger.ui
 import User
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.Adapters.InvestmentViewPagerAdapter
 import com.enfotrix.adminlifechanger.Adapters.WithdrawViewPagerAdapter
 import com.enfotrix.adminlifechanger.Constants
@@ -15,12 +17,14 @@ import com.enfotrix.adminlifechanger.Models.NomineeViewModel
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityInvestmentRequestBinding
 import com.enfotrix.adminlifechanger.databinding.ActivityWithdrawRequestBinding
+import com.enfotrix.lifechanger.Adapters.TransactionsAdapter
+import com.enfotrix.lifechanger.Models.TransactionModel
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import com.google.android.material.tabs.TabLayoutMediator
 
-class ActivityWithdrawRequest : AppCompatActivity() {
+class ActivityWithdrawRequest : AppCompatActivity() ,  TransactionsAdapter.OnItemClickListener{
 
 
     private val userViewModel: UserViewModel by viewModels()
@@ -53,34 +57,49 @@ class ActivityWithdrawRequest : AppCompatActivity() {
 
 
         setTitle("WithDraw")
-        setupViewPager()
-        setupTabLayout()
 
-        Toast.makeText(mContext, "Debug 1", Toast.LENGTH_SHORT).show()
+        binding.rvInvestmentRequests.layoutManager = LinearLayoutManager(mContext)
+
+        getRequests()
+
+
+
+
 
     }
-    private fun setupTabLayout() {
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            if(position==0) tab.text ="Pending"
-            else if(position==1) tab.text="Approved"
-        }.attach()
+
+    private fun getRequests(){
+
+
+        val pendingInvestment = sharedPrefManager.getTransactionList().filter { it.type == constant.TRANSACTION_TYPE_WITHDRAW && it.status == constant.TRANSACTION_STATUS_PENDING }.sortedByDescending { it.createdAt }
+
+        binding.rvInvestmentRequests.adapter= TransactionsAdapter(
+            constant.FROM_PENDING_WITHDRAW_REQ,
+            pendingInvestment,
+            sharedPrefManager.getUsersList(),
+            sharedPrefManager.getFAList(),
+            this@ActivityWithdrawRequest)
     }
 
-    private fun setupViewPager() {
-        val adapter = WithdrawViewPagerAdapter(this, 2)
-        binding.viewPager.adapter = adapter
+
+    override fun onItemClick(transactionModel: TransactionModel, user: User) {
+
+
+        startActivity(
+            Intent(mContext, ActivityInvestmentReqDetails ::class.java)
+                .putExtra("transactionModel",transactionModel.toString())
+                .putExtra("User",user.toString())
+                .putExtra("from",constant.FROM_PENDING_WITHDRAW_REQ)
+        )
+
+
+
+
+
+
     }
 
-    override fun onBackPressed() {
-        val viewPager = binding.viewPager
-        if (viewPager.currentItem == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed()
-        } else {
-            // Otherwise, select the previous step.
-            viewPager.currentItem = viewPager.currentItem - 1
-        }
+    override fun onDeleteClick(transactionModel: TransactionModel) {
     }
 
 }

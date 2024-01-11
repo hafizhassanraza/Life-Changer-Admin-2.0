@@ -16,6 +16,35 @@
     <string name="viewDetails"><u><b>View Details</b></u></string>
     <string name="download"><u><b>Download</b></u></string>
 
+
+    <string-array name="listofbanks">
+        <item>Allied Bank Limited (ABL)</item>
+        <item>Askari Bank</item>
+        <item>Bank Alfalah Limited (BAFL)</item>
+        <item>Bank Al-Habib Limited (BAHL)</item>
+        <item>BankIslami Pakistan Limited</item>
+        <item>Bank of Punjab (BOP)</item>
+        <item>Bank of Khyber</item>
+        <item>EasyPaisa</item>
+        <item>Faysal Bank Limited (FBL)</item>
+        <item>Habib Bank Limited (HBL)</item>
+        <item>Habib Metropolitan Bank Limited</item>
+        <item>HBL Konnect</item>
+        <item>JS Bank Limited</item>
+        <item>JazzCash</item>
+        <item>MCB Bank Limited</item>
+        <item>MCB Islamic Bank Limited</item>
+        <item>Meezan Bank Limited</item>
+        <item>National Bank of Pakistan (NBP)</item>
+        <item>NayaPay</item>
+        <item>Sindh Bank</item>
+        <item>Summit Bank Pakistan</item>
+        <item>United Bank Limited (UBL)</item>
+        <item>Upaisa</item>
+        <item>Zarai Taraqiati Bank Limited (ZTBL)</item>
+    </string-array>
+
+
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus

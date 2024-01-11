@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/secondary_m"
+
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="100dp"
+                android:layout_height="3dp"
+                android:layout_marginTop="12dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/gray"/>
+
+            <TextView
+                android:id="@+id/tvHeaderBank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Bank Account"
+                android:textColor="@color/black"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+
+            <TextView
+                android:id="@+id/tvHeaderBankDisc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textGrey"
+                android:layout_marginHorizontal="20dp"
+                android:text="Add your bank account details for funds transfer and other services"></TextView>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bank"
+                android:layout_marginLeft="20dp"
+                android:padding="5dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/black"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_edittext">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/bank"
+                    android:layout_gravity="center_vertical"
+                    android:tint="@color/gray"
+                    android:layout_marginHorizontal="10dp"/>
+                <Spinner
+                    android:id="@+id/spBank"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:entries="@array/listofbanks"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Account Tittle"
+                android:layout_marginLeft="20dp"
+                android:padding="5dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/black"/>
+            <EditText
+                android:id="@+id/etAccountTittle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textGrey"
+                android:hint="My Bank Account"
+                android:paddingLeft="20dp"
+                android:background="@drawable/bg_edittext"
+                android:layout_marginHorizontal="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Account Number"
+                android:layout_marginLeft="20dp"
+                android:padding="5dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/black"/>
+            <EditText
+                android:id="@+id/etAccountNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="1234XXXXXXXXXX"
+                android:paddingLeft="20dp"
+                android:inputType="number"
+                android:textColor="@color/textGrey"
+                android:background="@drawable/bg_edittext"
+                android:layout_marginHorizontal="20dp"/>
+
+
+
+
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cornerRadius="12dp"
+                android:layout_marginTop="24dp"
+                android:paddingVertical="15dp"
+                android:layout_marginHorizontal="20dp"
+                android:backgroundTint="@color/black"
+                android:layout_marginBottom="20dp"
+                android:textStyle="bold"
+                android:text="Add" />
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+
+
+
+</LinearLayout>

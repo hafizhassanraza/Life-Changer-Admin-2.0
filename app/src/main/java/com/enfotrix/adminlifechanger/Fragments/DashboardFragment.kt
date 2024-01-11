@@ -26,6 +26,7 @@ import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.Models.NomineeViewModel
 import com.enfotrix.adminlifechanger.databinding.ActivityNewInvestorsReqBinding
+import com.enfotrix.adminlifechanger.ui.ActivityAccounts
 import com.enfotrix.adminlifechanger.ui.ActivityFA
 import com.enfotrix.adminlifechanger.ui.ActivityInvestors
 import com.enfotrix.adminlifechanger.ui.ActivityNewInvestorReqDetails
@@ -109,9 +110,8 @@ class DashboardFragment : Fragment() {
         announce()
 
 
-        binding.laynews.setOnClickListener {
-            startActivity(Intent(requireContext(), ActivityAnnouncement::class.java))
-        }
+        binding.laynews.setOnClickListener { startActivity(Intent(requireContext(), ActivityAnnouncement::class.java)) }
+        binding.layAccounts.setOnClickListener { startActivity(Intent(requireContext(), ActivityAccounts::class.java)) }
 
 
 
@@ -363,7 +363,6 @@ class DashboardFragment : Fragment() {
 
             }
     }
-
 
     suspend fun getFA() {
 

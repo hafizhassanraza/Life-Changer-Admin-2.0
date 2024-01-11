@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.Adapters.InvestmentViewPagerAdapter
@@ -27,11 +28,15 @@ import com.enfotrix.lifechanger.Utils
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 
-class ActivityInvestmentRequest : AppCompatActivity(){
+class ActivityInvestmentRequest : AppCompatActivity() ,  TransactionsAdapter.OnItemClickListener{
     private val userViewModel: UserViewModel by viewModels()
     private val nomineeViewModel: NomineeViewModel by viewModels()
     private val investmentViewModel: InvestmentViewModel by viewModels()
     var constant= Constants()
+
+
+
+
 
 
 
@@ -58,39 +63,48 @@ class ActivityInvestmentRequest : AppCompatActivity(){
 
 
         setTitle("Investments")
-        setupViewPager()
-        setupTabLayout()
+
+
+        binding.rvInvestmentRequests.layoutManager = LinearLayoutManager(mContext)
+
+        getRequests()
 
 
 
 
 
     }
+    private fun getRequests(){
 
 
+        val pendingInvestment = sharedPrefManager.getTransactionList().filter { it.type == constant.TRANSACTION_TYPE_INVESTMENT && it.status == constant.TRANSACTION_STATUS_PENDING }.sortedByDescending { it.createdAt }
 
-    private fun setupTabLayout() {
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            if(position==0) tab.text ="Pending"
-            else if(position==1) tab.text="Approved"
-        }.attach()
+        binding.rvInvestmentRequests.adapter=TransactionsAdapter(
+            constant.FROM_PENDING_INVESTMENT_REQ,
+            pendingInvestment,
+            sharedPrefManager.getUsersList(),
+            sharedPrefManager.getFAList(),
+            this@ActivityInvestmentRequest)
     }
 
-    private fun setupViewPager() {
-        val adapter = InvestmentViewPagerAdapter(this, 2)
-        binding.viewPager.adapter = adapter
+
+    override fun onItemClick(transactionModel: TransactionModel, user: User) {
+
+
+        startActivity(
+            Intent(mContext, ActivityInvestmentReqDetails ::class.java)
+                .putExtra("transactionModel",transactionModel.toString())
+                .putExtra("User",user.toString())
+                .putExtra("from",constant.FROM_PENDING_INVESTMENT_REQ)
+        )
+
+
+
+
     }
 
-    override fun onBackPressed() {
-        val viewPager = binding.viewPager
-        if (viewPager.currentItem == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed()
-        } else {
-            // Otherwise, select the previous step.
-            viewPager.currentItem = viewPager.currentItem - 1
-        }
+    override fun onDeleteClick(transactionModel: TransactionModel) {
     }
+
 
 }

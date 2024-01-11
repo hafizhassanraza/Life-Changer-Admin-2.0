@@ -87,13 +87,14 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/v1">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
@@ -101,69 +102,6 @@
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="@color/secondary"
                 app:cardElevation="3dp"
-                      android:layout_below="@+id/v1">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_column="0"
-                    app:layout_row="0"
-                    app:layout_columnWeight="1"
-                    app:layout_rowWeight="1"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_alignParentTop="true"
-                        android:textColor="@color/primary"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="15dp"
-                        android:text="Investor's Primary Bank Account"/>
-                    <TextView
-                        android:id="@+id/tvInvestorBankName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_alignParentTop="true"
-                        android:textColor="@color/SecondaryVariant"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="15dp"
-                        android:text="Bank Name"/>
-
-
-                    <TextView
-                        android:id="@+id/tvInvestorBankAccountTittle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Account Tittle"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="15dp"
-                        android:textColor="@color/SecondaryVariant"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/tvInvestorBankAccountNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="000000000000000"
-                        android:layout_marginBottom="10dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="15dp"
-                        android:textColor="@color/SecondaryVariant"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/secondary"
-                app:cardElevation="3dp"
-                android:layout_marginTop="2dp"
                 android:layout_below="@+id/v1">
 
                 <LinearLayout
@@ -204,8 +142,7 @@
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="@color/secondary"
                 app:cardElevation="3dp"
-                android:layout_marginTop="2dp"
-                android:layout_below="@+id/v1">
+                android:layout_marginTop="2dp">
 
 
                 <LinearLayout
@@ -504,330 +441,16 @@
 
 
             </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cd7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/secondary"
-                app:cardElevation="3dp"
-                android:layout_marginTop="3dp"
-                android:layout_below="@+id/v1">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <RelativeLayout
-                        android:id="@+id/layInvestment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_column="0"
-                            app:layout_row="0"
-                            app:layout_columnWeight="1"
-                            app:layout_rowWeight="1"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:layout_alignParentTop="true"
-                                android:textColor="@color/primary"
-                                android:textStyle="bold"
-                                android:layout_marginLeft="15dp"
-                                android:text="Investment"/>
-                            <TextView
-                                android:id="@+id/tvBalance"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="10dp"
-                                android:layout_alignParentTop="true"
-                                android:textColor="@color/SecondaryVariant"
-                                android:layout_marginHorizontal="15dp"
-                                android:text="00"/>
-                            <TextView
-                                android:id="@+id/tvNewBalance"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="10dp"
-                                android:layout_alignParentTop="true"
-                                android:textColor="@color/SecondaryVariant"
-                                android:layout_marginHorizontal="15dp"
-                                android:text="00"/>
-
-
-                        </LinearLayout>
-
-                        <Button
-                            android:id="@+id/btnAddInvestment"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="15dp"
-                            android:text="Add "/>
-
-                    </RelativeLayout>
-
-
-
-
-
-
-
-
-
-
-
-                </RelativeLayout>
-
-
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cd8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/secondary"
-                app:cardElevation="3dp"
-                android:layout_marginTop="3dp"
-                android:layout_below="@+id/v1">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <RelativeLayout
-                        android:id="@+id/layWithdraw"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_column="0"
-                            app:layout_row="0"
-                            app:layout_columnWeight="1"
-                            app:layout_rowWeight="1"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:layout_alignParentTop="true"
-                                android:textColor="@color/primary"
-                                android:textStyle="bold"
-                                android:layout_marginLeft="15dp"
-                                android:text="Withdraw"/>
-                            <TextView
-                                android:id="@+id/tvBalance2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="10dp"
-                                android:layout_alignParentTop="true"
-                                android:textColor="@color/SecondaryVariant"
-                                android:layout_marginHorizontal="15dp"
-                                android:text="00"/>
-                            <TextView
-                                android:id="@+id/tvWithdrawBalance"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="10dp"
-                                android:layout_alignParentTop="true"
-                                android:textColor="@color/SecondaryVariant"
-                                android:layout_marginHorizontal="15dp"
-                                android:text="00"/>
-
-
-                        </LinearLayout>
-
-                        <Button
-                            android:id="@+id/btnWithdraw"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="15dp"
-                            android:text="Withdraw "/>
-
-                    </RelativeLayout>
-
-
-
-
-
-
-
-
-
-
-
-                </RelativeLayout>
-
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cd9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/secondary"
-                app:cardElevation="3dp"
-                android:layout_marginTop="3dp"
-                android:layout_below="@+id/v1">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <RelativeLayout
-                        android:id="@+id/layProfit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_column="0"
-                            app:layout_row="0"
-                            app:layout_columnWeight="1"
-                            app:layout_rowWeight="1"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:layout_alignParentTop="true"
-                                android:textColor="@color/primary"
-                                android:textStyle="bold"
-                                android:layout_marginLeft="15dp"
-                                android:text="Profit"/>
-
-                            <TextView
-                                android:id="@+id/tvProfitAdd"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="10dp"
-                                android:layout_alignParentTop="true"
-                                android:textColor="@color/SecondaryVariant"
-                                android:layout_marginHorizontal="15dp"
-                                android:text="00"/>
-
-
-                        </LinearLayout>
-
-                        <Button
-                            android:id="@+id/btnProfit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="15dp"
-                            android:text="Profit "/>
-
-                    </RelativeLayout>
-
-
-
-
-
-
-
-
-
-
-
-                </RelativeLayout>
-
-
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cd10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/secondary"
-                app:cardElevation="3dp"
-                android:layout_marginTop="3dp"
-                android:layout_below="@+id/v1">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <RelativeLayout
-                        android:id="@+id/layTax"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_column="0"
-                            app:layout_row="0"
-                            app:layout_columnWeight="1"
-                            app:layout_rowWeight="1"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:layout_alignParentTop="true"
-                                android:textColor="@color/primary"
-                                android:textStyle="bold"
-                                android:layout_marginLeft="15dp"
-                                android:text="Tax"/>
-
-                            <TextView
-                                android:id="@+id/tvTaxAdd"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="10dp"
-                                android:layout_alignParentTop="true"
-                                android:textColor="@color/SecondaryVariant"
-                                android:layout_marginHorizontal="15dp"
-                                android:text="00"/>
-
-
-                        </LinearLayout>
-
-                        <Button
-                            android:id="@+id/btnTax"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="15dp"
-                            android:text="Tax "/>
-
-                    </RelativeLayout>
-
-
-
-
-
-
-
-
-
-
-
-                </RelativeLayout>
-
-
-            </androidx.cardview.widget.CardView>
 
             <Button
                 android:id="@+id/btnApprove"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Approve Profile"
+                android:layout_marginBottom="40dp"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="80dp"/>
+                android:layout_marginTop="10dp"/>
 
         </LinearLayout>
 

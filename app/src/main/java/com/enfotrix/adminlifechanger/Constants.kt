@@ -11,6 +11,7 @@ public class Constants  {
     public var AGENT_TRANSACTION="Agent Transaction"
     public var NOMINEE_COLLECTION="Nominees"
     public var ACCOUNTS_COLLECTION="Accounts"
+    public var ANNOUNCEMENT_COLLECTION="Accounts"
     public var INVESTMENT_COLLECTION="Investment"
     public var TRANSACTION_REQ_COLLECTION="Transactions"
     public var PROFIT_TAX_COLLECTION="ProfitTax"

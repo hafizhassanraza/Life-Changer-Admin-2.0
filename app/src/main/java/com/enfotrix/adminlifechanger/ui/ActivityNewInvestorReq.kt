@@ -55,169 +55,21 @@ class ActivityNewInvestorReq : AppCompatActivity() ,  InvestorAdapter.OnItemClic
         binding = ActivityNewInvestorsReqBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.title = "Investment Request"
-
         mContext=this@ActivityNewInvestorReq
         utils = Utils(mContext)
         constants= Constants()
         sharedPrefManager = SharedPrefManager(mContext)
-
         binding.rvInvestors.layoutManager = LinearLayoutManager(mContext)
-
-        runFirestoreRequests()
+        setData()
     }
 
-
-
-    fun runFirestoreRequests() {
-        // Start a coroutine
-        utils.startLoadingAnimation()
-
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                awaitAll( async { getRequests() }, async { getAccount() }, async { getNominees() },async { getFA() })
-
-                utils.endLoadingAnimation()
-                // All requests have completed
-
-
-            } catch (e: Exception) {
-                // Handle any exceptions that occurred during the requests
-                // ...
-            }
-        }
-
-    }
-
-
-    fun getRequests(){
-        lifecycleScope.launch{
-            userViewModel.getUsers()
-                .addOnCompleteListener{task ->
-                   // utils.endLoadingAnimation()
-                    if (task.isSuccessful) {
-                        val list = ArrayList<User>()
-                        if(task.result.size()>0){
-                            for (document in task.result) {
-
-                                val user =document.toObject(User::class.java)
-                                user.id=document.id
-                                list.add( user)
-
-                            }
-
-                            binding.rvInvestors.adapter=InvestorAdapter(
-                                constant.FROM_PENDING_INVESTOR_REQ,
-                                list.filter {  it.status.equals(constant.INVESTOR_STATUS_PENDING) }.sortedByDescending { it.createdAt },
-                                this@ActivityNewInvestorReq)
-
-
-                            //Toast.makeText(mContext, "d1 : "+ task.result.size(), Toast.LENGTH_SHORT).show()
-
-                        }
-                    }
-                    else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
-
-                }
-                .addOnFailureListener{
-                    Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
-
-                }
-
-
-        }
-    }
-
-    fun getAccount(){
-        //utils.startLoadingAnimation()
-        lifecycleScope.launch{
-            userViewModel.getAccounts()
-                .addOnCompleteListener{task ->
-                   // utils.endLoadingAnimation()
-
-                    if (task.isSuccessful) {
-                        val list = ArrayList<ModelBankAccount>()
-                        if(task.result.size()>0){
-                            for (document in task.result)list.add( document.toObject(ModelBankAccount::class.java).apply { docID = document.id })
-
-                            sharedPrefManager.putAccountList(list)
-
-
-
-
-                            //Toast.makeText(mContext, "d2 : "+ task.result.size(), Toast.LENGTH_SHORT).show()
-
-
-                        }
-                    }
-                    else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
-
-                }
-                .addOnFailureListener{
-                    Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
-
-                }
-        }
-    }
-
-    suspend fun getNominees(){
-
-        lifecycleScope.launch{
-            nomineeViewModel.getNominees()
-                .addOnCompleteListener{task ->
-                    //utils.endLoadingAnimation()
-                    if (task.isSuccessful) {
-                        val list = ArrayList<ModelNominee>()
-                        if(task.result.size()>0){
-                            for (document in task.result) list.add( document.toObject(ModelNominee::class.java).apply { docID = document.id })
-
-                            sharedPrefManager.putNomineeList(list)
-
-                            //Toast.makeText(mContext, "d3 : "+ task.result.size(), Toast.LENGTH_SHORT).show()
-
-                        }
-                    }
-                    else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
-
-                }
-                .addOnFailureListener{
-                    Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
-
-                }
-        }
-    }
-
-
-    suspend fun getFA(){
-
-        lifecycleScope.launch{
-            faViewModel.getFA()
-                .addOnCompleteListener{task ->
-                    if (task.isSuccessful) {
-                        val list = ArrayList<ModelFA>()
-                        if(task.result.size()>0){
-                            for (document in task.result)list.add( document.toObject(ModelFA::class.java).apply { id = document.id })
-
-                            sharedPrefManager.putFAList(list)
-
-                        }
-                    }
-                    else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
-
-                }
-                .addOnFailureListener{
-                    utils.endLoadingAnimation()
-                    Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
-
-                }
-
-
-        }
+    private fun setData() {
+        val newInvestorList= sharedPrefManager.getUsersList().filter { it.status.equals(constant.INVESTOR_STATUS_PENDING) }
+        binding.rvInvestors.adapter=InvestorAdapter(constant.FROM_PENDING_INVESTOR_REQ, newInvestorList, this@ActivityNewInvestorReq)
     }
 
     override fun onItemClick(user: User) {
         startActivity(Intent(mContext,ActivityNewInvestorReqDetails::class.java).putExtra("user",user.toString()))
-
-
     }
 
 

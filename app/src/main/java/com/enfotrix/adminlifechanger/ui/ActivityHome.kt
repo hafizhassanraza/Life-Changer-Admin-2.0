@@ -1,40 +1,23 @@
-package com.enfotrix.adminlifechanger.Fragments
+package com.enfotrix.adminlifechanger.ui
 
 import User
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.ColorSpace.Model
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.enfotrix.adminlifechanger.ActivityAnnouncement
 import com.enfotrix.adminlifechanger.Constants
-import com.enfotrix.adminlifechanger.Models.FAViewModel
-import com.enfotrix.adminlifechanger.databinding.FragmentHomeBinding
-import com.enfotrix.adminlifechanger.Models.HomeViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
-import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
-import com.enfotrix.adminlifechanger.Models.NomineeViewModel
 import com.enfotrix.adminlifechanger.R
-import com.enfotrix.adminlifechanger.ui.ActivityAddProfit
-import com.enfotrix.adminlifechanger.ui.ActivityAddTax
-import com.enfotrix.adminlifechanger.ui.ActivityFA
-import com.enfotrix.adminlifechanger.ui.ActivityInvestmentManager
-import com.enfotrix.adminlifechanger.ui.ActivityInvestmentRequest
-import com.enfotrix.adminlifechanger.ui.ActivityInvestors
-import com.enfotrix.adminlifechanger.ui.ActivityNewInvestorReq
-import com.enfotrix.adminlifechanger.ui.ActivityWithdrawRequest
+import com.enfotrix.adminlifechanger.databinding.ActivityAccountsBinding
+import com.enfotrix.adminlifechanger.databinding.ActivityHomeBinding
+import com.enfotrix.adminlifechanger.databinding.FragmentHomeBinding
+import com.enfotrix.lifechanger.Adapters.InvestorAccountsAdapter
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
 import com.enfotrix.lifechanger.Models.TransactionModel
@@ -42,25 +25,13 @@ import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.joinAll
-import kotlinx.coroutines.launch
 
-class HomeFragment : Fragment() {
-
-
+class ActivityHome : AppCompatActivity() {
     private val db = Firebase.firestore
 
-
-    var constant= Constants()
-
-
-
+    private val userViewModel: UserViewModel by viewModels()
+    private lateinit var binding : ActivityHomeBinding
 
     private lateinit var utils: Utils
     private lateinit var mContext: Context
@@ -68,41 +39,58 @@ class HomeFragment : Fragment() {
     private lateinit var user: User
     private lateinit var sharedPrefManager : SharedPrefManager
     private lateinit var dialog : Dialog
-
-    private var _binding: FragmentHomeBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+    private lateinit var announcement : String
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        binding.btnInvestmentReq.setOnClickListener { startActivity(Intent(requireContext(),ActivityInvestmentRequest::class.java)) }
-        binding.btnWithdrawReq.setOnClickListener { startActivity(Intent(requireContext(),ActivityWithdrawRequest::class.java)) }
 
-        binding.layInvestment.setOnClickListener { startActivity(Intent(requireContext(),ActivityInvestmentManager::class.java)) }
-        binding.layInvestors.setOnClickListener { startActivity(Intent(requireContext(), ActivityInvestors::class.java)) }
-        binding.layProfit.setOnClickListener { startActivity(Intent(requireContext(),ActivityAddProfit::class.java)) }
-        binding.layAgent.setOnClickListener { startActivity(Intent(requireContext(),ActivityFA::class.java)) }
-
-        mContext=requireContext()
+        mContext=this@ActivityHome
         utils = Utils(mContext)
         constants= Constants()
         sharedPrefManager = SharedPrefManager(mContext)
 
+
+        binding.btnInvestmentReq.setOnClickListener { startActivity(Intent(mContext,ActivityInvestmentRequest::class.java)) }
+        binding.btnWithdrawReq.setOnClickListener { startActivity(Intent(mContext,ActivityWithdrawRequest::class.java)) }
+
+        //binding.layInvestment.setOnClickListener { startActivity(Intent(mContext,ActivityInActiveInvestment::class.java)) }
+        binding.btnInActiveInvestment.setOnClickListener { startActivity(Intent(mContext,ActivityInActiveInvestment::class.java)) }
+        binding.layInvestors.setOnClickListener { startActivity(Intent(mContext, ActivityInvestors::class.java)) }
+        binding.btnProfitManager.setOnClickListener { startActivity(Intent(mContext,ActivityAddProfit::class.java)) }
+        binding.layAgent.setOnClickListener { startActivity(Intent(mContext,ActivityFA::class.java)) }
+        binding.btnNewInvestors.setOnClickListener { startActivity(Intent(mContext,ActivityNewInvestorReq::class.java)) }
+        binding.btnAnnouncement.setOnClickListener { startActivity(Intent(mContext, ActivityAnnouncement::class.java)) }
+        binding.btnAccounts.setOnClickListener { startActivity(Intent(mContext, ActivityAccounts::class.java)) }
+
+
         getData()
 
-        return root
+
     }
 
 
 
     private fun getData() {
+
+
+        db.collection("Admin Announcement")
+            .orderBy("createdAt", com.google.firebase.firestore.Query.Direction.DESCENDING)
+            .limit(1)
+            .addSnapshotListener { querySnapshot, error ->
+                if (error != null) {
+                    // Handle error
+                    return@addSnapshotListener
+                }
+
+                if (querySnapshot != null && !querySnapshot.isEmpty) {
+                    val latestAnnouncement = querySnapshot.documents[0].getString("announcement")
+                    binding.tvAnnouncement.text = latestAnnouncement
+                }
+            }
 
         val collections = listOf(
             constants.ACCOUNTS_COLLECTION,
@@ -110,7 +98,8 @@ class HomeFragment : Fragment() {
             constants.INVESTMENT_COLLECTION,
             constants.TRANSACTION_REQ_COLLECTION,
             constants.FA_COLLECTION,
-            constants.NOMINEE_COLLECTION
+            constants.NOMINEE_COLLECTION,
+            constants.ANNOUNCEMENT_COLLECTION,
         )
         utils.startLoadingAnimation()
         collections.forEach { collection ->
@@ -144,6 +133,7 @@ class HomeFragment : Fragment() {
                             constants.NOMINEE_COLLECTION -> sharedPrefManager.putNomineeList(task.documents.mapNotNull { document ->
                                 document.toObject(ModelNominee::class.java)?.apply { docID = document.id }
                             })
+                            constants.ANNOUNCEMENT_COLLECTION -> task.documents.mapNotNull { document -> announcement= document.getString("announcement").toString() }
 
                         }
                         // Call endLoading after each snapshot listener completes
@@ -170,20 +160,21 @@ class HomeFragment : Fragment() {
         utils.endLoadingAnimation()
         var listInvestmentModel= sharedPrefManager.getInvestmentList()
         var listTransaction= sharedPrefManager.getTransactionList()
-        val pendingInvestmentCounter = listTransaction.count { it.type == constant.TRANSACTION_TYPE_INVESTMENT && it.status == constant.TRANSACTION_STATUS_PENDING }?.toInt() ?: 0
-        val pendingWithdrawCounter = listTransaction.count { it.type == constant.TRANSACTION_TYPE_WITHDRAW && it.status == constant.TRANSACTION_STATUS_PENDING }?.toInt() ?: 0
-
+        var newInvestorsCounter= sharedPrefManager.getUsersList().count{it.status.equals(constants.INVESTOR_STATUS_PENDING)}
+        val pendingInvestmentCounter = listTransaction.count { it.type == constants.TRANSACTION_TYPE_INVESTMENT && it.status == constants.TRANSACTION_STATUS_PENDING }?.toInt() ?: 0
+        val pendingWithdrawCounter = listTransaction.count { it.type == constants.TRANSACTION_TYPE_WITHDRAW && it.status == constants.TRANSACTION_STATUS_PENDING }?.toInt() ?: 0
+        val InActiveInvestCounter = sharedPrefManager.getInvestmentList().filter { investment ->
+            val inActiveInvestment = investment.lastInvestment.takeIf { !it.isNullOrEmpty() } ?: "0"
+            val inActiveInvestment_ = inActiveInvestment.toIntOrNull() ?: 0
+            inActiveInvestment_ > 0 }.count()
         binding.tvBalance.text= listInvestmentModel.sumOf { it.investmentBalance.takeIf { it.isNotBlank() }?.toInt() ?: 0 }.toInt().toString()
         binding.tvProfit.text= listInvestmentModel.sumOf { it.lastProfit.takeIf { it.isNotBlank() }?.toInt() ?: 0 }.toInt().toString()
         binding.tvInActiveInvestment.text= listInvestmentModel.sumOf { it.lastInvestment.takeIf { it.isNotBlank() }?.toInt() ?: 0 }.toInt().toString()
         binding.btnInvestmentReq.text= "Investment(${pendingInvestmentCounter})"
         binding.btnWithdrawReq.text= "Withdraw(${pendingWithdrawCounter})"
+        binding.btnInActiveInvestment.text= "In-Active Invest(${InActiveInvestCounter})"
+        binding.btnNewInvestors.text= "New Investors(${newInvestorsCounter})"
 
     }
-
-    //new investor -> nominee get on run time
-    //set check for primary account not delete
-
-
-
 }
+

@@ -16,10 +16,7 @@ import java.util.Locale
 
 class AdapterFA(val data: List<ModelFA> ,  val listener: AdapterFA.OnItemClickListener) :
     RecyclerView.Adapter<AdapterFA.ViewHolder>() {
-
-
     var constant = Constants()
-
     interface OnItemClickListener {
         fun onItemClick(modelFA: ModelFA)
         fun onDeleteClick(modelFA: ModelFA)

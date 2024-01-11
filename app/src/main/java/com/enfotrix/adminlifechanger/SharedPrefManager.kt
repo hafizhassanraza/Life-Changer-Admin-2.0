@@ -190,6 +190,30 @@ class SharedPrefManager(context: Context) {
             emptyList()
         }
     }
+    fun getInvestmentList(): List<InvestmentModel>{
+
+        val json = sharedPref.getString("ListInvestment", "") ?: ""
+        val type: Type = object : TypeToken<List<InvestmentModel?>?>() {}.getType()
+        //return Gson().fromJson(json, type)
+
+        return if (!json.isNullOrEmpty()) {
+            Gson().fromJson(json, type) ?: emptyList()
+        } else {
+            emptyList()
+        }
+    }
+    fun getTransactionList(): List<TransactionModel>{
+
+        val json = sharedPref.getString("ListTransaction", "") ?: ""
+        val type: Type = object : TypeToken<List<TransactionModel?>?>() {}.getType()
+        //return Gson().fromJson(json, type)
+
+        return if (!json.isNullOrEmpty()) {
+            Gson().fromJson(json, type) ?: emptyList()
+        } else {
+            emptyList()
+        }
+    }
 
 
     fun saveNominee(nominee: ModelNominee) {
@@ -238,6 +262,14 @@ class SharedPrefManager(context: Context) {
     }
     fun putActiveInvestment(list: List<InvestmentModel>) {
         editor.putString("ListActiveInvestment", Gson().toJson(list))
+        editor.commit()
+    }
+    fun putInvestmentList(list: List<InvestmentModel>) {
+        editor.putString("ListInvestment", Gson().toJson(list))
+        editor.commit()
+    }
+    fun putTransactionList(list: List<TransactionModel>) {
+        editor.putString("ListTransaction", Gson().toJson(list))
         editor.commit()
     }
     fun putInvestorPhoneNumber(IsPhoneNumberAdded: Boolean) {

@@ -5,8 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.ModelFA
+import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ItemTransactionBinding
 import com.enfotrix.lifechanger.Models.TransactionModel
 import java.text.SimpleDateFormat
@@ -43,21 +45,25 @@ class TransactionsAdapter (
 
         fun bind(transactionModel: TransactionModel, user: User)
         {
+            val context = itemBinding.root.context
 
 
 
+            Glide.with(context)
+                .load(user.photo)
+                .centerCrop()
+                .placeholder(R.drawable.ic_launcher_background) // Placeholder image while loading
+                .into(itemBinding.imgUserProfile)
 
             itemBinding.layItem.setOnClickListener {
                 listener.onItemClick(transactionModel,user)
             }
-
 
             itemBinding.tvInvestorName.text="${user.firstName}"
             itemBinding.tvPreviousBalance.text="${transactionModel.previousBalance}"
             itemBinding.tvInvestmentDate.text="${SimpleDateFormat( "hh:mm a dd/MM/yy", Locale.getDefault()).format(transactionModel.createdAt!!.toDate()).toString()}"
             if(activity.equals(constant.FROM_PENDING_WITHDRAW_REQ) || activity.equals(constant.FROM_APPROVED_WITHDRAW_REQ)) {
                 itemBinding.tvInvestWithdrawHeader.text="Withdraw"
-
             }
             itemBinding.tvInvestment.text="${transactionModel.amount}"
 

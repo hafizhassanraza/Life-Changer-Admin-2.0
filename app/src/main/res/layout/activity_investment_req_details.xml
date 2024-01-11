@@ -30,6 +30,7 @@
             android:layout_marginTop="15dp"
             app:cardCornerRadius="6dp">
             <ImageView
+                android:id="@+id/imgUserProfile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_launcher_background"/>
@@ -179,7 +180,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="85dp"
+            android:layout_height="110dp"
             android:layout_marginBottom="3dp"
             android:layout_below="@+id/v1"/>
         <androidx.cardview.widget.CardView
