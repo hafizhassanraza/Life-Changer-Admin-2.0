@@ -2,31 +2,27 @@
 <resources>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
-    <color name="PrimaryVariant">#006747</color>
+    <color name="PrimaryVariant">#7891E1</color>
+    <color name="PrimaryVariantDark">#525A87</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="SecondaryVariant">#FF018786</color>
     <color name="red_m">#910732</color>
     <color name="red">#F1054E</color>
+    <color name="yellow">#F7A80B</color>
     <color name="black">#FF000000</color>
     <color name="black_m">#1E1E1E</color>
     <color name="gray">#716969</color>
-    <color name="white">#FFFFFFFF</color>
-
-    <color name="primary">#2F9B47</color>
-    <color name="secondary">#C4C4C4</color>
-    <color name="secondary_m">#DFDEDE</color>
-    <color name="secondary_l">#32DFDEDE</color>
-    <color name="textprimary">#EDF8F5</color>
-    <color name="statusbarcolor">#006747</color>
-
-
-
     <color name="green">#4CAF50</color>
     <color name="lightGray">#EAF0F0</color>
     <color name="textGrey">#808F96</color>
-
+    <color name="white">#FFFFFFFF</color>
+    <color name="primary">#2FACEC</color>
     <!--    <color name="primary">#2F9B47</color>-->
-
+    <color name="secondary">#C4C4C4</color>
+    <color name="secondary_m">#F0F6F6</color>
+    <color name="secondary_l">#32DFDEDE</color>
+    <color name="textprimary">#EDF8F5</color>
     <color name="skyBlus">#2DACEF</color>
     <color name="skyblueShade">#DEF4FF</color>
+    <color name="statusbarcolor">#7891E1</color>
 </resources>

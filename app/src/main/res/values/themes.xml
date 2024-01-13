@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.LifeChanger" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="Theme.LifeChanger" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/PrimaryVariant</item>
@@ -10,9 +10,10 @@
         <item name="colorSecondaryVariant">@color/SecondaryVariant</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/primary</item>
 
         <item name="android:colorBackground">#EDF8F5</item>
+        <item name="android:fontFamily">@font/inter</item>
         <item name="android:textColor">@color/black</item>
         <!-- Customize your theme here. -->
     </style>
@@ -27,11 +28,19 @@
     </style>
 
     <style name="Theme.LifeChanger.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     <style name="Theme.LifeChanger.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <!-- Base application theme. -->
     <style name="Base.Theme.LifeChanger" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+
+
+    <style name="LoginCardShape.CardView" parent="">
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerFamilyBottomRight">rounded</item>
+        <item name="cornerSizeTopLeft">7%</item>
+        <item name="cornerSizeTopRight">7%</item>
     </style>
 </resources>

@@ -42,30 +42,31 @@ class ActivityHome : AppCompatActivity() {
     private lateinit var announcement : String
 
 
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         mContext=this@ActivityHome
         utils = Utils(mContext)
         constants= Constants()
         sharedPrefManager = SharedPrefManager(mContext)
 
-
         binding.btnInvestmentReq.setOnClickListener { startActivity(Intent(mContext,ActivityInvestmentRequest::class.java)) }
         binding.btnWithdrawReq.setOnClickListener { startActivity(Intent(mContext,ActivityWithdrawRequest::class.java)) }
-
-        //binding.layInvestment.setOnClickListener { startActivity(Intent(mContext,ActivityInActiveInvestment::class.java)) }
-        binding.btnInActiveInvestment.setOnClickListener { startActivity(Intent(mContext,ActivityInActiveInvestment::class.java)) }
-        binding.layInvestors.setOnClickListener { startActivity(Intent(mContext, ActivityInvestors::class.java)) }
-        binding.btnProfitManager.setOnClickListener { startActivity(Intent(mContext,ActivityAddProfit::class.java)) }
-        binding.layAgent.setOnClickListener { startActivity(Intent(mContext,ActivityFA::class.java)) }
         binding.btnNewInvestors.setOnClickListener { startActivity(Intent(mContext,ActivityNewInvestorReq::class.java)) }
-        binding.btnAnnouncement.setOnClickListener { startActivity(Intent(mContext, ActivityAnnouncement::class.java)) }
-        binding.btnAccounts.setOnClickListener { startActivity(Intent(mContext, ActivityAccounts::class.java)) }
 
+
+        binding.layInActiveInv.setOnClickListener { startActivity(Intent(mContext,ActivityInActiveInvestment::class.java)) }
+        binding.layInvestorsManager.setOnClickListener { startActivity(Intent(mContext, ActivityInvestors::class.java)) }
+        binding.layProfitManager.setOnClickListener { startActivity(Intent(mContext,ActivityAddProfit::class.java)) }
+        binding.layAgentManager.setOnClickListener { startActivity(Intent(mContext,ActivityFA::class.java)) }
+        binding.layAnnouncementManager.setOnClickListener { startActivity(Intent(mContext, ActivityAnnouncement::class.java)) }
+        binding.layAdminAccount.setOnClickListener { startActivity(Intent(mContext, ActivityAccounts::class.java)) }
+        binding.layInvStatment.setOnClickListener { startActivity(Intent(mContext, ActivityStatment::class.java)) }
 
         getData()
 
@@ -157,7 +158,7 @@ class ActivityHome : AppCompatActivity() {
 
         utils.startLoadingAnimation()
         Thread.sleep(50)
-        utils.endLoadingAnimation()
+
         var listInvestmentModel= sharedPrefManager.getInvestmentList()
         var listTransaction= sharedPrefManager.getTransactionList()
         var newInvestorsCounter= sharedPrefManager.getUsersList().count{it.status.equals(constants.INVESTOR_STATUS_PENDING)}
@@ -167,13 +168,37 @@ class ActivityHome : AppCompatActivity() {
             val inActiveInvestment = investment.lastInvestment.takeIf { !it.isNullOrEmpty() } ?: "0"
             val inActiveInvestment_ = inActiveInvestment.toIntOrNull() ?: 0
             inActiveInvestment_ > 0 }.count()
-        binding.tvBalance.text= listInvestmentModel.sumOf { it.investmentBalance.takeIf { it.isNotBlank() }?.toInt() ?: 0 }.toInt().toString()
-        binding.tvProfit.text= listInvestmentModel.sumOf { it.lastProfit.takeIf { it.isNotBlank() }?.toInt() ?: 0 }.toInt().toString()
-        binding.tvInActiveInvestment.text= listInvestmentModel.sumOf { it.lastInvestment.takeIf { it.isNotBlank() }?.toInt() ?: 0 }.toInt().toString()
-        binding.btnInvestmentReq.text= "Investment(${pendingInvestmentCounter})"
-        binding.btnWithdrawReq.text= "Withdraw(${pendingWithdrawCounter})"
-        binding.btnInActiveInvestment.text= "In-Active Invest(${InActiveInvestCounter})"
-        binding.btnNewInvestors.text= "New Investors(${newInvestorsCounter})"
+
+        var ActiveInvestment= listInvestmentModel.sumOf { it.investmentBalance.takeIf { it.isNotBlank() }?.toInt() ?: 0 }.toInt()
+        var Profit=listInvestmentModel.sumOf { it.lastProfit.takeIf { it.isNotBlank() }?.toInt() ?: 0 }.toInt()
+        var InActiveInvestment=listInvestmentModel.sumOf { it.lastInvestment.takeIf { it.isNotBlank() }?.toInt() ?: 0 }.toInt()
+        var totalSum= ActiveInvestment+InActiveInvestment+Profit
+
+        var AgentCounter = sharedPrefManager.getFAList().count()
+        var ActiveInvestorCounter = sharedPrefManager.getUsersList().count{it.status.equals(constants.INVESTOR_STATUS_ACTIVE)}
+
+
+        binding.tvActiveInvestment.text= ActiveInvestment.toString()
+        binding.tvProfit.text= Profit.toString()
+        binding.tvInActiveInvestment.text= InActiveInvestment.toString()
+        binding.tvExpectedSum.text= totalSum.toString()
+
+        binding.tvActiveInvCounter.text= pendingInvestmentCounter.toString()
+        binding.tvWithdrawCounter.text= pendingWithdrawCounter.toString()
+        binding.tvNewInvestorCounter.text= newInvestorsCounter.toString()
+
+        binding.tvInActiveCounter.text= InActiveInvestCounter.toString()
+        binding.tvInvestorCounter.text= ActiveInvestorCounter.toString()
+        binding.tvAgentCounter.text= AgentCounter.toString()
+
+
+
+
+
+        utils.endLoadingAnimation()
+
+
+
 
     }
 }

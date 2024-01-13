@@ -16,7 +16,6 @@
     <string name="viewDetails"><u><b>View Details</b></u></string>
     <string name="download"><u><b>Download</b></u></string>
 
-
     <string-array name="listofbanks">
         <item>Allied Bank Limited (ABL)</item>
         <item>Askari Bank</item>
@@ -83,6 +82,26 @@
     </string>
     <string name="describe_your_announcement">Describe your Announcement</string>
     <string name="title_activity_assigned_investors">ActivityAssignedInvestors</string>
+
+
+    <string name="invStatement">Investors \nE-Statment</string>
+    <string name="invHistory">Investment \nHistory</string>
+    <string name="wdHistory">Withdraw \nHistory</string>
+    <string name="profitHistory">Profit \nHistory</string>
+    <string name="taxHistory">Tax \nHistory</string>
+    <string name="agentStatement">Agents \nE-Statment</string>
+    <string name="instDet">In-Active \nInvestment</string>
+    <string name="profDet">Profit \nManager</string>
+    <string name="withDrawDet">Investors \nManager</string>
+    <string name="taxDet">Agent \nManager</string>
+    <string name="taxAcc">Admin \nAccounts</string>
+    <string name="StatDet">Announcement \nManager</string>
+
+    <string-array name="statment_options">
+        <item>All Transactions</item>
+        <item>Investments</item>
+        <item>Withdraws</item>
+    </string-array>
 
 
 </resources>
