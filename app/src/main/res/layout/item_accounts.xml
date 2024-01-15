@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/secondary_m"
+        android:layout_marginBottom="3dp"
+        android:layout_below="@+id/v1">
+
+        <RelativeLayout
+            android:id="@+id/layItem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/notificationTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentTop="true"
+                    android:textColor="@color/primary"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="15dp"
+                    android:text="Profit Bonous"/>
+
+
+                <TextView
+                    android:id="@+id/notificationData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Here it is notify to each of you that you will be amazed and u all will be given extra boiu"
+                    android:layout_alignParentLeft="true"
+                    android:paddingRight="5dp"
+                    android:layout_marginLeft="25dp"
+                    android:textColor="@color/SecondaryVariant"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12-22-2023"
+                    android:layout_marginBottom="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@color/gray"
+                    android:textSize="15sp"
+                    android:layout_gravity="end"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+<!--            <ImageView-->
+<!--                android:id="@+id/imgDelete"-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:layout_alignParentRight="true"-->
+<!--                android:layout_marginEnd="10dp"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:src="@drawable/baseline_delete_forever_24"-->
+<!--                android:tint="@color/red" />-->
+
+
+
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

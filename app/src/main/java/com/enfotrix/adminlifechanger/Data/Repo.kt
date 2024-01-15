@@ -11,6 +11,7 @@ import com.enfotrix.adminlifechanger.Models.AgentTransactionModel
 import com.enfotrix.adminlifechanger.Models.AgentWithdrawModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
+import com.enfotrix.adminlifechanger.Models.NotificationModel
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
 import com.enfotrix.lifechanger.Models.TransactionModel
@@ -496,16 +497,11 @@ modelFA.id=documents.id
         return AgentTransactionCollection.get()
     }
 
+    fun saveNotification(notification: NotificationModel): Task<DocumentReference> {
 
+        return NotificationCollection.add(notification)
 
-
-
-
-
-
-
-
-
+    }
 
 
 }
