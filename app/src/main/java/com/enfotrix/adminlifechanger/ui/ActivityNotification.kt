@@ -50,6 +50,7 @@ class ActivityNotification : AppCompatActivity() {
         constants = Constants()
         sharedPrefManager = SharedPrefManager(mContext)
         binding.rvNoti.layoutManager = LinearLayoutManager(mContext)
+        notificationsList.sortBy { it.createdAt}
         adapter = AdapterNotifications(notificationsList)
         binding.rvNoti.adapter = adapter
 

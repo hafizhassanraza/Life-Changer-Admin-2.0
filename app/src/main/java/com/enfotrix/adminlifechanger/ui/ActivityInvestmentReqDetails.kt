@@ -80,9 +80,7 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
         binding.btnAccept.setOnClickListener{
 
             if(intent.getStringExtra("from").toString().equals(constant.FROM_PENDING_WITHDRAW_REQ)) approvedWithdraw()
-            else approvedInvestment()
-
-
+            else if(intent.getStringExtra("from").toString().equals(constant.FROM_PENDING_INVESTMENT_REQ)) approvedInvestment()
         }
 
 
@@ -117,21 +115,44 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
             var investment = it.investmentBalance.toInt()
 
             var profit = 0
+            var inActiveInv = 0
             if(it.lastProfit!="") profit=it.lastProfit.toInt()
+            if(it.lastInvestment!="") inActiveInv=it.lastInvestment.toInt()
+            //var previousBalance= investment+profit
+            if (transactionAmount <= inActiveInv) {
+                inActiveInv -= transactionAmount
+            }
+            else {
+                var sumOfProfit_InActInv= inActiveInv + profit
+                if(transactionAmount <= sumOfProfit_InActInv){
 
-            var previousBalance= investment+profit
+                    transactionAmount=transactionAmount-inActiveInv
+                    inActiveInv=0
+                    profit -= transactionAmount
+                }
+                else {
+                    transactionAmount=transactionAmount-profit-inActiveInv
+                    profit = 0
+                    inActiveInv=0
+                    investment -= transactionAmount
+                }
+            }
 
-            if (transactionAmount <= profit) {
+
+
+
+            /*if (transactionAmount <= profit) {
                 profit -= transactionAmount
             } else {
 
                 transactionAmount=transactionAmount-profit
                 profit = 0
                 investment -= transactionAmount
-            }
+            }*/
 
             it.investmentBalance = investment.toString()
             it.lastProfit = profit.toString()
+            it.lastInvestment= inActiveInv.toString()
 
         }
 

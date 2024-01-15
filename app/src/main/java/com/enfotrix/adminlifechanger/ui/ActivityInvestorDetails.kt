@@ -410,34 +410,56 @@ class ActivityInvestorDetails : AppCompatActivity() {
 
 
 
+
+
         investmentModel?.let {
             var investment = it.investmentBalance.toInt()
 
             var profit = 0
+            var inActiveInv = 0
             if(it.lastProfit!="") profit=it.lastProfit.toInt()
-
-            var previousBalance= investment+profit
-
+            if(it.lastInvestment!="") inActiveInv=it.lastInvestment.toInt()
 
 
 
-            if (transactionAmount <= profit) {
+
+            if (transactionAmount <= inActiveInv) {
+                inActiveInv -= transactionAmount
+            }
+            else {
+                var sumOfProfit_InActInv= inActiveInv + profit
+                if(transactionAmount <= sumOfProfit_InActInv){
+
+                    transactionAmount=transactionAmount-inActiveInv
+                    inActiveInv=0
+                    profit -= transactionAmount
+                }
+                else {
+                    transactionAmount=transactionAmount-profit-inActiveInv
+                    profit = 0
+                    inActiveInv=0
+                    investment -= transactionAmount
+                }
+            }
+
+
+            /*if (transactionAmount <= profit) {
                 profit -= transactionAmount
             } else {
 
                 transactionAmount=transactionAmount-profit  //80=100-20
                 profit = 0
                 investment -= transactionAmount //220=300-80
-            }
+            }*/
 
             //
-            var newBalance= investment
 
 
 
 
             it.investmentBalance = investment.toString()
             it.lastProfit = profit.toString()
+            it.lastInvestment = inActiveInv.toString()
 
         }
 
