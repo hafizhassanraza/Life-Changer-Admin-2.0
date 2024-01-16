@@ -9,34 +9,29 @@ import android.os.Bundle
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Spinner
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.Adapters.AdapterEarning
-import com.enfotrix.adminlifechanger.Adapters.AdapterInvStatment
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.ModelEarning
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityAgentEarningBinding
-import com.enfotrix.adminlifechanger.databinding.ActivityStatmentBinding
-import com.enfotrix.lifechanger.Models.ModelBankAccount
-import com.enfotrix.lifechanger.Models.TransactionModel
+import com.enfotrix.adminlifechanger.databinding.ActivityEarningBinding
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class ActivityAgentEarning : AppCompatActivity(), AdapterEarning.OnItemClickListener {
+class ActivityEarning : AppCompatActivity() , AdapterEarning.OnItemClickListener {
 
 
     private val db = Firebase.firestore
 
     private val userViewModel: UserViewModel by viewModels()
-    private lateinit var binding : ActivityAgentEarningBinding
+    private lateinit var binding : ActivityEarningBinding
 
     private lateinit var earningList : List<ModelEarning>
     private lateinit var utils: Utils
@@ -48,11 +43,11 @@ class ActivityAgentEarning : AppCompatActivity(), AdapterEarning.OnItemClickList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAgentEarningBinding.inflate(layoutInflater)
+        binding = ActivityEarningBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
-        mContext=this@ActivityAgentEarning
+        mContext=this@ActivityEarning
         utils = Utils(mContext)
         constants= Constants()
         sharedPrefManager = SharedPrefManager(mContext)
@@ -68,7 +63,7 @@ class ActivityAgentEarning : AppCompatActivity(), AdapterEarning.OnItemClickList
 
     private fun setData() {
         earningList = sharedPrefManager.getAgentEarningList().filter { it.agentID.equals(modelFA.id) }.sortedByDescending { it.createdAt }
-        binding.rvStatment.adapter= AdapterEarning(earningList, this@ActivityAgentEarning)
+        binding.rvStatment.adapter= AdapterEarning(earningList, this@ActivityEarning)
     }
 
 
@@ -134,7 +129,8 @@ class ActivityAgentEarning : AppCompatActivity(), AdapterEarning.OnItemClickList
                                     if(task.isSuccessful){
                                         Thread.sleep(200)
                                         utils.endLoadingAnimation()
-                                        sharedPrefManager.putAgentEarningList(task.result!!.documents.mapNotNull { document -> document.toObject(ModelEarning::class.java)?.apply { docID = document.id } })
+                                        sharedPrefManager.putAgentEarningList(task.result!!.documents.mapNotNull { document -> document.toObject(
+                                            ModelEarning::class.java)?.apply { docID = document.id } })
                                         setData()
                                     }
                                 }

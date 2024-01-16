@@ -35,8 +35,7 @@ import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
 import java.util.Locale
 
-class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListener,
-    AdapterFA.OnItemClickListener {
+class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListener, AdapterFA.OnItemClickListener {
 
     private lateinit var rvInvestors: RecyclerView
     private lateinit var dialog: BottomSheetDialog
@@ -96,12 +95,14 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
         }
         binding.layEarning.setOnClickListener() {
 
-            startActivity(Intent(mContext,ActivityAgentEarning::class.java).putExtra("Fa",modelFA.toString()))
+            Toast.makeText(mContext, "debug", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(mContext,ActivityEarning::class.java).putExtra("Fa",modelFA.toString()))
 
         }
-        binding.layEarning.setOnClickListener() {
+        binding.layNotification.setOnClickListener() {
 
-            startActivity(Intent(mContext,ActivityAgentNotification::class.java).putExtra("Fa",modelFA.toString()))
+            startActivity(Intent(mContext,ActivityNotificationAgent::class.java).putExtra("Fa",modelFA.toString()))
+
 
 
 

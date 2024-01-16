@@ -17,6 +17,12 @@
         android:theme="@style/Theme.LifeChanger"
         tools:targetApi="31">
         <activity
+            android:name=".ui.ActivityNotificationAgent"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ActivityEarning"
+            android:exported="false" />
+        <activity
             android:name=".ui.ActivityUserStatement"
             android:exported="false" />
         <activity
