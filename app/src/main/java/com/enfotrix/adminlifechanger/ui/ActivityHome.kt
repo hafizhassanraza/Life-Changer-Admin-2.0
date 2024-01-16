@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.ActivityAnnouncement
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
+import com.enfotrix.adminlifechanger.Models.ModelEarning
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityAccountsBinding
@@ -101,6 +102,7 @@ class ActivityHome : AppCompatActivity() {
             constants.FA_COLLECTION,
             constants.NOMINEE_COLLECTION,
             constants.ANNOUNCEMENT_COLLECTION,
+            constants.AGENT_EARNING_COLLECTION,
         )
         utils.startLoadingAnimation()
         collections.forEach { collection ->
@@ -133,6 +135,9 @@ class ActivityHome : AppCompatActivity() {
                             })
                             constants.NOMINEE_COLLECTION -> sharedPrefManager.putNomineeList(task.documents.mapNotNull { document ->
                                 document.toObject(ModelNominee::class.java)?.apply { docID = document.id }
+                            })
+                            constants.AGENT_EARNING_COLLECTION -> sharedPrefManager.putAgentEarningList(task.documents.mapNotNull { document ->
+                                document.toObject(ModelEarning::class.java)?.apply { docID = document.id }
                             })
                             constants.ANNOUNCEMENT_COLLECTION -> task.documents.mapNotNull { document -> announcement= document.getString("announcement").toString() }
 

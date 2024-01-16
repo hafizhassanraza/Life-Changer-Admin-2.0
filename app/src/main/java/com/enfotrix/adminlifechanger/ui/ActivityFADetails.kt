@@ -73,12 +73,6 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
 
 
 
-
-
-
-
-
-
         supportActionBar?.title = "Financial Advisor Details"
         modelFA = ModelFA.fromString(intent.getStringExtra("FA").toString())!!
 
@@ -90,17 +84,30 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
 
         binding.tvName.text= modelFA.firstName
         binding.tvDesignantion.text= modelFA.designantion
-        binding.tvPay.text=modelFA.profit
+        binding.tvEarning.text=modelFA.profit
 
 
 
         /*binding.fbAddClient.setOnClickListener {
             showClientDialog()
         }*/
-binding.layInvest.setOnClickListener()
-{
-    startActivity(Intent(mContext,ActivityAssignedInvestors::class.java).putExtra("Fa",modelFA.toString()))
-}
+        binding.layInvest.setOnClickListener() {
+            startActivity(Intent(mContext,ActivityAssignedInvestors::class.java).putExtra("Fa",modelFA.toString()))
+        }
+        binding.layEarning.setOnClickListener() {
+
+            startActivity(Intent(mContext,ActivityAgentEarning::class.java).putExtra("Fa",modelFA.toString()))
+
+        }
+        binding.layEarning.setOnClickListener() {
+
+            startActivity(Intent(mContext,ActivityAgentNotification::class.java).putExtra("Fa",modelFA.toString()))
+
+
+
+        }
+
+
 
         getData()
         setdata()
@@ -229,11 +236,14 @@ binding.layInvest.setOnClickListener()
 
     fun getData() {
 
-        /* binding.rvClients.adapter = userViewModel.getAssignedInvestorsAdapter(
-             modelFA.id,
-             constant.FROM_ASSIGNED_FA,
-             this@ActivityFADetails
-         )*/
+        // Hussain
+        // agent ki profile (doc) ka snapshot listner lgana hai
+        // or us k success mein  global variable  "modelFA" ko update karna hai or setdata() call karna hai
+    }
+
+    fun withdrawEarning(){
+
+
 
     }
 
@@ -455,7 +465,7 @@ binding.layInvest.setOnClickListener()
          if (model != null) {
              binding.tvName.text = model.firstName
              binding.tvDesignantion.text = model.designantion
-             binding.tvPay.text = model.profit
+             binding.tvEarning.text = model.profit
              binding.tvBalance.text = model.cnic
              binding.tvInActiveInvestment.text = model.phone
              binding.availableProfit.text = model.address

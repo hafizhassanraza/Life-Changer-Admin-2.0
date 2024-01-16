@@ -91,18 +91,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:gravity="top"
-                    android:paddingTop="5dp"
-                    android:text="Rs."
-                    android:textColor="@color/secondary"
-                    android:textSize="14dp" />
 
                 <TextView
-                    android:id="@+id/tvPay"
+                    android:id="@+id/tvEarning"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="00"
@@ -113,7 +104,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="(Pay/Profit)"
+                    android:text="(Earning)"
                     android:textColor="@color/secondary"
                     android:textSize="9sp"
                     android:layout_marginLeft="3dp"
@@ -183,17 +174,6 @@
                         android:paddingTop="15dp"
                         android:paddingBottom="8dp"
                         android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvViewDetailsInvestment"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentBottom="true"
-                            android:text="@string/viewDetails"
-                            android:padding="5dp"
-                            android:textColor="@color/black"
-                            />
 
                         <ImageView
                             android:id="@+id/img1"
@@ -432,7 +412,7 @@
 
                     </LinearLayout>
                     <LinearLayout
-                        android:id="@+id/layWithdraw"
+                        android:id="@+id/layEarning"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
@@ -452,39 +432,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/primary"
-                            android:text="Add Profit"/>
-
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:id="@+id/layProfit"
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-
-                        app:layout_column="2"
-                        app:layout_row="0"
-                        app:layout_columnWeight="1"
-                        app:layout_rowWeight="1"
-
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:tint="@color/primary"
-                            android:src="@drawable/services"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/primary"
-                            android:text="Profit History"/>
+                            android:text="Earning"/>
 
 
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layNotification"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
@@ -500,30 +454,6 @@
                             android:layout_height="40dp"
                             android:tint="@color/primary"
                             android:src="@drawable/feedback"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/primary"
-                            android:text="Withdraw"/>
-
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        app:layout_column="1"
-                        app:layout_row="1"
-                        app:layout_columnWeight="1"
-                        app:layout_rowWeight="1"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:tint="@color/primary"
-                            android:src="@drawable/share"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

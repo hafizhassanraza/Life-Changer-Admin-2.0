@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.view.Display.Mode
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
+import com.enfotrix.adminlifechanger.Models.ModelEarning
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
@@ -128,6 +129,17 @@ class SharedPrefManager(context: Context) {
             emptyList()
         }
     }
+    fun getAgentEarningList(): List<ModelEarning>{
+
+        val json = sharedPref.getString("ListEarning", "") ?: ""
+        val type: Type = object : TypeToken<List<ModelEarning?>?>() {}.getType()
+        //return Gson().fromJson(json, type)
+        return if (!json.isNullOrEmpty()) {
+            Gson().fromJson(json, type) ?: emptyList()
+        } else {
+            emptyList()
+        }
+    }
     fun getNomineeList(): List<ModelNominee>{
 
         val json = sharedPref.getString("ListNominee", "") ?: ""
@@ -234,6 +246,10 @@ class SharedPrefManager(context: Context) {
     }
     fun putNomineeList(list: List<ModelNominee>) {
         editor.putString("ListNominee", Gson().toJson(list))
+        editor.commit()
+    }
+    fun putAgentEarningList(list: List<ModelEarning>) {
+        editor.putString("ListEarning", Gson().toJson(list))
         editor.commit()
     }
     fun putUserList(list: List<User>) {

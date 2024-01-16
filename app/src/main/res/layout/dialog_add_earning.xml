@@ -21,19 +21,19 @@
 
             <View
                 android:layout_width="100dp"
-                android:layout_height="2dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="3dp"
+                android:layout_marginTop="12dp"
                 android:layout_gravity="center_horizontal"
-                android:background="@color/SecondaryVariant"/>
+                android:background="@color/gray"/>
 
             <TextView
                 android:id="@+id/tvHeaderBank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Profit !"
-                android:textColor="@color/black_m"
+                android:text="Add Bank Account"
+                android:textColor="@color/black"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:textSize="20dp"
                 android:textStyle="bold"/>
 
@@ -42,48 +42,75 @@
                 android:id="@+id/tvHeaderBankDisc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/SecondaryVariant"
+                android:textColor="@color/textGrey"
                 android:layout_marginHorizontal="20dp"
-                android:text="Add Profit for for this Agent  with remarks"/>
-
+                android:text="Add your bank account details for funds transfer and other services"></TextView>
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Earning"
+                android:text="Bank"
                 android:layout_marginLeft="20dp"
                 android:padding="5dp"
-                android:textStyle="bold"
                 android:layout_marginTop="5dp"
-                android:textColor="@color/gray"/>
-            <EditText
-                android:id="@+id/etBalance"
+                android:textColor="@color/black"/>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="00"
+                android:layout_marginHorizontal="20dp"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_edittext">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/bank"
+                    android:layout_gravity="center_vertical"
+                    android:tint="@color/gray"
+                    android:layout_marginHorizontal="10dp"/>
+                <Spinner
+                    android:id="@+id/spBank"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:entries="@array/listofbanks"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Account Tittle"
+                android:layout_marginLeft="20dp"
+                android:padding="5dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/black"/>
+            <EditText
+                android:id="@+id/etAccountTittle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textGrey"
+                android:hint="My Bank Account"
+                android:paddingLeft="20dp"
+                android:background="@drawable/bg_edittext"
+                android:layout_marginHorizontal="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Account Number"
+                android:layout_marginLeft="20dp"
+                android:padding="5dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/black"/>
+            <EditText
+                android:id="@+id/etAccountNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="1234XXXXXXXXXX"
                 android:paddingLeft="20dp"
                 android:inputType="number"
-                android:background="@drawable/bg_edittext"
-                android:layout_marginHorizontal="20dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Remarks"
-                android:layout_marginLeft="20dp"
-                android:padding="5dp"
-                android:textStyle="bold"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/gray"/>
-            <EditText
-                android:id="@+id/etRemarks"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:gravity="top"
-                android:paddingVertical="5dp"
-                android:hint="e.g: Client's Invested Share"
-                android:paddingLeft="20dp"
-                android:inputType="text"
+                android:textColor="@color/textGrey"
                 android:background="@drawable/bg_edittext"
                 android:layout_marginHorizontal="20dp"/>
 
@@ -92,18 +119,18 @@
 
 
 
-            <Button
-                android:id="@+id/AddProfit"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddAccount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cornerRadius="12dp"
                 android:layout_marginTop="24dp"
+                android:paddingVertical="15dp"
                 android:layout_marginHorizontal="20dp"
-                android:background="@drawable/bg_button"
+                android:backgroundTint="@color/black"
                 android:layout_marginBottom="20dp"
-                android:backgroundTint="@color/primary"
-                android:drawableRight="@drawable/baseline_keyboard_arrow_right_24"
-                android:drawableTint="@color/white"
-                android:text="Set" />
+                android:textStyle="bold"
+                android:text="Add" />
 
 
         </LinearLayout>

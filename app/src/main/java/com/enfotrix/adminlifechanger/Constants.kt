@@ -6,6 +6,7 @@ public class Constants  {
 
     ///////////////////////////// COLLECTIONS NAME //////////////////////////
 
+    public var AGENT_EARNING_COLLECTION="Agent Transaction"
     public var INVESTOR_COLLECTION="Investors"
     public var FA_COLLECTION="Financial Advisor"
     public var AGENT_TRANSACTION="Agent Transaction"
@@ -48,7 +49,9 @@ public class Constants  {
     //////////////////////////// KEYS VALUES ////////////////////////////////
     public var ADMIN= "Admin"
     public var TRANSACTION_STATUS_PENDING= "Pending"
+    public var EARNING_STATUS_PENDING= "Pending"
     public var TRANSACTION_STATUS_APPROVED= "Approved"
+    public var EARNING_STATUS_WITHDRAW= "Withdraw"
     public var TRANSACTION_STATUS_REJECT= "Reject"
     public var TRANSACTION_TYPE_WITHDRAW= "Withdraw"
     public var TRANSACTION_TYPE_Profit= "Profit"
