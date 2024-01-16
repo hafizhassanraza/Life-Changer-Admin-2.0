@@ -8,7 +8,7 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="co.devdiv.zeemusicclub" />
+                  <option name="appId" value="com.Enfotrix.Jahaaz" />
                 </ConnectionSetting>
               </option>
               <option name="failureTypes">

@@ -60,6 +60,9 @@ public class Constants  {
     public var INVESTOR_STATUS_PENDING= "Pending"
     public var INVESTOR_STATUS_INCOMPLETE= "Incomplete"
     public var INVESTOR_STATUS_BLOCKED= "Blocked"
+    public var TRANSACTION_TYPE_TAX= "Tax"
+    public var TRANSACTION_TYPE_PROFIT= "Profit"
+
 
 
     ///////////////////////////  MESSAGES ///////////////////////

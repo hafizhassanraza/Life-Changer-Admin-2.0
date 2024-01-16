@@ -81,6 +81,8 @@ class ActivityInvestorDetails : AppCompatActivity() {
 
 
         binding.layNotification.setOnClickListener { startActivity(Intent(mContext, ActivityNotification::class.java).putExtra("user",user.toString())) }
+        binding.layEstatement.setOnClickListener { startActivity(Intent(mContext, ActivityUserStatement::class.java).putExtra("user",user.toString())) }
+
 
         binding.tvViewDetailsInvestment.setOnClickListener { startActivity(Intent(mContext, ActivityInvestorDetailsTransactions::class.java).putExtra("user",user.toString())) }
         binding.tvViewDetailsUser.setOnClickListener { startActivity(Intent(mContext, ActivityInvestorDetailsProfile::class.java).putExtra("user",user.toString())) }
@@ -90,6 +92,7 @@ class ActivityInvestorDetails : AppCompatActivity() {
         binding.layProfit.setOnClickListener {showProfitBalanceDialog() }
         getFA()
         getInvestment()
+
 
 
     }

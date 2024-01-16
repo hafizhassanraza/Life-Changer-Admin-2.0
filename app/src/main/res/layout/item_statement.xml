@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        android:layout_below="@+id/v1">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/tvPreviousBalance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="120dp"
+                    android:gravity="center_horizontal"
+                    android:layout_marginVertical="15dp"
+                    android:textSize="17dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="00000"/>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="22dp">
+
+
+
+                    <TextView
+                        android:id="@+id/tvReqAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="110dp"
+                        android:gravity="center_horizontal"
+                        android:layout_marginVertical="15dp"
+                        android:textSize="17dp"
+                        android:textColor="@color/green"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:text="00000"/>
+                </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/transactionType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="120dp"
+                    android:gravity="center_horizontal"
+                    android:layout_marginVertical="15dp"
+                    android:textSize="17dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="00000"/>
+                <TextView
+                    android:id="@+id/tvNewBalance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="120dp"
+                    android:gravity="center_horizontal"
+                    android:layout_marginVertical="15dp"
+                    android:textSize="17dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="00000"/>
+                <TextView
+                    android:id="@+id/tvReqDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="120dp"
+                    android:gravity="center_horizontal"
+                    android:layout_marginVertical="15dp"
+                    android:textSize="17dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="00000"/>
+
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/textGrey"
+                android:alpha="0.4"/>
+        </LinearLayout>
+
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</LinearLayout>

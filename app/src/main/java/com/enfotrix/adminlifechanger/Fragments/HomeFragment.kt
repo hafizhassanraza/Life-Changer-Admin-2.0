@@ -20,13 +20,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
-import com.enfotrix.adminlifechanger.databinding.FragmentHomeBinding
 import com.enfotrix.adminlifechanger.Models.HomeViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.Models.NomineeViewModel
 import com.enfotrix.adminlifechanger.R
+import com.enfotrix.adminlifechanger.databinding.FragmentHomeBinding
 import com.enfotrix.adminlifechanger.ui.ActivityAddProfit
 import com.enfotrix.adminlifechanger.ui.ActivityAddTax
 import com.enfotrix.adminlifechanger.ui.ActivityFA
