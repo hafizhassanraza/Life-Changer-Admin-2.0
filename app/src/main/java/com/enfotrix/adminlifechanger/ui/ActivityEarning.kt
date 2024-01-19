@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -74,8 +75,31 @@ class ActivityEarning : AppCompatActivity() , AdapterEarning.OnItemClickListener
     private fun dialogEarningDetails(modelEarning: ModelEarning) {
 
 
-        //modelEarning.disc
-        //// hussain -> create dialog  to  show {modelEarning.disc}
+            val dialog = Dialog(mContext)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.setContentView(R.layout.dialog_earning_details)
+
+            // Initialize the dialog views
+            val tvHeaderBank = dialog.findViewById<TextView>(R.id.tvHeaderBank)
+            val tvHeaderBankDisc = dialog.findViewById<TextView>(R.id.tvHeaderBankDisc)
+            val oldBalance = dialog.findViewById<TextView>(R.id.oldBalance)
+            val earningAmount = dialog.findViewById<TextView>(R.id.earningAmount)
+            val clearance = dialog.findViewById<TextView>(R.id.clearance)
+            val date = dialog.findViewById<TextView>(R.id.date)
+            val remarks = dialog.findViewById<TextView>(R.id.remarks)
+
+            // Set data to the dialog views
+            tvHeaderBankDisc.text = ""
+            oldBalance.text = "${modelEarning.balance}"
+            earningAmount.text = " ${modelEarning.amount}"
+            clearance.text = "${modelEarning.amount}"
+            date.text = " ${modelEarning.createdAt.toDate()}" // Convert timestamp to date
+            remarks.text = "${modelEarning.}"
+
+            dialog.show()
+
+
 
     }
 
