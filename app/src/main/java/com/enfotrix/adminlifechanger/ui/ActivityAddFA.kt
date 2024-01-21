@@ -12,11 +12,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
-import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
-import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityAddFaBinding
-import com.enfotrix.adminlifechanger.databinding.ActivityFaBinding
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import com.google.firebase.Timestamp

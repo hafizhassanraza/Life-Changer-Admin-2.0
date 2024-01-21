@@ -8,17 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.ActivityAnnouncement
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.ModelEarning
 import com.enfotrix.adminlifechanger.Models.ModelFA
-import com.enfotrix.adminlifechanger.R
-import com.enfotrix.adminlifechanger.databinding.ActivityAccountsBinding
 import com.enfotrix.adminlifechanger.databinding.ActivityHomeBinding
-import com.enfotrix.adminlifechanger.databinding.FragmentHomeBinding
-import com.enfotrix.lifechanger.Adapters.InvestorAccountsAdapter
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
 import com.enfotrix.lifechanger.Models.TransactionModel
@@ -161,8 +156,8 @@ class ActivityHome : AppCompatActivity() {
     private fun setData() {
 
 
-        utils.startLoadingAnimation()
-        Thread.sleep(50)
+        //utils.startLoadingAnimation()
+        //Thread.sleep(50)
 
         var listInvestmentModel= sharedPrefManager.getInvestmentList()
         var listTransaction= sharedPrefManager.getTransactionList()
@@ -200,7 +195,7 @@ class ActivityHome : AppCompatActivity() {
 
 
 
-        utils.endLoadingAnimation()
+        //utils.endLoadingAnimation()
 
 
 

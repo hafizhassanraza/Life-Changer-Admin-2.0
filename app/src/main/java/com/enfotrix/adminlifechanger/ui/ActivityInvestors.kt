@@ -89,8 +89,9 @@ class ActivityInvestors : AppCompatActivity() ,  AdapterActiveInvestors.OnItemCl
 
         investmentList = sharedPrefManager.getInvestmentList()
         userlist = sharedPrefManager.getUsersList().filter { it.status.equals(constant.INVESTOR_STATUS_ACTIVE) }
+        userlist.sortedByDescending { it.firstName }
 
-        binding.rvInvestors.adapter= AdapterActiveInvestors(userlist.sortedByDescending { it.createdAt }, investmentList,this@ActivityInvestors)
+        binding.rvInvestors.adapter= AdapterActiveInvestors(userlist, investmentList,this@ActivityInvestors)
 
         binding.svUsers.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -116,7 +117,7 @@ class ActivityInvestors : AppCompatActivity() ,  AdapterActiveInvestors.OnItemCl
         val filteredlist = ArrayList<User>()
         if(text.isEmpty()||text.equals("")||text==null){
 
-            binding.rvInvestors.adapter= AdapterActiveInvestors(userlist.sortedByDescending { it.createdAt }, investmentList,this@ActivityInvestors)
+            binding.rvInvestors.adapter= AdapterActiveInvestors(userlist, investmentList,this@ActivityInvestors)
         }
         else {
             for (user in userlist) {
@@ -139,7 +140,7 @@ class ActivityInvestors : AppCompatActivity() ,  AdapterActiveInvestors.OnItemCl
                 // list to our adapter class.
 
                 binding.rvInvestors.adapter= AdapterActiveInvestors(
-                    filteredlist.filter {  it.status.equals(constants.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.createdAt },
+                    filteredlist.filter {  it.status.equals(constants.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.firstName },
                     investmentList,this@ActivityInvestors)
 
 

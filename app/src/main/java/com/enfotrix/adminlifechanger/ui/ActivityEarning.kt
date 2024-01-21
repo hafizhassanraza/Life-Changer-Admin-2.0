@@ -24,6 +24,7 @@ import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 
 class ActivityEarning : AppCompatActivity() , AdapterEarning.OnItemClickListener {
@@ -55,9 +56,12 @@ class ActivityEarning : AppCompatActivity() , AdapterEarning.OnItemClickListener
         binding.rvStatment.layoutManager = LinearLayoutManager(mContext)
 
 
+
+
         modelFA = ModelFA.fromString(intent.getStringExtra("Fa").toString())!!
-        setData()
         binding.fbAddEarning.setOnClickListener { addEarningDialog() }
+
+        setData()
 
 
     }
@@ -95,14 +99,44 @@ class ActivityEarning : AppCompatActivity() , AdapterEarning.OnItemClickListener
             earningAmount.text = " ${modelEarning.amount}"
             clearance.text = "${modelEarning.amount}"
             date.text = " ${modelEarning.createdAt.toDate()}" // Convert timestamp to date
-            remarks.text = "${modelEarning.}"
+            remarks.text = "${modelEarning.disc}"
 
             dialog.show()
 
 
-
     }
 
+
+
+    fun getData() {
+
+
+        db.collection(constants.FA_COLLECTION).document(modelFA.id)
+            .addSnapshotListener { documentSnapshot, error ->
+                if (error != null) {
+                    // Handle error
+                    return@addSnapshotListener
+                }
+                documentSnapshot?.let { snapshot ->
+                    if (snapshot.exists()) {
+                        modelFA= snapshot.toObject<ModelFA>()!!
+
+                        // Update the shared preference with the modified modelFA
+                        sharedPrefManager.putFAList(
+                            sharedPrefManager.getFAList().map {
+                                if (it.id == modelFA.id) modelFA else it
+                            }
+                        )
+
+
+                    }
+
+
+                }
+            }
+
+
+    }
 
 
     fun addEarningDialog(){
@@ -117,17 +151,23 @@ class ActivityEarning : AppCompatActivity() , AdapterEarning.OnItemClickListener
         val AddProfit = dialog.findViewById<Button>(R.id.AddProfit)
         AddProfit.setOnClickListener {
 
-            addEarning(
-                ModelEarning(
-                    "",
-                    etBalance.text.toString(),
-                    modelFA.profit,
-                    etRemarks.text.toString(),
-                    modelFA.id,
-                    constants.EARNING_STATUS_PENDING
+
+            if(etBalance.text.isNullOrEmpty()) Toast.makeText(mContext, "Please enter the amount", Toast.LENGTH_SHORT).show()
+            else if(etRemarks.text.isNullOrEmpty()) Toast.makeText(mContext, "Please enter the remarks", Toast.LENGTH_SHORT).show()
+            else {
+                addEarning(
+                    ModelEarning(
+                        "",
+                        etBalance.text.toString(),
+                        modelFA.profit,
+                        etRemarks.text.toString(),
+                        modelFA.id,
+                        constants.EARNING_STATUS_PENDING
+                    )
                 )
-            )
-            dialog.dismiss()
+                dialog.dismiss()
+
+            }
         }
         dialog.show()
 
@@ -155,7 +195,16 @@ class ActivityEarning : AppCompatActivity() , AdapterEarning.OnItemClickListener
                                         utils.endLoadingAnimation()
                                         sharedPrefManager.putAgentEarningList(task.result!!.documents.mapNotNull { document -> document.toObject(
                                             ModelEarning::class.java)?.apply { docID = document.id } })
+
+
+                                        sharedPrefManager.putFAList(
+                                            sharedPrefManager.getFAList().map {
+                                                if (it.id == modelFA.id) modelFA else it
+                                            }
+                                        )
+                                        getData()
                                         setData()
+
                                     }
                                 }
                         }

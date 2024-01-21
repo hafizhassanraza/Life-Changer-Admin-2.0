@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -24,6 +23,7 @@ import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.AgentTransactionModel
 import com.enfotrix.adminlifechanger.Models.AgentTransactionviewModel
 import com.enfotrix.adminlifechanger.Models.FAViewModel
+import com.enfotrix.adminlifechanger.Models.ModelEarning
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityFadetailsBinding
@@ -32,10 +32,20 @@ import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.util.Locale
 
 class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListener, AdapterFA.OnItemClickListener {
+
+
+    private val db = Firebase.firestore
 
     private lateinit var rvInvestors: RecyclerView
     private lateinit var dialog: BottomSheetDialog
@@ -90,12 +100,15 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
         /*binding.fbAddClient.setOnClickListener {
             showClientDialog()
         }*/
+        binding.layWithdraw.setOnClickListener() {
+            WithdrawEarnings()
+        }
         binding.layInvest.setOnClickListener() {
             startActivity(Intent(mContext,ActivityAssignedInvestors::class.java).putExtra("Fa",modelFA.toString()))
         }
         binding.layEarning.setOnClickListener() {
 
-            Toast.makeText(mContext, "debug", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(mContext, "debug", Toast.LENGTH_SHORT).show()
             startActivity(Intent(mContext,ActivityEarning::class.java).putExtra("Fa",modelFA.toString()))
 
         }
@@ -117,33 +130,51 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
         originallist = userViewModel.getusers2(modelFA.id)
 
 
+    }
 
-        /*        binding.rvClients.layoutManager = LinearLayoutManager(mContext)
-
-
-
-                binding.tvAddProfit.setOnClickListener {
-                    showProfitDialog()
-                }
+    fun WithdrawEarnings(){
 
 
-                binding.tveditfa.setOnClickListener {
-                    startActivity(Intent(this@ActivityFADetails, ActivityEditFA::class.java).apply {
-                        putExtra("FA", modelFA.toString())
-                    })
-                }
-                setdata()
-                binding.svClients.setOnQueryTextListener(object :
-                    androidx.appcompat.widget.SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String): Boolean {
-                        return false
+        // with draw balance from user profile
+        //  change the the status of pending transactions
+        // getData
+
+        utils.startLoadingAnimation()
+
+
+        CoroutineScope(Dispatchers.IO).launch {
+            var earningList = sharedPrefManager.getAgentEarningList().filter { it.agentID == modelFA.id }
+
+            if (earningList.isNotEmpty()) {
+                var pendingEarningsList = earningList.filter { it.status == constants.EARNING_STATUS_PENDING }
+
+                if (pendingEarningsList.isNotEmpty()) {
+                    for (earning in pendingEarningsList) {
+                        earning.status = constants.EARNING_STATUS_WITHDRAW
+                        earning.withdrawAt=Timestamp.now()
+                        db.collection(constants.AGENT_EARNING_COLLECTION).document(earning.docID).set(earning).await()
                     }
 
-                    override fun onQueryTextChange(newText: String): Boolean {
-                        filterclients(newText)
-                        return false
+                    modelFA.profit="0"
+                    db.collection(constants.FA_COLLECTION).document(modelFA.id).set(modelFA)
+
+
+
+                    withContext(Dispatchers.Main) {
+                        getData()
+                        utils.endLoadingAnimation()
+
+                        Toast.makeText(mContext, "Withdraw successfully", Toast.LENGTH_SHORT).show()
                     }
-                })*/
+                }
+                else utils.endLoadingAnimation()
+            }
+            else utils.endLoadingAnimation()
+
+        }
+
+
+
 
 
     }
@@ -237,9 +268,46 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
 
     fun getData() {
 
-        // Hussain
-        // agent ki profile (doc) ka snapshot listner lgana hai
-        // or us k success mein  global variable  "modelFA" ko update karna hai or setdata() call karna hai
+
+        db.collection(constants.FA_COLLECTION).document(modelFA.id)
+            .addSnapshotListener { documentSnapshot, error ->
+                if (error != null) {
+                    // Handle error
+                    return@addSnapshotListener
+                }
+                documentSnapshot?.let { snapshot ->
+                    if (snapshot.exists()) {
+                        modelFA= snapshot.toObject<ModelFA>()!!
+
+                        // Update the shared preference with the modified modelFA
+                        sharedPrefManager.putFAList(
+                            sharedPrefManager.getFAList().map {
+                                if (it.id == modelFA.id) modelFA else it
+                            }
+                        )
+                        setdata()
+                    }
+
+
+                }
+            }
+
+        db.collection(constants.AGENT_EARNING_COLLECTION)
+            .addSnapshotListener { documentSnapshot, error ->
+                if (error != null) {
+                    // Handle error
+                    return@addSnapshotListener
+                }
+                documentSnapshot?.let { snapshot ->
+
+                    sharedPrefManager.putAgentEarningList(snapshot.documents.mapNotNull { document ->
+                        document.toObject(ModelEarning::class.java)?.apply { docID = document.id }
+                    })
+                }
+            }
+
+
+
     }
 
     fun withdrawEarning(){
@@ -324,7 +392,6 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
 
 
         user.fa_id = modelFA.id
-
         utils.startLoadingAnimation()
         lifecycleScope.launch {
             userViewModel.setUser(user)
@@ -461,16 +528,18 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
     }
 
     fun setdata() {
-        val modelFAStr = intent.getStringExtra("FA")
-        val model: ModelFA? = modelFAStr?.let { ModelFA.fromString(it) }
-         if (model != null) {
-             binding.tvName.text = model.firstName
-             binding.tvDesignantion.text = model.designantion
-             binding.tvEarning.text = model.profit
-             binding.tvBalance.text = model.cnic
-             binding.tvInActiveInvestment.text = model.phone
-             binding.availableProfit.text = model.address
-             binding.tvTotalInvestors.text = model.cnic_back
+    /*    val modelFAStr = intent.getStringExtra("FA")
+        val model: ModelFA? = modelFAStr?.let { ModelFA.fromString(it) }*/
+
+        modelFA
+         if (modelFA != null) {
+             binding.tvName.text = modelFA.firstName
+             binding.tvDesignantion.text = modelFA.designantion
+             binding.tvEarning.text = modelFA.profit
+             binding.tvBalance.text = modelFA.cnic
+             binding.tvInActiveInvestment.text = modelFA.phone
+             binding.availableProfit.text = modelFA.address
+             binding.tvTotalInvestors.text = modelFA.cnic_back
 
 
          }

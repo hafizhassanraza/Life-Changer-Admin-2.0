@@ -3,7 +3,6 @@ package com.enfotrix.lifechanger
 import User
 import android.content.Context
 import android.content.SharedPreferences
-import android.view.Display.Mode
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.ModelEarning
 import com.enfotrix.adminlifechanger.Models.ModelFA

@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.Adapters.InvestorAdapter
 import com.enfotrix.adminlifechanger.Constants
@@ -19,8 +18,6 @@ import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.Models.NomineeViewModel
-import com.enfotrix.adminlifechanger.R
-import com.enfotrix.adminlifechanger.databinding.FragmentDashboardBinding
 import com.enfotrix.adminlifechanger.databinding.FragmentNewInvestersBinding
 import com.enfotrix.adminlifechanger.ui.ActivityNewInvestorReqDetails
 import com.enfotrix.lifechanger.Models.ModelBankAccount
@@ -30,19 +27,10 @@ import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 
-import android.view.Menu
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.recyclerview.widget.RecyclerView
 import java.util.Locale
 
 

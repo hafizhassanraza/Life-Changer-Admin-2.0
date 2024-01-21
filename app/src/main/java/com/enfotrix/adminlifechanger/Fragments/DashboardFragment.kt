@@ -8,16 +8,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.ActivityAnnouncement
-import com.enfotrix.adminlifechanger.Adapters.InvestorAdapter
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.databinding.FragmentDashboardBinding
 import com.enfotrix.adminlifechanger.Models.DashboardViewModel
@@ -25,11 +20,7 @@ import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.Models.NomineeViewModel
-import com.enfotrix.adminlifechanger.databinding.ActivityNewInvestorsReqBinding
 import com.enfotrix.adminlifechanger.ui.ActivityAccounts
-import com.enfotrix.adminlifechanger.ui.ActivityFA
-import com.enfotrix.adminlifechanger.ui.ActivityInvestors
-import com.enfotrix.adminlifechanger.ui.ActivityNewInvestorReqDetails
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
 import com.enfotrix.lifechanger.Models.UserViewModel
@@ -42,7 +33,6 @@ import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 

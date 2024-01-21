@@ -462,6 +462,31 @@
 
 
                     </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/layWithdraw"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        app:layout_column="1"
+                        app:layout_row="1"
+                        app:layout_columnWeight="1"
+                        app:layout_rowWeight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:tint="@color/primary"
+                            android:src="@drawable/withdraw_"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/primary"
+                            android:text="Withdraw"/>
+
+
+                    </LinearLayout>
 
 
                 </androidx.gridlayout.widget.GridLayout>
