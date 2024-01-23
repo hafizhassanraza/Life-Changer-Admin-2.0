@@ -175,6 +175,7 @@ class ActivityHome : AppCompatActivity() {
         var totalSum= ActiveInvestment+InActiveInvestment+Profit
 
         var AgentCounter = sharedPrefManager.getFAList().count()
+        var AgentWithdrawReqCounter = sharedPrefManager.getAgentEarningList().count()
         var ActiveInvestorCounter = sharedPrefManager.getUsersList().count{it.status.equals(constants.INVESTOR_STATUS_ACTIVE)}
 
 
@@ -190,6 +191,7 @@ class ActivityHome : AppCompatActivity() {
         binding.tvInActiveCounter.text= InActiveInvestCounter.toString()
         binding.tvInvestorCounter.text= ActiveInvestorCounter.toString()
         binding.tvAgentCounter.text= AgentCounter.toString()
+        binding.tvAgentWithdrawReqCounter.text= AgentCounter.toString()
 
 
 

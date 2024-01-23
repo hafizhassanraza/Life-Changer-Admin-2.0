@@ -385,6 +385,53 @@
 
 
         </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="6dp"
+                android:layout_marginRight="15dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/baseline_circle_24">
+
+                <TextView
+                    android:id="@+id/tvAgentWithdrawReqCounter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/montserrate_semi_bold"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:textSize="14dp" />
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btnAgentWithdrawReq"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginStart="14dp"
+                android:backgroundTint="@color/PrimaryVariant"
+                app:cornerRadius="15dp"
+                android:layout_marginEnd="14dp"
+                android:text="Withdraw (Agent)"
+                android:textStyle="bold"
+                android:drawableTint="@color/white"
+                android:textColor="@color/white"
+                />
+
+
+        </RelativeLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
