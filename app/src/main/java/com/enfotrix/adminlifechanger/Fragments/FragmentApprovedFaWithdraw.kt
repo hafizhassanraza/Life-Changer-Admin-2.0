@@ -72,11 +72,11 @@ class FragmentApprovedFaWithdraw : Fragment() ,AgentTransactionsAdapter.OnItemCl
 
         binding.rvWithdrawRequests.layoutManager = LinearLayoutManager(mContext)
 
-        getFaWithdraw()
+       // getFaWithdraw()
 
         return root
     }
-    fun getFaWithdraw()
+    /*fun getFaWithdraw()
     {
         lifecycleScope.launch{
             agentWithdrawReqDetails.getPendingWithdrawsAgentReq()
@@ -113,7 +113,7 @@ class FragmentApprovedFaWithdraw : Fragment() ,AgentTransactionsAdapter.OnItemCl
                 }
 
         }
-    }
+    }*/
     fun getAccount(){
         lifecycleScope.launch{
             userViewModel.getAccounts()

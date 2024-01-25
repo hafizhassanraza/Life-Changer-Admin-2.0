@@ -50,19 +50,22 @@ class ActivityNotification : AppCompatActivity() {
         constants = Constants()
         sharedPrefManager = SharedPrefManager(mContext)
         binding.rvNoti.layoutManager = LinearLayoutManager(mContext)
-        notificationsList.sortBy { it.createdAt}
-        adapter = AdapterNotifications(notificationsList)
-        binding.rvNoti.adapter = adapter
 
         setTitle("")
         user = User.fromString(intent.getStringExtra("user").toString())!!
-        Toast.makeText(mContext, "" + user.id, Toast.LENGTH_SHORT).show()
 
         binding.addbtn.setOnClickListener {
             openAddNotificationDialog()
         }
 
-        getNotificationsList() // Initialize the list when the activity is created
+        setData()
+        //getNotificationsList() // Initialize the list when the activity is created
+    }
+
+    private fun setData() {
+
+        binding.rvNoti.adapter = AdapterNotifications(sharedPrefManager.getNotificationList().sortedBy { it.createdAt }.filter { it.userID.equals(user.id) })
+
     }
 
     private fun openAddNotificationDialog() {
@@ -79,37 +82,8 @@ class ActivityNotification : AppCompatActivity() {
             val notificationData = etNotificationData.text.toString().trim()
 
             if (title.isNotEmpty() && notificationData.isNotEmpty()) {
-                utils.startLoadingAnimation()
-                lifecycleScope.launch {
-                    var notiModel = NotificationModel("", user.id, getCurrentDateInFormat(), title, notificationData)
-                    notificationViewModel.setNotification(notiModel)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                val docId = task.result?.id
-                                if (docId != null) {
-                                    notiModel.id = docId
-                                    lifecycleScope.launch {
-                                        FirebaseFirestore.getInstance().collection(constants.NOTIFICATION_COLLECTION).document(docId).set(notiModel)
-                                            .addOnCompleteListener {
-                                                if (it.isSuccessful) {
-                                                    utils.endLoadingAnimation()
-                                                    Toast.makeText(mContext, "Added", Toast.LENGTH_SHORT).show()
-                                                    // Update the RecyclerView when a new notification is added
-                                                    getNotificationsList()
-                                                } else {
-                                                    utils.endLoadingAnimation()
-                                                }
-                                            }
-                                    }
 
-                                }
-
-                            }
-                        }
-
-
-                }
-
+                AddNotification(NotificationModel("", user.id, getCurrentDateInFormat(), title, notificationData))
 
                 // Dismiss the dialog
                 addNotificationDialog.dismiss()
@@ -120,6 +94,32 @@ class ActivityNotification : AppCompatActivity() {
 
         addNotificationDialog.show()
     }
+    fun AddNotification(notificationModel: NotificationModel){
+
+        utils.startLoadingAnimation()
+        lifecycleScope.launch {
+            notificationViewModel.setNotification(notificationModel)
+                .addOnSuccessListener { task ->
+                    FirebaseFirestore.getInstance().collection(constants.NOTIFICATION_COLLECTION)
+                        .addSnapshotListener { snapshot, firebaseFirestoreException ->
+                            firebaseFirestoreException?.let {
+                                Toast.makeText(mContext, it.message.toString(), Toast.LENGTH_SHORT).show()
+                                return@addSnapshotListener
+                            }
+                            snapshot?.let { task ->
+                                utils.endLoadingAnimation()
+
+                                sharedPrefManager.putNotification(task.documents.mapNotNull { document -> document.toObject(NotificationModel::class.java)?.apply { id = document.id } })
+                                setData()
+                            }
+
+                        }
+
+                }
+
+
+        }
+    }
 
     fun getCurrentDateInFormat(): String {
         val currentDate = Date()
@@ -127,27 +127,5 @@ class ActivityNotification : AppCompatActivity() {
         return dateFormat.format(currentDate)
     }
 
-    private fun getNotificationsList() {
-        FirebaseFirestore.getInstance().collection(constants.NOTIFICATION_COLLECTION)
-            .addSnapshotListener { snapshot, exception ->
-                if (exception != null) {
-                    // Handle the error
-                    Toast.makeText(mContext, "Error fetching notifications", Toast.LENGTH_SHORT).show()
-                    return@addSnapshotListener
-                }
 
-                // Clear the previous list to avoid duplicates
-                notificationsList.clear()
-
-                // Iterate through the documents and add them to the list
-                for (document in snapshot!!) {
-                    val notification = document.toObject(NotificationModel::class.java)
-                    notification.id = document.id
-                    notificationsList.add(notification)
-                }
-
-                // Notify the adapter that the dataset has changed
-                adapter.notifyDataSetChanged()
-            }
-    }
 }

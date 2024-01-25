@@ -164,19 +164,17 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
         utils.startLoadingAnimation()
 
         db.collection(constants.INVESTMENT_COLLECTION).document(investmentModel.investorID).set(investmentModel)
-            .addOnCompleteListener {
-                if(it.isSuccessful){
-                    db.collection(constants.TRANSACTION_REQ_COLLECTION).document(transactionModel.id).set(transactionModel)
-                        .addOnCompleteListener {
-                            if(it.isSuccessful){
-                                utils.endLoadingAnimation()
-                                Toast.makeText(mContext, "Withdraw Approved", Toast.LENGTH_SHORT).show()
-                                startActivity(Intent(mContext,ActivityHome::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
-                                finish()
-                            }
+            .addOnSuccessListener {
 
-                        }
-                }
+                db.collection(constants.TRANSACTION_REQ_COLLECTION).document(transactionModel.id).set(transactionModel)
+                    .addOnSuccessListener {
+
+                        utils.endLoadingAnimation()
+                        Toast.makeText(mContext, "Withdraw Approved", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(mContext,ActivityHome::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                        finish()
+
+                    }
 
             }
 
@@ -250,8 +248,7 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
         investmentModel= sharedPrefManager.getInvestmentList().find { it.investorID == user.id }!!
         val fa: ModelFA? = if (!user.fa_id.isNullOrEmpty()) { sharedPrefManager.getFAList().find { it.id == user.fa_id } } else { null }
 
-
-
+        
         if(intent.getStringExtra("from").toString().equals(constant.FROM_PENDING_WITHDRAW_REQ)){
             binding.tvHeader22.text="Withdraw"
             supportActionBar?.title = "Withdraw Details"

@@ -47,8 +47,8 @@ class AdapterEarning (val earningList: List<ModelEarning>, val listener: OnItemC
 
             itemBinding.tvReqDate.text = SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(earning.createdAt.toDate())
 
-            if (earning.status.equals(constant.EARNING_STATUS_WITHDRAW)) itemBinding.tvApprovedDate.text = SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(earning.withdrawAt?.toDate() ?: "Pending")
-            else itemBinding.tvApprovedDate.text = "Pending"
+           // if (earning.status.equals(constant.EARNING_STATUS_WITHDRAW)) itemBinding.tvApprovedDate.text = SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(earning.withdrawAt?.toDate() ?: "Pending")
+           // else itemBinding.tvApprovedDate.text = "Pending"
 
 
 

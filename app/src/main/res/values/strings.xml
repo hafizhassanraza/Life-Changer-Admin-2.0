@@ -16,6 +16,10 @@
     <string name="viewDetails"><u><b>View Details</b></u></string>
     <string name="download"><u><b>Download</b></u></string>
 
+    <string-array name="withdraw_options">
+        <item>Approved Withdraws</item>
+        <item>Pending Withdraws</item>
+    </string-array>
     <string-array name="listofbanks">
         <item>Allied Bank Limited (ABL)</item>
         <item>Askari Bank</item>

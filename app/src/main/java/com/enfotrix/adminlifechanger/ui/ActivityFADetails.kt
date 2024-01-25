@@ -101,7 +101,9 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
             showClientDialog()
         }*/
         binding.layWithdraw.setOnClickListener() {
-            WithdrawEarnings()
+            //WithdrawEarnings()
+            startActivity(Intent(mContext,ActivityAgentWithdraw::class.java).putExtra("Fa",modelFA.toString()))
+
         }
         binding.layInvest.setOnClickListener() {
             startActivity(Intent(mContext,ActivityAssignedInvestors::class.java).putExtra("Fa",modelFA.toString()))
@@ -531,15 +533,40 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
     /*    val modelFAStr = intent.getStringExtra("FA")
         val model: ModelFA? = modelFAStr?.let { ModelFA.fromString(it) }*/
 
-        modelFA
          if (modelFA != null) {
+
+
+             val InActiveInvestCounter = sharedPrefManager.getInvestmentList().filter { investment ->
+                 val inActiveInvestment = investment.lastInvestment.takeIf { !it.isNullOrEmpty() } ?: "0"
+                 val inActiveInvestment_ = inActiveInvestment.toIntOrNull() ?: 0
+                 inActiveInvestment_ > 0 }.count()
+
+             var investorsOfFA= sharedPrefManager.getUsersList().filter { it.fa_id.equals(modelFA.id) }
+
+
+             var listInvestmentOfFaInvestors= sharedPrefManager.getInvestmentList().filter { investment -> investorsOfFA.any { it.id == investment.investorID } }
+
+
+
+
+             var ActiveInvestment= listInvestmentOfFaInvestors.sumOf { it.investmentBalance.takeIf { it.isNotBlank() }?.toInt() ?: 0 }.toInt()
+             var Profit=listInvestmentOfFaInvestors.sumOf { it.lastProfit.takeIf { it.isNotBlank() }?.toInt() ?: 0 }.toInt()
+             var InActiveInvestment=listInvestmentOfFaInvestors.sumOf { it.lastInvestment.takeIf { it.isNotBlank() }?.toInt() ?: 0 }.toInt()
+             var totalSum= ActiveInvestment+InActiveInvestment+Profit
+
+
+
+
+
+             binding.tvActiveInvestment.text= ActiveInvestment.toString()
+             binding.tvProfit.text= Profit.toString()
+             binding.tvInActiveInvestment.text= InActiveInvestment.toString()
+             binding.tvExpectedSum.text= totalSum.toString()
+
              binding.tvName.text = modelFA.firstName
              binding.tvDesignantion.text = modelFA.designantion
              binding.tvEarning.text = modelFA.profit
-             binding.tvBalance.text = modelFA.cnic
-             binding.tvInActiveInvestment.text = modelFA.phone
-             binding.availableProfit.text = modelFA.address
-             binding.tvTotalInvestors.text = modelFA.cnic_back
+             binding.tvTotalInvestors.text = investorsOfFA.count().toString()
 
 
          }

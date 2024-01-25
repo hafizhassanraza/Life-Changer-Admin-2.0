@@ -13,8 +13,14 @@ import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.AgentTransactionModel
 import com.enfotrix.adminlifechanger.Models.AgentWithdrawModel
 import com.enfotrix.adminlifechanger.Models.AgentTransactionviewModel
+import com.enfotrix.adminlifechanger.Models.FAViewModel
+import com.enfotrix.adminlifechanger.Models.InvestmentModel
+import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.databinding.ActivityAgentWithdrawReqDetailsBinding
+import com.enfotrix.adminlifechanger.databinding.ActivityInvestmentReqDetailsBinding
+import com.enfotrix.lifechanger.Models.TransactionModel
+import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import com.google.firebase.Timestamp
@@ -29,12 +35,23 @@ import java.util.Locale
 class ActivityAgentWithdrawReqDetails : AppCompatActivity() {
 
 
+
+
     private val db = Firebase.firestore
+    private val investmentViewModel: InvestmentViewModel by viewModels()
+    private val faViewModel: FAViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
+    var constant= Constants()
+
+
+    private lateinit var transactionModel: TransactionModel
+    private lateinit var investmentModel: InvestmentModel
+
+
 
 
     private val agentTransactionviewModel: AgentTransactionviewModel by viewModels()
 
-    var constant = Constants()
 
 
     private lateinit var binding: ActivityAgentWithdrawReqDetailsBinding
@@ -49,6 +66,7 @@ class ActivityAgentWithdrawReqDetails : AppCompatActivity() {
     private lateinit var model2: AgentTransactionModel
     private var agentWithdrawModel: AgentWithdrawModel? = null
     private lateinit var modelFA: ModelFA
+    private lateinit var agentwithdrawModel: AgentWithdrawModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,27 +88,20 @@ class ActivityAgentWithdrawReqDetails : AppCompatActivity() {
 
         binding.btnAccept.setOnClickListener {
 
-            if (intent.getStringExtra("from").toString()
-                    .equals(constant.FROM_PENDING_WITHDRAW_REQ)
-            ) approvedWithdraw()
-            else
-                Toast.makeText(
-                    mContext,
-                    "Already Approved,Might Be error from Developer Side",
-                    Toast.LENGTH_SHORT
-                ).show()
+            approvedWithdraw()
 
         }
         setData()
-        getData()
 
     }
 
 
     private fun getData() {
 
-        agentWithdrawModel =
-            AgentWithdrawModel.fromString(intent.getStringExtra("agentwithdrawmodel").toString())!!
+
+/*
+
+        agentWithdrawModel = AgentWithdrawModel.fromString(intent.getStringExtra("agentwithdrawmodel").toString())!!
         modelFA = ModelFA.fromString(intent.getStringExtra("FA").toString())!!
 
 
@@ -128,14 +139,43 @@ class ActivityAgentWithdrawReqDetails : AppCompatActivity() {
                     ).show()
                 }
         }
+*/
 
 
     }
 
-    @SuppressLint("SuspiciousIndentation")
 
     private fun approvedWithdraw() {
-        if (agentWithdrawModel!!.withdrawBalance.toInt() > agentTransactionModel.newBalance.toInt()) {
+
+
+        val transactionAmount = agentwithdrawModel?.withdrawBalance?.toInt() ?: 0
+        val agentEarning = modelFA?.profit?.toInt() ?: 0
+
+        if(transactionAmount>agentEarning) Toast.makeText(mContext, "insufficient Balance", Toast.LENGTH_SHORT).show()
+        else {
+
+            agentwithdrawModel.status= constants.TRANSACTION_STATUS_APPROVED
+            agentwithdrawModel.withdrawApprovedDate= Timestamp.now()
+            agentwithdrawModel.lastWithdrawBalance = modelFA.profit // set all previous balance
+            modelFA.profit=(agentEarning-transactionAmount).toString()
+            db.collection(constants.WITHDRAW_COLLECTION).document(agentwithdrawModel.id).set(agentwithdrawModel)
+                .addOnSuccessListener {
+                    db.collection(constants.FA_COLLECTION).document(modelFA.id).set(modelFA)
+                        .addOnSuccessListener {
+                            utils.endLoadingAnimation()
+                            Toast.makeText(mContext, "Withdraw Approved", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(mContext,ActivityHome::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                            finish()
+                        }
+                }
+
+
+
+        }
+
+
+
+        /*if (agentWithdrawModel!!.withdrawBalance.toInt() > agentTransactionModel.newBalance.toInt()) {
             Toast.makeText(mContext, "Insufficient Balance", Toast.LENGTH_SHORT).show()
         } else {
 
@@ -188,34 +228,21 @@ class ActivityAgentWithdrawReqDetails : AppCompatActivity() {
             }
 
 
-        }
+        }*/
     }
+
 
     fun setData() {
-        if (intent.getStringExtra("from").toString().equals(constant.FROM_PENDING_WITHDRAW_REQ)) {
-            binding.tvHeader22.text = "Withdraw"
-            supportActionBar?.title = "Withdraw Details"
-        }
-        var agentwithdrawModel =
-            AgentWithdrawModel.fromString(intent.getStringExtra("agentwithdrawmodel").toString())
-        var modelFA = ModelFA.fromString(intent.getStringExtra("FA").toString())
+
+        binding.tvHeader22.text = "Withdraw"
+        agentwithdrawModel = AgentWithdrawModel.fromString(intent.getStringExtra("transactionModel").toString())!!
+        modelFA = ModelFA.fromString(intent.getStringExtra("User").toString())!!
+
         binding.tvInvestorName.text = "${modelFA?.firstName} ${modelFA?.lastName}"
         binding.tvInvestorCnic.text = "${modelFA?.cnic}"
-        binding.investmentDate.text = SimpleDateFormat(
-            "hh:mm a dd/MM/yy",
-            Locale.getDefault()
-        ).format(agentwithdrawModel?.lastWithdrawReqDate!!.toDate()).toString()
+        binding.investmentDate.text = SimpleDateFormat("hh:mm a dd/MM/yy", Locale.getDefault()).format(agentwithdrawModel?.lastWithdrawReqDate!!.toDate()).toString()
         binding.tvInvestment.text = "${agentwithdrawModel?.withdrawBalance}"
 
-        /*  binding.tvInvestorBankName.text="${senderBankAccount?.bank_name}"
-          binding.tvInvestorAccountNumber.text="${senderBankAccount?.account_number}"
-          binding.tvInvestorAccountTittle.text="${senderBankAccount?.account_tittle}"
-
-          binding.tvBankName.text="${receiverBankAccount?.bank_name}"
-          binding.tvAccountNumber.text="${receiverBankAccount?.account_number}"
-          binding.tvAccountTittle.text="${receiverBankAccount?.account_tittle}"*/
-
     }
-
 
 }

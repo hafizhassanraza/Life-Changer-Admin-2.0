@@ -1,8 +1,10 @@
 package com.enfotrix.lifechanger.Adapters
 
 import User
+import android.opengl.Visibility
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.enfotrix.adminlifechanger.Constants
@@ -14,11 +16,7 @@ import com.enfotrix.lifechanger.Models.TransactionModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class AgentTransactionsAdapter (
-    var activity:String,
-    val data: List<AgentWithdrawModel>,
-    val financialAdvisors: List<ModelFA>,
-    val listener: OnItemClickListener) : RecyclerView.Adapter<AgentTransactionsAdapter.ViewHolder>(){
+class AgentTransactionsAdapter (val data: List<AgentWithdrawModel>, val financialAdvisors: List<ModelFA>, val listener: OnItemClickListener) : RecyclerView.Adapter<AgentTransactionsAdapter.ViewHolder>(){
 
 
     var constant= Constants()
@@ -35,35 +33,37 @@ class AgentTransactionsAdapter (
 
 
 
-        financialAdvisors.find { it.id.equals(data[position].fa_ID)}?.let { holder.bind(data[position], it) }
+        //financialAdvisors.find { it.id.equals(data[position].fa_ID)}?.let { holder.bind(data[position], it) }
 
-        //holder.bind(data[position])
+
+        holder.bind(data[position])
 
     }
     override fun getItemCount(): Int { return data.size }
     inner class ViewHolder(val itemBinding: ItemTransactionBinding) : RecyclerView.ViewHolder(itemBinding.root){
 
-        fun bind(agentWithdrawModel: AgentWithdrawModel, modelFA: ModelFA)
+        //fun bind(agentWithdrawModel: AgentWithdrawModel, modelFA: ModelFA)
+        fun bind(agentWithdrawModel: AgentWithdrawModel)
         {
+
+            var modelFA= financialAdvisors.find { it.id.equals(agentWithdrawModel.fa_ID) }
 
 
 
 
             itemBinding.layItem.setOnClickListener {
-                listener.onAgentItemClick(agentWithdrawModel,modelFA)
+                listener.onAgentItemClick(agentWithdrawModel,modelFA!!)
+
             }
 
-
-            itemBinding.tvInvestorName.text="${modelFA.firstName}"
+            itemBinding.tvInvestorName.text="${modelFA!!.firstName}"
             itemBinding.tvPreviousBalance.text="${agentWithdrawModel.lastWithdrawBalance}"
             itemBinding.tvInvestmentDate.text="${SimpleDateFormat( "hh:mm a dd/MM/yy", Locale.getDefault()).format(agentWithdrawModel.lastWithdrawReqDate!!.toDate()).toString()}"
-            if(activity.equals(constant.FROM_PENDING_WITHDRAW_REQ) || activity.equals(constant.FROM_APPROVED_WITHDRAW_REQ)) {
-                itemBinding.tvInvestWithdrawHeader.text="Withdraw"
 
-            }
             itemBinding.tvInvestment.text="${agentWithdrawModel.withdrawBalance}"
 
-
+            itemBinding.tvInvestWithdrawHeader1.visibility= View.GONE
+            itemBinding.layPreviousBalance.visibility= View.GONE
 
 
         }

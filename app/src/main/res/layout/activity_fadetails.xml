@@ -147,231 +147,226 @@
 
 
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter"
+                    android:text="Clients' Investments"
+                    android:textColor="@color/textGrey"
+                    android:layout_marginBottom="7dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="15dp"
+                    android:alpha="0.6"
 
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/newCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_marginHorizontal="15dp"
-                    android:elevation="15dp"
                     app:cardCornerRadius="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
-
-                    <ImageView
+                    >
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:alpha=".18"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/cardbg" />
-
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingHorizontal="15dp"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="8dp"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/img1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="18dp"
-                            android:src="@drawable/visa_"
-                            android:layout_alignParentTop="true"
-                            android:layout_alignParentRight="true"/>
-
-
-                        <ImageView
-                            android:layout_width="60dp"
-                            android:layout_height="50dp"
-                            android:layout_below="@+id/img1"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginTop="10dp"
-                            android:src="@drawable/chip_"/>
-
+                        android:orientation="vertical"
+                        android:padding="15dp"
+                        >
 
                         <LinearLayout
-                            android:id="@+id/layActiveInvestmetn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_gravity="center_horizontal"
+                            android:orientation="horizontal"
+                            >
 
 
-
-                            <LinearLayout
+                            <TextView
+                                android:id="@+id/tvTotalInvestors"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                >
-
-
-                                <TextView
-                                    android:id="@+id/tvTotalInvestors"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="00"
-                                    android:textColor="@color/black"
-                                    android:textSize="15sp"
-                                    android:textStyle="bold"/>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="(Total Investors)"
-                                    android:textColor="@color/gray"
-                                    android:textSize="9sp"
-                                    android:layout_marginLeft="3dp"
-                                    android:textStyle="bold" />
-
-
-
-
-
-                            </LinearLayout>
-
+                                android:text="00"
+                                android:textColor="@color/black"
+                                android:textSize="15sp"
+                                android:textStyle="bold"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:text="Current (Active) Investment"
-                                android:layout_below="@+id/nametextlayout"
+                                android:text="(Total Investors)"
                                 android:textColor="@color/gray"
-                                android:textSize="8dp" />
+                                android:textSize="9sp"
+                                android:layout_marginLeft="3dp"
+                                android:textStyle="bold" />
 
 
-
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="5dp"
-                                    android:gravity="top"
-                                    android:paddingTop="5dp"
-                                    android:text="Rs."
-                                    android:textColor="@color/gray"
-                                    android:textSize="16dp" />
-
-                                <TextView
-                                    android:id="@+id/tvBalance"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="20,0000000"
-                                    android:textColor="@color/black"
-                                    android:textSize="29sp"
-                                    android:textStyle="bold" />
-
-
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                >
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="5dp"
-                                    android:gravity="top"
-                                    android:paddingTop="5dp"
-                                    android:text="Rs."
-                                    android:textColor="@color/gray"
-                                    android:textSize="14dp" />
-
-                                <TextView
-                                    android:id="@+id/tvInActiveInvestment"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="00"
-                                    android:textColor="@color/black"
-                                    android:textSize="15sp"
-                                    android:textStyle="bold"/>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="(In-Active Investment)"
-                                    android:textColor="@color/gray"
-                                    android:textSize="9sp"
-                                    android:layout_marginLeft="3dp"
-                                    android:textStyle="bold" />
-
-
-
-
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                >
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="5dp"
-                                    android:gravity="top"
-                                    android:paddingTop="5dp"
-                                    android:text="Rs."
-                                    android:textColor="@color/gray"
-                                    android:textSize="14dp" />
-
-                                <TextView
-                                    android:id="@+id/availableProfit"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="00"
-                                    android:textColor="@color/black"
-                                    android:textSize="15sp"
-                                    android:textStyle="bold"/>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="(Available Profit)"
-                                    android:textColor="@color/gray"
-                                    android:textSize="9sp"
-                                    android:layout_marginLeft="3dp"
-                                    android:textStyle="bold" />
-
-
-
-
-
-                            </LinearLayout>
 
 
 
                         </LinearLayout>
 
 
+                        <RelativeLayout
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+
+
+                            <TextView
+                                android:id="@+id/h11"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/inter"
+                                android:text="Active"
+                                android:textColor="@color/gray"
+                                android:textSize="14dp" />
 
 
 
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toLeftOf="@id/tvActiveInvestment"
+                                android:text="Rs."
+                                android:textColor="@color/black"
+                                android:textSize="14dp" />
+
+                            <TextView
+                                android:id="@+id/tvActiveInvestment"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:text="00"
+                                android:textColor="@color/black"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+
+                        </RelativeLayout>
+                        <RelativeLayout
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+
+
+                            <TextView
+                                android:id="@+id/h1111"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/inter"
+                                android:text="Profit"
+                                android:textColor="@color/gray"
+                                android:textSize="14dp" />
 
 
 
-                    </RelativeLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toLeftOf="@id/tvProfit"
+                                android:text="Rs."
+                                android:textColor="@color/black"
+                                android:textSize="14dp" />
+
+                            <TextView
+                                android:id="@+id/tvProfit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:text="00"
+                                android:textColor="@color/black"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
 
 
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+                            <TextView
+                                android:id="@+id/h1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/inter"
+                                android:text="In-Active"
+                                android:textColor="@color/gray"
+                                android:textSize="14dp"/>
 
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toLeftOf="@id/tvInActiveInvestment"
+
+                                android:text="Rs."
+                                android:textColor="@color/black"
+                                android:textSize="14dp" />
+
+                            <TextView
+                                android:id="@+id/tvInActiveInvestment"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:text="00"
+                                android:textColor="@color/black"
+                                android:textSize="15sp"
+                                android:textStyle="bold"/>
 
 
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+
+                            android:orientation="horizontal"
+                            >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/inter"
+                                android:text="Sum"
+                                android:textColor="@color/gray"
+                                android:textSize="15dp"
+                                android:textStyle="bold" />
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toLeftOf="@id/tvExpectedSum"
+                                android:text="Rs."
+                                android:textColor="@color/yellow"
+                                android:textSize="14dp" />
+
+                            <TextView
+                                android:id="@+id/tvExpectedSum"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:text="00"
+                                android:textColor="@color/yellow"
+                                android:textSize="15sp"
+                                android:textStyle="bold"/>
+
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
                 </androidx.cardview.widget.CardView>
+
+
 
 
 

@@ -3,9 +3,11 @@ package com.enfotrix.lifechanger
 import User
 import android.content.Context
 import android.content.SharedPreferences
+import com.enfotrix.adminlifechanger.Models.AgentWithdrawModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.ModelEarning
 import com.enfotrix.adminlifechanger.Models.ModelFA
+import com.enfotrix.adminlifechanger.Models.NotificationModel
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
 import com.enfotrix.lifechanger.Models.ModelProfitTax
@@ -225,7 +227,30 @@ class SharedPrefManager(context: Context) {
             emptyList()
         }
     }
+    fun getNotificationList(): List<NotificationModel>{
 
+        val json = sharedPref.getString("ListNotification", "") ?: ""
+        val type: Type = object : TypeToken<List<NotificationModel?>?>() {}.getType()
+        //return Gson().fromJson(json, type)
+
+        return if (!json.isNullOrEmpty()) {
+            Gson().fromJson(json, type) ?: emptyList()
+        } else {
+            emptyList()
+        }
+    }
+
+    fun getAgentWithdrawList(): List<AgentWithdrawModel>{
+
+        val json = sharedPref.getString("ListAgentWithdraw", "") ?: ""
+        val type: Type = object : TypeToken<List<AgentWithdrawModel?>?>() {}.getType()
+        //return Gson().fromJson(json, type)
+        return if (!json.isNullOrEmpty()) {
+            Gson().fromJson(json, type) ?: emptyList()
+        } else {
+            emptyList()
+        }
+    }
 
     fun saveNominee(nominee: ModelNominee) {
         /*val gson = Gson()
@@ -251,6 +276,15 @@ class SharedPrefManager(context: Context) {
         editor.putString("ListEarning", Gson().toJson(list))
         editor.commit()
     }
+    fun putNotification(list: List<NotificationModel>) {
+        editor.putString("ListNotification", Gson().toJson(list))
+        editor.commit()
+    }
+    fun putAgentWithdrawList(list: List<AgentWithdrawModel>) {
+        editor.putString("ListAgentWithdraw", Gson().toJson(list))
+        editor.commit()
+    }
+
     fun putUserList(list: List<User>) {
         editor.putString("ListUser", Gson().toJson(list))
         editor.commit()

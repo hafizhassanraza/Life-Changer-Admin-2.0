@@ -10,9 +10,11 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import com.enfotrix.adminlifechanger.ActivityAnnouncement
 import com.enfotrix.adminlifechanger.Constants
+import com.enfotrix.adminlifechanger.Models.AgentWithdrawModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.ModelEarning
 import com.enfotrix.adminlifechanger.Models.ModelFA
+import com.enfotrix.adminlifechanger.Models.NotificationModel
 import com.enfotrix.adminlifechanger.databinding.ActivityHomeBinding
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
@@ -54,6 +56,7 @@ class ActivityHome : AppCompatActivity() {
         binding.btnInvestmentReq.setOnClickListener { startActivity(Intent(mContext,ActivityInvestmentRequest::class.java)) }
         binding.btnWithdrawReq.setOnClickListener { startActivity(Intent(mContext,ActivityWithdrawRequest::class.java)) }
         binding.btnNewInvestors.setOnClickListener { startActivity(Intent(mContext,ActivityNewInvestorReq::class.java)) }
+        binding.btnAgentWithdrawReq.setOnClickListener { startActivity(Intent(mContext,ActivityFaWithdrawRequest::class.java)) }
 
 
         binding.layInActiveInv.setOnClickListener { startActivity(Intent(mContext,ActivityInActiveInvestment::class.java)) }
@@ -95,9 +98,12 @@ class ActivityHome : AppCompatActivity() {
             constants.INVESTMENT_COLLECTION,
             constants.TRANSACTION_REQ_COLLECTION,
             constants.FA_COLLECTION,
+            constants.NOTIFICATION_COLLECTION,
             constants.NOMINEE_COLLECTION,
             constants.ANNOUNCEMENT_COLLECTION,
             constants.AGENT_EARNING_COLLECTION,
+            constants.WITHDRAW_COLLECTION // Agent Withdraw
+
         )
         utils.startLoadingAnimation()
         collections.forEach { collection ->
@@ -134,8 +140,14 @@ class ActivityHome : AppCompatActivity() {
                             constants.AGENT_EARNING_COLLECTION -> sharedPrefManager.putAgentEarningList(task.documents.mapNotNull { document ->
                                 document.toObject(ModelEarning::class.java)?.apply { docID = document.id }
                             })
+                            constants.NOTIFICATION_COLLECTION -> sharedPrefManager.putNotification(task.documents.mapNotNull { document ->
+                                document.toObject(NotificationModel::class.java)?.apply { id = document.id }
+                            })
+                            // agent withdraw requests
+                            constants.WITHDRAW_COLLECTION -> sharedPrefManager.putAgentWithdrawList(task.documents.mapNotNull { document ->
+                                document.toObject(AgentWithdrawModel::class.java)
+                            })
                             constants.ANNOUNCEMENT_COLLECTION -> task.documents.mapNotNull { document -> announcement= document.getString("announcement").toString() }
-
                         }
                         // Call endLoading after each snapshot listener completes
                         utils.endLoadingAnimation()
@@ -175,7 +187,7 @@ class ActivityHome : AppCompatActivity() {
         var totalSum= ActiveInvestment+InActiveInvestment+Profit
 
         var AgentCounter = sharedPrefManager.getFAList().count()
-        var AgentWithdrawReqCounter = sharedPrefManager.getAgentEarningList().count()
+        var AgentWithdrawReqCounter = sharedPrefManager.getAgentWithdrawList().filter { it.status.equals(constants.TRANSACTION_STATUS_PENDING) } .count()
         var ActiveInvestorCounter = sharedPrefManager.getUsersList().count{it.status.equals(constants.INVESTOR_STATUS_ACTIVE)}
 
 
@@ -191,10 +203,7 @@ class ActivityHome : AppCompatActivity() {
         binding.tvInActiveCounter.text= InActiveInvestCounter.toString()
         binding.tvInvestorCounter.text= ActiveInvestorCounter.toString()
         binding.tvAgentCounter.text= AgentCounter.toString()
-        binding.tvAgentWithdrawReqCounter.text= AgentCounter.toString()
-
-
-
+        binding.tvAgentWithdrawReqCounter.text= AgentWithdrawReqCounter.toString()
 
 
         //utils.endLoadingAnimation()

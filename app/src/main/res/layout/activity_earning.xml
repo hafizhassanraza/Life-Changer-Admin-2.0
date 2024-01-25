@@ -96,6 +96,8 @@
                             android:fontFamily="@font/montserrate_semi_bold"
                             android:text="Earning Amount"
                             android:textSize="17dp" />
+
+
                         <TextView
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
@@ -103,23 +105,17 @@
                             android:gravity="center_horizontal"
                             android:textColor="@color/gray"
                             android:fontFamily="@font/montserrate_semi_bold"
-                            android:text="Req. Date"
+                            android:text="Date"
+                            android:layout_gravity="center_vertical"
                             android:textSize="17dp" />
+
 
                         <TextView
                             android:layout_width="90dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
+                            android:layout_marginLeft="40dp"
                             android:textColor="@color/gray"
-                            android:gravity="center_horizontal"
-                            android:fontFamily="@font/montserrate_semi_bold"
-                            android:text="Clearance  Date"
-                            android:textSize="17dp" />
-                        <TextView
-                            android:layout_width="90dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
-                            android:textColor="@color/gray"
+                            android:layout_gravity="center_vertical"
                             android:gravity="center_horizontal"
                             android:fontFamily="@font/montserrate_semi_bold"
                             android:text="Remarks"

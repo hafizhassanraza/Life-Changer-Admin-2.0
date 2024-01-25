@@ -76,11 +76,11 @@ class FragmenPendingFaWithdraw : Fragment(), AgentTransactionsAdapter.OnItemClic
 
         binding.rvWithdrawRequests.layoutManager = LinearLayoutManager(mContext)
 
-       getFaWithdraw()
+       //getFaWithdraw()
 
         return root
     }
-    fun getFaWithdraw()
+    /*fun getFaWithdraw()
     {
         lifecycleScope.launch{
             agentWithdrawReqDetails.getPendingWithdrawsAgentReq()
@@ -118,7 +118,7 @@ class FragmenPendingFaWithdraw : Fragment(), AgentTransactionsAdapter.OnItemClic
                 }
 
         }
-    }
+    }*/
     fun getAccount(){
         lifecycleScope.launch{
             userViewModel.getAccounts()

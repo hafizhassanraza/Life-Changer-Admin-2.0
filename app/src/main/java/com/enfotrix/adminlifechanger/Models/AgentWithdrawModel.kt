@@ -13,6 +13,7 @@ data class AgentWithdrawModel @JvmOverloads constructor(
     var lastWithdrawBalance: String = "",
     var status: String = "",
     var id:String=""
+
 )
 {
     override fun toString(): String {
@@ -20,10 +21,10 @@ data class AgentWithdrawModel @JvmOverloads constructor(
         return gson.toJson(this)
     }
     companion object {
-        fun fromString(transactionModelString: String): AgentWithdrawModel? {
+        fun fromString(agentWithdrawModel_String: String): AgentWithdrawModel? {
             val gson = Gson()
             return try {
-                gson.fromJson(transactionModelString, AgentWithdrawModel::class.java)
+                gson.fromJson(agentWithdrawModel_String, AgentWithdrawModel::class.java)
             } catch (e: Exception) {
                 null
             }
