@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.enfotrix.adminlifechanger.API.FCM
 import com.enfotrix.adminlifechanger.Adapters.AdapterNotifications
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.NotificationModel
@@ -107,6 +108,13 @@ class ActivityNotification : AppCompatActivity() {
         lifecycleScope.launch {
             notificationViewModel.setNotification(notificationModel)
                 .addOnSuccessListener { task ->
+
+                    FCM().sendFCMNotification(
+                        user.userdevicetoken,
+                        notificationModel.notiTitle,
+                        notificationModel.notiData
+                    )
+
                     FirebaseFirestore.getInstance().collection(constants.NOTIFICATION_COLLECTION)
                         .addSnapshotListener { snapshot, firebaseFirestoreException ->
                             firebaseFirestoreException?.let {

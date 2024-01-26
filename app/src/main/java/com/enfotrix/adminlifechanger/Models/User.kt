@@ -19,7 +19,10 @@ data class User(
     var pin: String = "",
     var id: String = "",
     var fa_id: String = "",
-    val createdAt: Timestamp = Timestamp.now() // Creation timestamp
+    val createdAt: Timestamp = Timestamp.now(), // Creation timestamp
+    var userdevicetoken: String = "",
+    var admindevicetoken: String = "",
+    var agentdevicetoekn: String = ""
 ) : Parcelable {
 
     // Parcelable implementation

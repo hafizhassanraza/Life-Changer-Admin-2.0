@@ -20,6 +20,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.enfotrix.adminlifechanger.API.FCM
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
@@ -402,6 +403,11 @@ class ActivityInvestorDetails : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 notificationViewModel.setNotification(notificationModel).await()
+                FCM().sendFCMNotification(
+                    user.userdevicetoken,
+                    notificationModel.notiTitle,
+                    notificationModel.notiData
+                )
                 Toast.makeText(mContext, "Notification sent!!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Toast.makeText(mContext, "Failed to send notification", Toast.LENGTH_SHORT).show()
