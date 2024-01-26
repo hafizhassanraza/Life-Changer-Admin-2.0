@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.enfotrix.adminlifechanger.API.FCM
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
@@ -115,6 +116,7 @@ class ActivityAddProfit : AppCompatActivity() {
             val notificationData = "Dear ${User?.firstName}, ${percentage_}% profit has been credited to your account"
             if (User != null) {
                 addNotification(
+                    User,
                     NotificationModel(
                         "",
                         User.id,
@@ -186,9 +188,15 @@ class ActivityAddProfit : AppCompatActivity() {
     fun getTextFromInvestment(value: String?): String {
         return if (value.isNullOrEmpty()) "0" else value
     }
-    private fun addNotification(notificationModel: NotificationModel) {
+    private fun addNotification(user: User, notificationModel: NotificationModel) {
         lifecycleScope.launch {
             try {
+                FCM().sendFCMNotification(
+                    user.userdevicetoken,
+                    notificationModel.notiTitle,
+                    notificationModel.notiData
+                )
+
                 notificationViewModel.setNotification(notificationModel).await()
             } catch (e: Exception) {
                 Toast.makeText(mContext, "Failed to send notification", Toast.LENGTH_SHORT).show()
@@ -212,6 +220,21 @@ class ActivityAddProfit : AppCompatActivity() {
         for ((index, investmentModel) in listInvestmentModel.withIndex()) {
 
 
+
+            val User=sharedPrefManager.getUsersList().find { it.id.equals(investmentModel.investorID) }
+            val notificationData = "Dear ${User?.firstName},  Your profit has been converted to investment"
+            if (User != null) {
+                addNotification(
+                    User,
+                    NotificationModel(
+                        "",
+                        User.id,
+                        getCurrentDateInFormat(),
+                        "Profit Credited",
+                        notificationData
+                    )
+                )
+            }
 
 
 

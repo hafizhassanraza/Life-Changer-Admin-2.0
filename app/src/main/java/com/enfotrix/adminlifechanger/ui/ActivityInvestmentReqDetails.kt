@@ -18,6 +18,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.enfotrix.adminlifechanger.API.FCM
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
@@ -198,7 +199,8 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
 
                         val notificationData =
                             "Dear $name, Your withdraw request of $amount has been approved."
-                         addNotification(
+                        addNotification(
+                             user,
                             NotificationModel(
                                 "",
                                 user!!.id,
@@ -207,9 +209,7 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
                                 notificationData
                             )
                         )
-                        utils.endLoadingAnimation()
-                        startActivity(Intent(mContext,ActivityHome::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
-                        finish()
+
 
                     }
 
@@ -225,12 +225,24 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
         return dateFormat.format(currentDate)
     }
 
-    private fun addNotification(notificationModel: NotificationModel) {
+    private fun addNotification(user: User, notificationModel: NotificationModel) {
         lifecycleScope.launch {
             try {
+
+                FCM().sendFCMNotification(
+                    user.userdevicetoken,
+                    notificationModel.notiTitle,
+                    notificationModel.notiData
+                )
                 notificationViewModel.setNotification(notificationModel).await()
-                Toast.makeText(mContext, "Withdraw Approved", Toast.LENGTH_SHORT).show()
-                Toast.makeText(mContext, "Notification sent!!", Toast.LENGTH_SHORT).show()
+
+                utils.endLoadingAnimation()
+
+
+                Toast.makeText(mContext, "Request Approved", Toast.LENGTH_SHORT).show()
+
+                startActivity(Intent(mContext,ActivityHome::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                finish()
             } catch (e: Exception) {
                 Toast.makeText(mContext, "Failed to send notification", Toast.LENGTH_SHORT).show()
                 e.printStackTrace()
@@ -297,6 +309,7 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
                                 val notificationData =
                                     "Dear $name, Your Investment request of  $amount PKR has been approved."
                                 addNotification(
+                                    user,
                                     NotificationModel(
                                         "",
                                         user!!.id,
@@ -309,10 +322,7 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
 
 
 
-                                utils.endLoadingAnimation()
-                                Toast.makeText(mContext, "Investment Approved", Toast.LENGTH_SHORT).show()
-                                startActivity(Intent(mContext,ActivityHome::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
-                                finish()
+
                             }
 
                     }

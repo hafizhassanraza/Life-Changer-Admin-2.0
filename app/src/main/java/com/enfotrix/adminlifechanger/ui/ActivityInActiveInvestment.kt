@@ -14,6 +14,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.enfotrix.adminlifechanger.API.FCM
 import com.enfotrix.adminlifechanger.Adapters.AdapterInActiveInvestment
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
@@ -149,6 +150,7 @@ class ActivityInActiveInvestment : AppCompatActivity(), AdapterInActiveInvestmen
                                     "Dear ${User?.firstName},Your Inactive Investment of ${inActiveInvestment.toString()} PKR converted to Active Now your Current Active Balance is ${investmentModel.investmentBalance} PKR"
                                 if (User != null) {
                                     addNotification(
+                                        User,
                                         NotificationModel(
                                             "",
                                             User.id,
@@ -172,9 +174,14 @@ class ActivityInActiveInvestment : AppCompatActivity(), AdapterInActiveInvestmen
             }
     }
 
-    private fun addNotification(notificationModel: NotificationModel) {
+    private fun addNotification(user: User , notificationModel: NotificationModel) {
         lifecycleScope.launch {
             try {
+                FCM().sendFCMNotification(
+                    user.userdevicetoken,
+                    notificationModel.notiTitle,
+                    notificationModel.notiData
+                )
                 notificationViewModel.setNotification(notificationModel).await()
                 Toast.makeText(mContext, "Notification sent!!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
