@@ -29,6 +29,7 @@
             android:layout_marginTop="15dp"
             app:cardCornerRadius="6dp">
             <ImageView
+                android:id="@+id/img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_launcher_background"/>

@@ -3,7 +3,6 @@ package com.enfotrix.adminlifechanger.ui
 import User
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -13,6 +12,8 @@ import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
+import com.enfotrix.adminlifechanger.Models.NotificationModel
+import com.enfotrix.adminlifechanger.Models.NotificationViewModel
 import com.enfotrix.adminlifechanger.databinding.ActivityAddProfitBinding
 import com.enfotrix.lifechanger.Models.TransactionModel
 import com.enfotrix.lifechanger.Models.UserViewModel
@@ -23,6 +24,9 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class ActivityAddProfit : AppCompatActivity() {
 
@@ -36,6 +40,7 @@ class ActivityAddProfit : AppCompatActivity() {
     private val faViewModel: FAViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
     var constant= Constants()
+    private val notificationViewModel: NotificationViewModel by viewModels()
 
 
     private lateinit var binding: ActivityAddProfitBinding
@@ -82,7 +87,7 @@ class ActivityAddProfit : AppCompatActivity() {
 
             val percentage = binding.etProfit.text.toString()
 
-            addProfit(percentage.toDouble() / 100)
+            addProfit(percentage.toDouble() / 100,percentage)
         }
         binding.btnConvertProfit.setOnClickListener{
 
@@ -98,12 +103,29 @@ class ActivityAddProfit : AppCompatActivity() {
     }
 
 
-    private fun addProfit(percentage: Double) {
+    private fun addProfit(percentage: Double, percentage_: String) {
+
         utils.startLoadingAnimation()
 
         val totalInvestments = listInvestmentModel.size
 
         for ((index, investmentModel) in listInvestmentModel.withIndex()) {
+            ///for notification
+            val User=sharedPrefManager.getUsersList().find { it.id.equals(investmentModel.investorID) }
+            val notificationData = "Dear ${User?.firstName}, ${percentage_}% profit has been credited to your account"
+            if (User != null) {
+                addNotification(
+                    NotificationModel(
+                        "",
+                        User.id,
+                        getCurrentDateInFormat(),
+                        "Profit Credited",
+                        notificationData
+                    )
+                )
+            }
+
+
             val previousBalance = investmentModel.investmentBalance
             val previousTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
 
@@ -142,6 +164,8 @@ class ActivityAddProfit : AppCompatActivity() {
                     Timestamp.now()
                 )
 
+
+
                 lifecycleScope.launch {
                     val setInvestmentTask = investmentViewModel.setInvestment(investmentModel)
                     val addTransactionTask = db.collection(constants.TRANSACTION_REQ_COLLECTION).add(profitModel)
@@ -150,7 +174,7 @@ class ActivityAddProfit : AppCompatActivity() {
                         .addOnCompleteListener {
 
                             if (index == totalInvestments - 1) {
-                                utils.endLoadingAnimation()
+                           utils.endLoadingAnimation()
                                 Toast.makeText(mContext, "Profit Added Successfully!", Toast.LENGTH_SHORT).show()
                             }
 
@@ -162,6 +186,23 @@ class ActivityAddProfit : AppCompatActivity() {
     fun getTextFromInvestment(value: String?): String {
         return if (value.isNullOrEmpty()) "0" else value
     }
+    private fun addNotification(notificationModel: NotificationModel) {
+        lifecycleScope.launch {
+            try {
+                notificationViewModel.setNotification(notificationModel).await()
+            } catch (e: Exception) {
+                Toast.makeText(mContext, "Failed to send notification", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun getCurrentDateInFormat(): String {
+        val currentDate = Date()
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy")
+        return dateFormat.format(currentDate)
+    }
+
 
     private fun convertProfit() {
         utils.startLoadingAnimation()
@@ -169,6 +210,9 @@ class ActivityAddProfit : AppCompatActivity() {
         val totalInvestments = listInvestmentModel.size
 
         for ((index, investmentModel) in listInvestmentModel.withIndex()) {
+
+
+
 
 
 

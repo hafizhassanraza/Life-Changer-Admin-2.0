@@ -84,6 +84,7 @@ public class Constants  {
     public var INVESTOR_CNIC_EXIST= "User(CNIC) already exist!"
     public var INVESTOR_CNIC_NOT_EXIST= "User(CNIC) not exist!"
     public var INVESTOR_CNIC_BLOCKED= "User(CNIC) Blocked!"
+    public var AGENT_NOTIFICATIONS_TITLE= "Earning"
 
     ///////////////////////////// Activities/Fragment Flow //////////////////////////
 

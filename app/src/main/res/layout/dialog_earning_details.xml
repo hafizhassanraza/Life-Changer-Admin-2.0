@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="400dp"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
@@ -16,7 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/secondary_m"
-
             android:orientation="vertical">
 
             <View
@@ -43,6 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
+                android:visibility="visible"
                 android:text="Earning details are given below"
                 android:textColor="@color/SecondaryVariant" />
 
@@ -57,7 +57,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="5dp"
                     android:padding="5dp"
-                    android:text="Old Balance"
+                    android:text="Old Balance:"
                     android:textColor="@color/black_m"
                     android:textStyle="bold" />
 
@@ -84,7 +84,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="5dp"
                     android:padding="5dp"
-                    android:text="Earning Amount"
+                    android:text="Earning Amount:"
                     android:textColor="@color/black_m"
                     android:textStyle="bold" />
 
@@ -100,6 +100,32 @@
                     android:textStyle="bold" />
 
             </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginLeft="20dp"-->
+<!--                    android:layout_marginTop="5dp"-->
+<!--                    android:padding="5dp"-->
+<!--                    android:text="Clearance Pending:"-->
+<!--                    android:textColor="@color/black_m"-->
+<!--                    android:textStyle="bold" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/clearance"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="5dp"-->
+<!--                    android:padding="5dp"-->
+<!--                    android:layout_marginRight="20dp"-->
+<!--                    android:text="2000"-->
+<!--                    android:textColor="@color/black_m"-->
+<!--                    android:textStyle="bold" />-->
+
+<!--            </LinearLayout>-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -110,33 +136,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="5dp"
                     android:padding="5dp"
-                    android:text="Clearance Pending"
-                    android:textColor="@color/black_m"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/clearance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:padding="5dp"
-                    android:layout_marginRight="20dp"
-                    android:text="2000"
-                    android:textColor="@color/black_m"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:padding="5dp"
-                    android:text="Request Date"
+                    android:text="Request Date:"
                     android:textColor="@color/black_m"
                     android:textStyle="bold" />
 
@@ -162,7 +162,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="5dp"
                     android:padding="5dp"
-                    android:text="Remarks"
+                    android:text="Remarks:"
                     android:textColor="@color/black_m"
                     android:textStyle="bold" />
 

@@ -5,15 +5,15 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.view.View
 import android.view.Window
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -25,10 +25,10 @@ import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
+import com.enfotrix.adminlifechanger.Models.NotificationModel
+import com.enfotrix.adminlifechanger.Models.NotificationViewModel
 import com.enfotrix.adminlifechanger.R
-import com.enfotrix.adminlifechanger.databinding.ActivityInvestmentReqDetailsBinding
 import com.enfotrix.adminlifechanger.databinding.ActivityNewInvestorReqDetailsBinding
-import com.enfotrix.adminlifechanger.databinding.ActivityNewInvestorsReqBinding
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
 import com.enfotrix.lifechanger.Models.TransactionModel
@@ -41,16 +41,23 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickListener {
 
     private val investmentViewModel: InvestmentViewModel by viewModels()
     private val faViewModel:FAViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
+    private val notificationViewModel: NotificationViewModel by viewModels()
+
+
 
 
 
     private var faSelector:Boolean=false
+    private var faID: String? =null
     private lateinit var investmentModel:InvestmentModel
 
 
@@ -134,15 +141,47 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
 
 
         user.status=constant.INVESTOR_STATUS_ACTIVE
-
         utils.startLoadingAnimation()
         lifecycleScope.launch {
             userViewModel.setUser(user)
                 .addOnCompleteListener{task ->
                     utils.endLoadingAnimation()
                     if (task.isSuccessful) {
+                        val faName=sharedPrefManager.getFAList().find { it.id.equals(faID) }?.firstName
+                        val fa = SpannableString(faName)
+                        fa.setSpan(StyleSpan(Typeface.BOLD), 0, fa.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
 
-                        Toast.makeText(mContext, "Investor Approved", Toast.LENGTH_SHORT).show()
+                        val notificationData = "Dear $fa, You have been assigned as the financial advisor for a new investor Mr.${user.firstName}"
+                        faID?.let {
+                            NotificationModel(
+                                "",
+                                it,
+                                getCurrentDateInFormat(),
+                                "Client Assigned",
+                                notificationData
+                            )
+                        }?.let { addNotification(it) }
+
+                        val notificationData_ = "Dear ${user.firstName}, your account request has been approved."
+                        addNotification(NotificationModel(
+                                "",
+                                user.id,
+                                getCurrentDateInFormat(),
+                                "Account Verification",
+                            notificationData_
+                            ))
+                                        val notification_data = "Dear ${user.firstName},${fa} has been assigned as your financial advisor."
+                                    addNotification( NotificationModel(
+                                            "",
+                                            user.id,
+                                            getCurrentDateInFormat(),
+                                            "Financial Advisor Assigned",
+                                               notification_data
+                                        ))
+
+                       Toast.makeText(mContext, "Investor Approved", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(mContext, "Notification Sent", Toast.LENGTH_SHORT).show()
+
                         startActivity(Intent(mContext,ActivityHome::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
                         finish()
 
@@ -162,6 +201,24 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
 
         }
 
+    }
+
+    private fun addNotification(notificationModel: NotificationModel) {
+        lifecycleScope.launch {
+            try {
+                notificationViewModel.setNotification(notificationModel).await()
+            } catch (e: Exception) {
+                Toast.makeText(mContext, "Failed to send notification", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+    fun getCurrentDateInFormat(): String {
+        val currentDate = Date()
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy")
+        return dateFormat.format(currentDate)
     }
 
 
@@ -193,6 +250,7 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(),AdapterFA.OnItemClickL
         binding.layAssigned.setVisibility(View.VISIBLE)
         binding.layUnAssigned.setVisibility(View.GONE)
         user.fa_id=modelFA.id
+        faID=modelFA.id
         faSelector=true
         dialog.dismiss()
 

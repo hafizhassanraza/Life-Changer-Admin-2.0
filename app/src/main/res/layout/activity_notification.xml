@@ -37,6 +37,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:src="@drawable/icon_add_nominee"
+            android:elevation="8dp"
             android:backgroundTint="@color/primary"/>
     </FrameLayout>
 

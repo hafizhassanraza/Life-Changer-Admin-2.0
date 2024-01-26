@@ -4,11 +4,16 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.AgentTransactionModel
 import com.enfotrix.adminlifechanger.Models.AgentWithdrawModel
@@ -17,6 +22,8 @@ import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
+import com.enfotrix.adminlifechanger.Models.NotificationModel
+import com.enfotrix.adminlifechanger.Models.NotificationViewModel
 import com.enfotrix.adminlifechanger.databinding.ActivityAgentWithdrawReqDetailsBinding
 import com.enfotrix.adminlifechanger.databinding.ActivityInvestmentReqDetailsBinding
 import com.enfotrix.lifechanger.Models.TransactionModel
@@ -30,13 +37,13 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class ActivityAgentWithdrawReqDetails : AppCompatActivity() {
 
 
-
-
+    private val notificationViewModel: NotificationViewModel by viewModels()
     private val db = Firebase.firestore
     private val investmentViewModel: InvestmentViewModel by viewModels()
     private val faViewModel: FAViewModel by viewModels()
@@ -66,6 +73,7 @@ class ActivityAgentWithdrawReqDetails : AppCompatActivity() {
     private lateinit var model2: AgentTransactionModel
     private var agentWithdrawModel: AgentWithdrawModel? = null
     private lateinit var modelFA: ModelFA
+    private lateinit var notificationModel: NotificationModel
     private lateinit var agentwithdrawModel: AgentWithdrawModel
 
 
@@ -81,6 +89,7 @@ class ActivityAgentWithdrawReqDetails : AppCompatActivity() {
         sharedPrefManager = SharedPrefManager(mContext)
         agentTransactionModel = AgentTransactionModel()
         model2 = AgentTransactionModel()
+
 
 
 
@@ -158,14 +167,34 @@ class ActivityAgentWithdrawReqDetails : AppCompatActivity() {
             agentwithdrawModel.withdrawApprovedDate= Timestamp.now()
             agentwithdrawModel.lastWithdrawBalance = modelFA.profit // set all previous balance
             modelFA.profit=(agentEarning-transactionAmount).toString()
+            utils.startLoadingAnimation()
             db.collection(constants.WITHDRAW_COLLECTION).document(agentwithdrawModel.id).set(agentwithdrawModel)
                 .addOnSuccessListener {
                     db.collection(constants.FA_COLLECTION).document(modelFA.id).set(modelFA)
                         .addOnSuccessListener {
+
+
+                            val name = SpannableString(modelFA?.firstName)
+                            name.setSpan(StyleSpan(Typeface.BOLD), 0, name.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+
+                            val withdrawAmount = SpannableString(agentwithdrawModel?.withdrawBalance)
+                            withdrawAmount.setSpan(StyleSpan(Typeface.BOLD), 0, withdrawAmount.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+
+                            val notificationData = "Dear $name, your request of  $withdrawAmount PKR has been approved"
+                            lifecycleScope.launch {
+                                notificationViewModel.setNotification(NotificationModel("",  modelFA.id, getCurrentDateInFormat(), "Withdrawal Approved ", notificationData)).await()
+                                Toast.makeText(mContext, "Notification sent!!", Toast.LENGTH_SHORT).show()
+                                startActivity(Intent(mContext,ActivityHome::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                                finish()
+                            }
+
+
+
+
+
                             utils.endLoadingAnimation()
                             Toast.makeText(mContext, "Withdraw Approved", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(mContext,ActivityHome::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
-                            finish()
+
                         }
                 }
 
@@ -242,7 +271,39 @@ class ActivityAgentWithdrawReqDetails : AppCompatActivity() {
         binding.tvInvestorCnic.text = "${modelFA?.cnic}"
         binding.investmentDate.text = SimpleDateFormat("hh:mm a dd/MM/yy", Locale.getDefault()).format(agentwithdrawModel?.lastWithdrawReqDate!!.toDate()).toString()
         binding.tvInvestment.text = "${agentwithdrawModel?.withdrawBalance}"
+        Glide.with(this)
+            .load(modelFA.photo)
+            .into(binding.img);
+
+        val account = sharedPrefManager.getAccountList().find { it.docID == agentwithdrawModel.reciverAccountID }
+        if (account != null && agentwithdrawModel.reciverAccountID?.isNotEmpty() == true) {
+
+            binding.tvAccountTittle.text=account.account_tittle
+            binding.tvBankName.text=account.bank_name
+            binding.tvAccountNumber.text=account.account_number
+        } else {
+            Toast.makeText(mContext, "No account found", Toast.LENGTH_SHORT).show()
+        }
 
     }
+    fun getCurrentDateInFormat(): String {
+        val currentDate = Date()
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy")
+        return dateFormat.format(currentDate)
+    }
+//    private fun addNotification(notificationModel: NotificationModel) {
+//        Toast.makeText(mContext, "debug1", Toast.LENGTH_SHORT).show()
+//        utils.startLoadingAnimation()
+//        lifecycleScope.launch {
+//            try {
+//                utils.endLoadingAnimation()
+//
+//            } catch (e: Exception) {
+//                utils.endLoadingAnimation()
+//                Toast.makeText(mContext, "Failed to send notification", Toast.LENGTH_SHORT).show()
+//                e.printStackTrace()
+//            }
+//        }
+//    }
 
 }

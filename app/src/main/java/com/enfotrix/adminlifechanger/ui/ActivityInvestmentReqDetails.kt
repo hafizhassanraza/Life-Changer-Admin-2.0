@@ -5,10 +5,14 @@ import android.app.Dialog
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +23,8 @@ import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
+import com.enfotrix.adminlifechanger.Models.NotificationModel
+import com.enfotrix.adminlifechanger.Models.NotificationViewModel
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityInvestmentReqDetailsBinding
 import com.enfotrix.adminlifechanger.databinding.ActivityInvestmentRequestBinding
@@ -31,7 +37,9 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class ActivityInvestmentReqDetails : AppCompatActivity() {
@@ -42,6 +50,8 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
     private val faViewModel: FAViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
     var constant= Constants()
+    private val notificationViewModel: NotificationViewModel by viewModels()
+
 
     private lateinit var binding: ActivityInvestmentReqDetailsBinding
     private lateinit var utils: Utils
@@ -169,8 +179,35 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
                 db.collection(constants.TRANSACTION_REQ_COLLECTION).document(transactionModel.id).set(transactionModel)
                     .addOnSuccessListener {
 
+                        //for notifications
+                        val amount = SpannableString(transactionAmount.toString())
+                        amount.setSpan(
+                            StyleSpan(Typeface.BOLD),
+                            0,
+                            amount.length,
+                            Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                        )
+                        //for notifications
+                        val name = SpannableString(user?.firstName)
+                        name.setSpan(
+                            StyleSpan(Typeface.BOLD),
+                            0,
+                            name.length,
+                            Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                        )
+
+                        val notificationData =
+                            "Dear $name, Your withdraw request of $amount has been approved."
+                         addNotification(
+                            NotificationModel(
+                                "",
+                                user!!.id,
+                                getCurrentDateInFormat(),
+                                "Withdrawal Approved",
+                                notificationData
+                            )
+                        )
                         utils.endLoadingAnimation()
-                        Toast.makeText(mContext, "Withdraw Approved", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(mContext,ActivityHome::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
                         finish()
 
@@ -180,6 +217,25 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
 
 
 
+    }
+
+    fun getCurrentDateInFormat(): String {
+        val currentDate = Date()
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy")
+        return dateFormat.format(currentDate)
+    }
+
+    private fun addNotification(notificationModel: NotificationModel) {
+        lifecycleScope.launch {
+            try {
+                notificationViewModel.setNotification(notificationModel).await()
+                Toast.makeText(mContext, "Withdraw Approved", Toast.LENGTH_SHORT).show()
+                Toast.makeText(mContext, "Notification sent!!", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(mContext, "Failed to send notification", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+            }
+        }
     }
 
     fun getTextFromInvestment(value: String?): String {
@@ -220,6 +276,39 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
 
                     db.collection(constants.TRANSACTION_REQ_COLLECTION).document(transactionModel.id).set(transactionModel).addOnCompleteListener {
                             if(it.isSuccessful){
+
+                                //for notifications
+                                val amount = SpannableString(transactionAmount.toString())
+                                amount.setSpan(
+                                    StyleSpan(Typeface.BOLD),
+                                    0,
+                                    amount.length,
+                                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                                )
+                                //for notifications
+                                val name = SpannableString(user?.firstName)
+                                name.setSpan(
+                                    StyleSpan(Typeface.BOLD),
+                                    0,
+                                    name.length,
+                                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                                )
+
+                                val notificationData =
+                                    "Dear $name, Your Investment request of  $amount PKR has been approved."
+                                addNotification(
+                                    NotificationModel(
+                                        "",
+                                        user!!.id,
+                                        getCurrentDateInFormat(),
+                                        "Investment Approved",
+                                        notificationData
+                                    )
+                                )
+
+
+
+
                                 utils.endLoadingAnimation()
                                 Toast.makeText(mContext, "Investment Approved", Toast.LENGTH_SHORT).show()
                                 startActivity(Intent(mContext,ActivityHome::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
@@ -231,13 +320,7 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
 
             }
 
-
-
-
-
     }
-
-
 
     fun setData(){
 
@@ -263,11 +346,12 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
         var receiverBankAccount = sharedPrefManager.getAccountList().find { it.docID.equals(transactionModel?.receiverAccountID) }
 
 
-        binding.tvInvestorName.text="${user?.firstName} ${user?.lastName}"
+        binding.tvInvestorName.text="${user?.firstName} "
         binding.tvInvestorCnic.text="${user?.cnic}"
         binding.investmentDate.text="${SimpleDateFormat( "hh:mm a dd/MM/yy", Locale.getDefault()).format(transactionModel?.createdAt!!.toDate()).toString()}"
         binding.tvInvestment.text="${transactionModel?.amount}"
 
+        Toast.makeText(mContext, ""+senderBankAccount?.bank_name, Toast.LENGTH_SHORT).show()
         binding.tvInvestorBankName.text="${senderBankAccount?.bank_name}"
         binding.tvInvestorAccountNumber.text="${senderBankAccount?.account_number}"
         binding.tvInvestorAccountTittle.text="${senderBankAccount?.account_tittle}"
@@ -289,6 +373,9 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
         if(modelFA!=null){
             binding.tvFAName.text="${modelFA?.firstName} ${modelFA?.lastName}"
             binding.tvDesignation.text="${modelFA?.designantion}"
+            Glide.with(mContext)
+                .load(modelFA.photo)
+                .into(binding.imgFA)
         }
         Thread.sleep(400)
         utils.endLoadingAnimation()

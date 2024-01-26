@@ -12,7 +12,8 @@ data class AgentWithdrawModel @JvmOverloads constructor(
     var lastWithdrawReqDate: Timestamp = Timestamp.now(),
     var lastWithdrawBalance: String = "",
     var status: String = "",
-    var id:String=""
+    var id:String="",
+    var reciverAccountID:String="",
 
 )
 {

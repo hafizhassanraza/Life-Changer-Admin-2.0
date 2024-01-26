@@ -5,9 +5,13 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
@@ -24,6 +28,8 @@ import com.enfotrix.adminlifechanger.Models.AgentTransactionModel
 import com.enfotrix.adminlifechanger.Models.AgentTransactionviewModel
 import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
+import com.enfotrix.adminlifechanger.Models.NotificationModel
+import com.enfotrix.adminlifechanger.Models.NotificationViewModel
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityAssignedInvestorsBinding
 import com.enfotrix.adminlifechanger.databinding.ActivityFadetailsBinding
@@ -33,6 +39,9 @@ import com.enfotrix.lifechanger.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemClickListener,
@@ -43,6 +52,8 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
     private var originalFAList: List<User> = emptyList()
     private var originallist: List<User> = emptyList()
     private lateinit var user: User
+    private val notificationViewModel: NotificationViewModel by viewModels()
+
 
     private val userlist = ArrayList<User>()
     private val faViewModel: FAViewModel by viewModels()
@@ -71,15 +82,6 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
         constants = Constants()
         sharedPrefManager = SharedPrefManager(mContext)
         binding.rvClients.layoutManager = LinearLayoutManager(mContext)
-
-
-
-
-
-
-
-
-
 
         supportActionBar?.title = "Assigned Investors"
         modelFA = ModelFA.fromString(intent.getStringExtra("Fa").toString())!!
@@ -172,9 +174,6 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
 
         } else {
             for (user in originalFAList) {
-
-                // Toast.makeText(this@ActivityAssignedInvestors, user.cnic +"", Toast.LENGTH_SHORT).show()
-                // checking if the entered string matched with any item of our recycler view.
                 if (user.firstName.toLowerCase(Locale.getDefault())
                         .contains(text.toLowerCase(Locale.getDefault()))
                 ) {
@@ -216,21 +215,48 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
         lifecycleScope.launch {
             userViewModel.setUser(user)
                 .addOnCompleteListener { task ->
-
-
                     lifecycleScope.launch {
                         userViewModel.getUsers()
                             .addOnCompleteListener { task ->
                                 utils.endLoadingAnimation()
                                 if (task.isSuccessful) {
+
                                     val list = ArrayList<User>()
                                     if (task.result.size() > 0) {
                                         for (document in task.result) list.add(
                                             document.toObject(
                                                 User::class.java
                                             ).apply { id = document.id })
+
+
+                                        val Name = SpannableString(user?.firstName)
+                                        Name.setSpan(StyleSpan(Typeface.BOLD), 0, Name.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+
+                                        val notification_data = "Dear $Name, You have been assigned a new Financial Advisor ${modelFA.firstName}"
+                                        addNotification(NotificationModel("",  user.id, getCurrentDateInFormat(), "Financial Advisor Assigned", notification_data))
                                         sharedPrefManager.putUserList(list)
                                         dialog.dismiss()
+                                        val name = SpannableString(user?.firstName)
+                                        name.setSpan(
+                                            StyleSpan(Typeface.BOLD),
+                                            0,
+                                            name.length,
+                                            Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                                        )
+
+
+                                   //     val FA=sharedPrefManager.getFAList().find { it.id.equals(user.fa_id) }
+                                        val notificationData =
+                                            "Dear $name, Your financial advisor, ${modelFA.firstName}, has been removed. We will assign you a new financial advisor soon."
+                                        addNotification(
+                                            NotificationModel(
+                                                "",
+                                                user!!.id,
+                                                getCurrentDateInFormat(),
+                                                "Financial Advisor Unassigned",
+                                                notificationData
+                                            )
+                                        )
 
                                         Toast.makeText(mContext, "Assigned", Toast.LENGTH_SHORT)
                                             .show()
@@ -266,8 +292,24 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
 
 
     }
+    private fun addNotification(notificationModel: NotificationModel) {
+        lifecycleScope.launch {
+            try {
+                notificationViewModel.setNotification(notificationModel).await()
+                Toast.makeText(mContext, "Notification sent!!", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(mContext, "Failed to send notification", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+            }
+        }
+    }
 
 
+    fun getCurrentDateInFormat(): String {
+        val currentDate = Date()
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy")
+        return dateFormat.format(currentDate)
+    }
     private fun filter(text: String) {
         val filteredList = ArrayList<User>()
         if (text.isEmpty() || text.isBlank()) {
@@ -313,6 +355,27 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
                                 for (document in task.result) list.add(
                                     document.toObject(User::class.java).apply { id = document.id })
                                 sharedPrefManager.putUserList(list)
+
+                                val name = SpannableString(user?.firstName)
+                                name.setSpan(
+                                    StyleSpan(Typeface.BOLD),
+                                    0,
+                                    name.length,
+                                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                                )
+                              val FA=sharedPrefManager.getFAList().find { it.id.equals(user.fa_id) }
+                                val notificationData =
+                                    "Dear $name, Your financial advisor, ${FA?.firstName}, has been removed. We will assign you a new financial advisor soon."
+                                addNotification(
+                                    NotificationModel(
+                                        "",
+                                        user!!.id,
+                                        getCurrentDateInFormat(),
+                                        "Financial Advisor Unassigned",
+                                        notificationData
+                                    )
+                                )
+
                                 Toast.makeText(
                                     mContext,
                                     "Removed from assigned",

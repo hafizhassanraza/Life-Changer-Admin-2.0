@@ -43,7 +43,7 @@ class ActivityFA : AppCompatActivity(), AdapterFA.OnItemClickListener {
 
     private val userlist = ArrayList<User>()
 
-    private var listFA= ArrayList<ModelFA>()
+    private var listFA = ArrayList<ModelFA>()
 
     private var listInvestment = ArrayList<InvestmentModel>()
 
@@ -86,6 +86,7 @@ class ActivityFA : AppCompatActivity(), AdapterFA.OnItemClickListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 return false
             }
+
             override fun onQueryTextChange(newText: String): Boolean {
                 filter(newText)
                 return false
@@ -128,7 +129,7 @@ class ActivityFA : AppCompatActivity(), AdapterFA.OnItemClickListener {
     }
 
 
-    fun getFa(){
+    fun getFa() {
 
 
         utils.startLoadingAnimation()
@@ -137,31 +138,33 @@ class ActivityFA : AppCompatActivity(), AdapterFA.OnItemClickListener {
         lifecycleScope.launch {
 
 
-
-
-
             userViewModel.getUsers()
-                .addOnCompleteListener{task ->
+                .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        if(task.result.size()>0){
+                        if (task.result.size() > 0) {
                             for (document in task.result) {
 
-                                val user =document.toObject(User::class.java)
-                                user.id=document.id
-                                userlist.add( user)
+                                val user = document.toObject(User::class.java)
+                                user.id = document.id
+                                userlist.add(user)
 
                             }
 
                             db.collection(constants.INVESTMENT_COLLECTION)
                                 .addSnapshotListener { snapshot, firebaseFirestoreException ->
                                     firebaseFirestoreException?.let {
-                                        Toast.makeText(mContext, it.message.toString(), Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            mContext,
+                                            it.message.toString(),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                         return@addSnapshotListener
                                     }
                                     snapshot?.let { documents ->
 
 
-                                        listInvestment = documents.map { it.toObject(InvestmentModel::class.java) } as ArrayList<InvestmentModel>
+                                        listInvestment =
+                                            documents.map { it.toObject(InvestmentModel::class.java) } as ArrayList<InvestmentModel>
                                         sharedPrefManager.putActiveInvestment(listInvestment)
 
 
@@ -175,73 +178,91 @@ class ActivityFA : AppCompatActivity(), AdapterFA.OnItemClickListener {
                                                         if (task.result.size() > 0) {
 
 
-
-                                                            for (document in task.result){
+                                                            for (document in task.result) {
 
                                                                 //listFA.add(document.toObject(ModelFA::class.java).apply { id = document.id })
 
-                                                                var modelFA=document.toObject(ModelFA::class.java).apply { id = document.id }
+                                                                var modelFA =
+                                                                    document.toObject(ModelFA::class.java)
+                                                                        .apply { id = document.id }
 
 
-                                                                var InActiveInvestment_Counter= 0
-                                                                var ActiveInvestment_Counter= 0
-                                                                var Profit_Counter= 0
-var totalinvestors=0
-                                                                for(investor in userlist){
-                                                                    if(investor.fa_id.equals(modelFA.id)){
-totalinvestors++
+                                                                var InActiveInvestment_Counter = 0
+                                                                var ActiveInvestment_Counter = 0
+                                                                var Profit_Counter = 0
+                                                                var totalinvestors = 0
+                                                                for (investor in userlist) {
+                                                                    if (investor.fa_id.equals(
+                                                                            modelFA.id
+                                                                        )
+                                                                    ) {
+                                                                        totalinvestors++
 
 
-                                                                        var investment= listInvestment.find { it.investorID.equals(investor.id) }
-                                                                        var InActiveInvestment= 0
-                                                                        var ActiveInvestment= 0
-                                                                        var Profit= 0
+                                                                        var investment =
+                                                                            listInvestment.find {
+                                                                                it.investorID.equals(
+                                                                                    investor.id
+                                                                                )
+                                                                            }
+                                                                        var InActiveInvestment = 0
+                                                                        var ActiveInvestment = 0
+                                                                        var Profit = 0
                                                                         if (investment != null) {
-                                                                            if(!investment.investmentBalance.isNullOrEmpty()) ActiveInvestment= investment.investmentBalance.toInt()
-                                                                            if(!investment.lastInvestment.isNullOrEmpty()) InActiveInvestment= investment.lastInvestment.toInt()
-                                                                            if(!investment.lastProfit.isNullOrEmpty()) Profit= investment.lastProfit.toInt()
+                                                                            if (!investment.investmentBalance.isNullOrEmpty()) ActiveInvestment =
+                                                                                investment.investmentBalance.toInt()
+                                                                            if (!investment.lastInvestment.isNullOrEmpty()) InActiveInvestment =
+                                                                                investment.lastInvestment.toInt()
+                                                                            if (!investment.lastProfit.isNullOrEmpty()) Profit =
+                                                                                investment.lastProfit.toInt()
                                                                         }
 
-                                                                        ActiveInvestment_Counter=ActiveInvestment_Counter+ActiveInvestment
-                                                                        InActiveInvestment_Counter=InActiveInvestment_Counter+InActiveInvestment
-                                                                        Profit_Counter=Profit_Counter+Profit
+                                                                        ActiveInvestment_Counter =
+                                                                            ActiveInvestment_Counter + ActiveInvestment
+                                                                        InActiveInvestment_Counter =
+                                                                            InActiveInvestment_Counter + InActiveInvestment
+                                                                        Profit_Counter =
+                                                                            Profit_Counter + Profit
                                                                     }
 
                                                                 }
 
-                                                                modelFA.phone=InActiveInvestment_Counter.toString()
-                                                                modelFA.cnic=ActiveInvestment_Counter.toString()
-                                                                modelFA.address=Profit_Counter.toString()
-                                                                modelFA.cnic_back=totalinvestors.toString()
+                                                                modelFA.phone =
+                                                                    InActiveInvestment_Counter.toString()
+                                                                modelFA.cnic =
+                                                                    ActiveInvestment_Counter.toString()
+                                                                modelFA.address =
+                                                                    Profit_Counter.toString()
+                                                                modelFA.cnic_back =
+                                                                    totalinvestors.toString()
 
                                                                 listFA.add(modelFA)
-
 
 
                                                             }
 
 
-                                                            binding.rvFA.adapter = AdapterFA(listFA ,this@ActivityFA)
-
-
+                                                            binding.rvFA.adapter =
+                                                                AdapterFA(listFA, this@ActivityFA)
 
 
                                                         }
-                                                    } else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                                                    } else Toast.makeText(
+                                                        mContext,
+                                                        constants.SOMETHING_WENT_WRONG_MESSAGE,
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
 
                                                 }
                                                 .addOnFailureListener {
                                                     utils.endLoadingAnimation()
-                                                    Toast.makeText(mContext, it.message + "", Toast.LENGTH_SHORT).show()
+                                                    Toast.makeText(
+                                                        mContext,
+                                                        it.message + "",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
                                                 }
                                         }
-
-
-
-
-
-
-
 
 
                                         /* binding.svAgents.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -259,27 +280,23 @@ totalinvestors++
                                 }
 
 
-
-
                             //Toast.makeText(mContext, "d1 : "+ task.result.size(), Toast.LENGTH_SHORT).show()
 
                         }
-                    }
-                    else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+                    } else Toast.makeText(
+                        mContext,
+                        constants.SOMETHING_WENT_WRONG_MESSAGE,
+                        Toast.LENGTH_SHORT
+                    ).show()
 
                 }
-                .addOnFailureListener{
-                    Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
+                .addOnFailureListener {
+                    Toast.makeText(mContext, it.message + "", Toast.LENGTH_SHORT).show()
 
                 }
-
 
 
         }
-
-
-
-
 
 
     }
@@ -314,8 +331,6 @@ totalinvestors++
         }
 
 
-
-
     }
 
 
@@ -324,7 +339,7 @@ totalinvestors++
 
         if (text.isEmpty() || text.isBlank()) {
             // If the search query is empty or blank, show the entire original data
-            binding.rvFA.adapter = AdapterFA(listFA,this@ActivityFA)
+            binding.rvFA.adapter = AdapterFA(listFA, this@ActivityFA)
         } else {
             // Filter the original data based on the search query
             for (modelFA in listFA) {
@@ -340,7 +355,7 @@ totalinvestors++
                 Toast.makeText(mContext, "No Data Found..", Toast.LENGTH_SHORT).show()
             } else {
                 // Update the RecyclerView with the filtered list
-                binding.rvFA.adapter =AdapterFA(filteredList, this@ActivityFA)
+                binding.rvFA.adapter = AdapterFA(filteredList, this@ActivityFA)
             }
         }
     }
@@ -381,7 +396,12 @@ totalinvestors++
     override fun onItemClick(modelFA: ModelFA) {
 
 
-        startActivity(Intent(mContext, ActivityFADetails::class.java).putExtra("FA", modelFA.toString()))
+        startActivity(
+            Intent(mContext, ActivityFADetails::class.java).putExtra(
+                "FA",
+                modelFA.toString()
+            )
+        )
 
     }
 

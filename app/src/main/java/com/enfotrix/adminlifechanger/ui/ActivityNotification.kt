@@ -3,6 +3,8 @@ package com.enfotrix.adminlifechanger.ui
 import User
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
@@ -64,14 +66,20 @@ class ActivityNotification : AppCompatActivity() {
 
     private fun setData() {
 
-        binding.rvNoti.adapter = AdapterNotifications(sharedPrefManager.getNotificationList().sortedBy { it.createdAt }.filter { it.userID.equals(user.id) })
+        val sortedNotifications = sharedPrefManager.getNotificationList()
+            .filter { it.userID.equals(user.id) }
+            .sortedByDescending { it.createdAt }
+
+        binding.rvNoti.adapter = AdapterNotifications(sortedNotifications)
 
     }
 
     private fun openAddNotificationDialog() {
         val dialogBinding = DialogAddNotificationBinding.inflate(LayoutInflater.from(mContext))
         val addNotificationDialog = Dialog(mContext)
+        addNotificationDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         addNotificationDialog.setContentView(dialogBinding.root)
+
 
         val etTitle = dialogBinding.etBalance
         val etNotificationData = dialogBinding.notiData
@@ -95,7 +103,6 @@ class ActivityNotification : AppCompatActivity() {
         addNotificationDialog.show()
     }
     fun AddNotification(notificationModel: NotificationModel){
-
         utils.startLoadingAnimation()
         lifecycleScope.launch {
             notificationViewModel.setNotification(notificationModel)

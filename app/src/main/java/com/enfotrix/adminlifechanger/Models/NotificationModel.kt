@@ -14,6 +14,3 @@ data class NotificationModel @JvmOverloads constructor (
 
 
 )
-
-{
-}

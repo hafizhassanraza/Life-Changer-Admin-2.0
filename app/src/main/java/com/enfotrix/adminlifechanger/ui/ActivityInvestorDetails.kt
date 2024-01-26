@@ -5,8 +5,12 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
@@ -21,6 +25,8 @@ import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
+import com.enfotrix.adminlifechanger.Models.NotificationModel
+import com.enfotrix.adminlifechanger.Models.NotificationViewModel
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityInvestorDetailsBinding
 import com.enfotrix.lifechanger.Models.TransactionModel
@@ -32,6 +38,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class ActivityInvestorDetails : AppCompatActivity() {
 
@@ -39,6 +48,7 @@ class ActivityInvestorDetails : AppCompatActivity() {
     private val faViewModel: FAViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
 
+    private val notificationViewModel: NotificationViewModel by viewModels()
 
     private lateinit var investmentModel: InvestmentModel
 
@@ -366,6 +376,14 @@ class ActivityInvestorDetails : AppCompatActivity() {
 
                     db.collection(constants.TRANSACTION_REQ_COLLECTION).add(transactionModel)
                         .addOnCompleteListener {
+
+
+                            val name = SpannableString(user.firstName)
+                            name.setSpan(StyleSpan(Typeface.BOLD), 0, name.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+
+                            val notificationData = "Dear $name, an investment of $amount PKR has been credited to your account"
+                            addNotification(NotificationModel("",  user.id, getCurrentDateInFormat(), "Investment Credited", notificationData))
+
                             utils.endLoadingAnimation()
                             Toast.makeText(mContext, "Investment Added", Toast.LENGTH_SHORT).show()
                             getInvestment()
@@ -380,7 +398,22 @@ class ActivityInvestorDetails : AppCompatActivity() {
 
 
     }
-
+    private fun addNotification(notificationModel: NotificationModel) {
+        lifecycleScope.launch {
+            try {
+                notificationViewModel.setNotification(notificationModel).await()
+                Toast.makeText(mContext, "Notification sent!!", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(mContext, "Failed to send notification", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+            }
+        }
+    }
+    fun getCurrentDateInFormat(): String {
+        val currentDate = Date()
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy")
+        return dateFormat.format(currentDate)
+    }
 
     private fun withdrawInvestment(amount: Int, receiverAccountID: String, previousBalance: String, senderAccountID: String) {
 
@@ -483,6 +516,14 @@ class ActivityInvestorDetails : AppCompatActivity() {
 
                     db.collection(constants.TRANSACTION_REQ_COLLECTION).add(transactionModel)
                         .addOnCompleteListener {
+
+
+                            val name = SpannableString(user.firstName)
+                            name.setSpan(StyleSpan(Typeface.BOLD), 0, name.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+
+                            val notificationData = "Dear $name, a withdrawal of $amount PKR has been debited from your account"
+                            addNotification(NotificationModel("",  user.id, getCurrentDateInFormat(), "Withdrawal Approved", notificationData))
+
                             utils.endLoadingAnimation()
                             Toast.makeText(mContext, "Withdraw Successfully", Toast.LENGTH_SHORT).show()
                             getInvestment()
@@ -536,6 +577,11 @@ class ActivityInvestorDetails : AppCompatActivity() {
 
                     db.collection(constants.TRANSACTION_REQ_COLLECTION).add(transactionModel)
                         .addOnCompleteListener {
+                            val name = SpannableString(user.firstName)
+                            name.setSpan(StyleSpan(Typeface.BOLD), 0, name.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+
+                            val notificationData = "Dear $name, a tax deduction of $amount PKR has been processed on your account. Please review your statement."
+                            addNotification(NotificationModel("",  user.id, getCurrentDateInFormat(), "Tax Deducted", notificationData))
                             utils.endLoadingAnimation()
                             Toast.makeText(mContext, "Tax Deduction Successfully", Toast.LENGTH_SHORT).show()
                             getInvestment()
@@ -596,6 +642,15 @@ class ActivityInvestorDetails : AppCompatActivity() {
 
                     db.collection(constants.TRANSACTION_REQ_COLLECTION).add(transactionModel)
                         .addOnCompleteListener {
+
+                            val name = SpannableString(user.firstName)
+                            name.setSpan(StyleSpan(Typeface.BOLD), 0, name.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+
+                            val notificationData = "Dear $name, you have earned a profit of $amount PKR. Congratulations!"
+
+                            addNotification(NotificationModel("",  user.id, getCurrentDateInFormat(), "Profit Earned", notificationData))
+
+
                             utils.endLoadingAnimation()
                             Toast.makeText(mContext, "Profit Added", Toast.LENGTH_SHORT).show()
                             getInvestment()
