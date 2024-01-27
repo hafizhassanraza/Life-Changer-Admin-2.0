@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.viewModels
@@ -78,6 +79,7 @@ class ActivityNotification : AppCompatActivity() {
     private fun openAddNotificationDialog() {
         val dialogBinding = DialogAddNotificationBinding.inflate(LayoutInflater.from(mContext))
         val addNotificationDialog = Dialog(mContext)
+        addNotificationDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         addNotificationDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         addNotificationDialog.setContentView(dialogBinding.root)
 

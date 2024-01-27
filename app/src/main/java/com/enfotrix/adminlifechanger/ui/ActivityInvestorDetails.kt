@@ -142,7 +142,7 @@ class ActivityInvestorDetails : AppCompatActivity() {
                         if (FA != null) {
                             binding.tvFAName.text = FA.firstName
                             binding.tvFADesignation.text = FA.designantion
-                            Glide.with(mContext).load(FA.photo).centerCrop().placeholder(R.drawable.ic_launcher_background).into(binding.imgFA);
+                            Glide.with(mContext).load(FA.photo).into(binding.imgFA);
                         }
 
                     }

@@ -112,7 +112,7 @@ class ActivityAddProfit : AppCompatActivity() {
         for ((index, investmentModel) in listInvestmentModel.withIndex()) {
             ///for notification
             val User=sharedPrefManager.getUsersList().find { it.id.equals(investmentModel.investorID) }
-            val notificationData = "Dear ${User?.firstName}, ${percentage_}% profit has been credited to your account"
+            val notificationData = "Dear ${User?.firstName}, Your previous profit of $"
             if (User != null) {
                 addNotification(
                     NotificationModel(
@@ -208,9 +208,21 @@ class ActivityAddProfit : AppCompatActivity() {
         utils.startLoadingAnimation()
 
         val totalInvestments = listInvestmentModel.size
-
         for ((index, investmentModel) in listInvestmentModel.withIndex()) {
-
+            var previous_profit = investmentModel.lastProfit
+            val User=sharedPrefManager.getUsersList().find { it.id.equals(investmentModel.investorID) }
+            val notificationData = "Dear ${User?.firstName}, Your previous profit of $previous_profit PKR has been converted to your Investment "
+            if (User != null) {
+                addNotification(
+                    NotificationModel(
+                        "",
+                        User.id,
+                        getCurrentDateInFormat(),
+                        "Profit Converted to Investment",
+                        notificationData
+                    )
+                )
+            }
 
 
 
