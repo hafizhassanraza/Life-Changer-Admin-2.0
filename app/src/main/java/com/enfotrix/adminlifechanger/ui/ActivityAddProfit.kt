@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.enfotrix.adminlifechanger.API.FCM
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
@@ -72,13 +71,13 @@ class ActivityAddProfit : AppCompatActivity() {
         //41//1111
 
 
-       /* binding.btnAccept.setOnClickListener{
+        /* binding.btnAccept.setOnClickListener{
 
-            if(intent.getStringExtra("from").toString().equals(constant.FROM_PENDING_WITHDRAW_REQ)) approvedWithdraw()
-            else approved()
+             if(intent.getStringExtra("from").toString().equals(constant.FROM_PENDING_WITHDRAW_REQ)) approvedWithdraw()
+             else approved()
 
 
-        }*/
+         }*/
 
 
 
@@ -116,7 +115,6 @@ class ActivityAddProfit : AppCompatActivity() {
             val notificationData = "Dear ${User?.firstName}, Your previous profit of $"
             if (User != null) {
                 addNotification(
-                    User,
                     NotificationModel(
                         "",
                         User.id,
@@ -176,7 +174,7 @@ class ActivityAddProfit : AppCompatActivity() {
                         .addOnCompleteListener {
 
                             if (index == totalInvestments - 1) {
-                           utils.endLoadingAnimation()
+                                utils.endLoadingAnimation()
                                 Toast.makeText(mContext, "Profit Added Successfully!", Toast.LENGTH_SHORT).show()
                             }
 
@@ -188,15 +186,9 @@ class ActivityAddProfit : AppCompatActivity() {
     fun getTextFromInvestment(value: String?): String {
         return if (value.isNullOrEmpty()) "0" else value
     }
-    private fun addNotification(user: User, notificationModel: NotificationModel) {
+    private fun addNotification(notificationModel: NotificationModel) {
         lifecycleScope.launch {
             try {
-                FCM().sendFCMNotification(
-                    user.userdevicetoken,
-                    notificationModel.notiTitle,
-                    notificationModel.notiData
-                )
-
                 notificationViewModel.setNotification(notificationModel).await()
             } catch (e: Exception) {
                 Toast.makeText(mContext, "Failed to send notification", Toast.LENGTH_SHORT).show()
@@ -232,21 +224,6 @@ class ActivityAddProfit : AppCompatActivity() {
                 )
             }
 
-
-            val User=sharedPrefManager.getUsersList().find { it.id.equals(investmentModel.investorID) }
-            val notificationData = "Dear ${User?.firstName},  Your profit has been converted to investment"
-            if (User != null) {
-                addNotification(
-                    User,
-                    NotificationModel(
-                        "",
-                        User.id,
-                        getCurrentDateInFormat(),
-                        "Profit Credited",
-                        notificationData
-                    )
-                )
-            }
 
 
 
@@ -316,75 +293,75 @@ class ActivityAddProfit : AppCompatActivity() {
         }
     }
 
-/*    private fun addProfit(percentage: Double) {
+    /*    private fun addProfit(percentage: Double) {
 
 
-        utils.startLoadingAnimation()
+            utils.startLoadingAnimation()
 
-        val totalInvestments = listInvestmentModel.size
-
-
-        for ((index, investmentModel) in listInvestmentModel.withIndex()){
+            val totalInvestments = listInvestmentModel.size
 
 
-            var previousBalance = investmentModel.investmentBalance
-            var previousProfit = investmentModel.lastProfit
-
-            if (previousBalance != null && previousBalance != "") {
-                var profit: Double=0.0
-
-                var previousBalance_ = previousBalance.toInt()
-                var previousProfit_ = previousProfit.toInt()
-                profit = previousBalance_ * percentage
-
-                //var newBalance = previousBalance_ + profit.toInt()
-                var newProfit = previousProfit_ + profit.toInt()
+            for ((index, investmentModel) in listInvestmentModel.withIndex()){
 
 
+                var previousBalance = investmentModel.investmentBalance
+                var previousProfit = investmentModel.lastProfit
 
-                investmentModel.lastProfit = (newProfit.toInt()).toString()
+                if (previousBalance != null && previousBalance != "") {
+                    var profit: Double=0.0
 
+                    var previousBalance_ = previousBalance.toInt()
+                    var previousProfit_ = previousProfit.toInt()
+                    profit = previousBalance_ * percentage
 
-                var profit_=profit.toInt()
-
-                var transactionModel=TransactionModel(
-                    investmentModel.investorID,
-                    "Profit",
-                    "Approved",
-                    profit_.toString(), // current (weekly) Profit
-                    "",
-                    previousProfit_.toString(), //  previous profit
-                    "",
-                    "",
-                    (newProfit.toInt()).toString(),// new balance -> new profit
-                    Timestamp.now(),
-                    Timestamp.now()
-                )
-
-                lifecycleScope.launch{
-                    investmentViewModel.setInvestment(investmentModel)
-                        .addOnCompleteListener{task->
+                    //var newBalance = previousBalance_ + profit.toInt()
+                    var newProfit = previousProfit_ + profit.toInt()
 
 
-                            db.collection(constants.TRANSACTION_REQ_COLLECTION).add(transactionModel)
-                                .addOnCompleteListener {
-                                    if (index == totalInvestments - 1) {
-                                        utils.endLoadingAnimation()
-                                        Toast.makeText(mContext, "Profit Added Successfully!", Toast.LENGTH_SHORT).show()
 
+                    investmentModel.lastProfit = (newProfit.toInt()).toString()
+
+
+                    var profit_=profit.toInt()
+
+                    var transactionModel=TransactionModel(
+                        investmentModel.investorID,
+                        "Profit",
+                        "Approved",
+                        profit_.toString(), // current (weekly) Profit
+                        "",
+                        previousProfit_.toString(), //  previous profit
+                        "",
+                        "",
+                        (newProfit.toInt()).toString(),// new balance -> new profit
+                        Timestamp.now(),
+                        Timestamp.now()
+                    )
+
+                    lifecycleScope.launch{
+                        investmentViewModel.setInvestment(investmentModel)
+                            .addOnCompleteListener{task->
+
+
+                                db.collection(constants.TRANSACTION_REQ_COLLECTION).add(transactionModel)
+                                    .addOnCompleteListener {
+                                        if (index == totalInvestments - 1) {
+                                            utils.endLoadingAnimation()
+                                            Toast.makeText(mContext, "Profit Added Successfully!", Toast.LENGTH_SHORT).show()
+
+                                        }
                                     }
-                                }
-                        }
+                            }
+
+
+                    }
 
 
                 }
-
-
             }
-        }
 
 
-    }*/
+        }*/
 
     private fun getData() {
         db.collection(constants.INVESTMENT_COLLECTION).get()
