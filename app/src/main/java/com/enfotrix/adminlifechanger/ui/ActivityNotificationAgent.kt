@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.enfotrix.adminlifechanger.API.FCM
 import com.enfotrix.adminlifechanger.Adapters.AdapterNotifications
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.ModelFA
@@ -89,6 +90,7 @@ class ActivityNotificationAgent : AppCompatActivity() {
 
                 AddNotification(NotificationModel("", modelFA.id, getCurrentDateInFormat(), title, notificationData))
 
+
                 // Dismiss the dialog
                 addNotificationDialog.dismiss()
             } else {
@@ -104,6 +106,14 @@ class ActivityNotificationAgent : AppCompatActivity() {
         lifecycleScope.launch {
             notificationViewModel.setNotification(notificationModel)
                 .addOnSuccessListener { task ->
+
+                    modelFA?.devicetoekn?.let {
+                        FCM().sendFCMNotification(
+                            it,
+                            notificationModel.notiTitle,
+                            notificationModel.notiData
+                        )
+                    }
                     FirebaseFirestore.getInstance().collection(constants.NOTIFICATION_COLLECTION)
                         .addSnapshotListener { snapshot, firebaseFirestoreException ->
                             firebaseFirestoreException?.let {
@@ -111,7 +121,6 @@ class ActivityNotificationAgent : AppCompatActivity() {
                                 return@addSnapshotListener
                             }
                             snapshot?.let { task ->
-
                                 utils.endLoadingAnimation()
                                 sharedPrefManager.putNotification(task.documents.mapNotNull { document -> document.toObject(NotificationModel::class.java)?.apply { id = document.id } })
                                 setData()

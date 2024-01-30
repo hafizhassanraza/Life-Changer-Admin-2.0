@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.enfotrix.adminlifechanger.API.FCM
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.AgentTransactionModel
 import com.enfotrix.adminlifechanger.Models.AgentWithdrawModel
@@ -183,6 +184,11 @@ class ActivityAgentWithdrawReqDetails : AppCompatActivity() {
                             val notificationData = "Dear $name, your request of  $withdrawAmount PKR has been approved"
                             lifecycleScope.launch {
                                 notificationViewModel.setNotification(NotificationModel("",  modelFA.id, getCurrentDateInFormat(), "Withdrawal Approved ", notificationData)).await()
+                                FCM().sendFCMNotification(
+                                    modelFA.devicetoekn,
+                                    notificationModel.notiTitle,
+                                    notificationModel.notiData
+                                )
                                 Toast.makeText(mContext, "Notification sent!!", Toast.LENGTH_SHORT).show()
                                 startActivity(Intent(mContext,ActivityHome::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
                                 finish()

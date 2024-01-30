@@ -21,6 +21,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.enfotrix.adminlifechanger.API.FCM
 import com.enfotrix.adminlifechanger.Adapters.AdapterFA
 import com.enfotrix.adminlifechanger.Adapters.InvestorAdapter
 import com.enfotrix.adminlifechanger.Constants
@@ -246,17 +247,17 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
 
 
                                    //     val FA=sharedPrefManager.getFAList().find { it.id.equals(user.fa_id) }
-                                        val notificationData =
-                                            "Dear $name, Your financial advisor, ${modelFA.firstName}, has been removed. We will assign you a new financial advisor soon."
-                                        addNotification(
-                                            NotificationModel(
-                                                "",
-                                                user!!.id,
-                                                getCurrentDateInFormat(),
-                                                "Financial Advisor Unassigned",
-                                                notificationData
-                                            )
-                                        )
+//                                        val notificationData =
+//                                            "Dear $name, Your financial advisor, ${modelFA.firstName}, has been removed. We will assign you a new financial advisor soon."
+//                                        addNotification(
+//                                            NotificationModel(
+//                                                "",
+//                                                user!!.id,
+//                                                getCurrentDateInFormat(),
+//                                                "Financial Advisor Unassigned",
+//                                                notificationData
+//                                            ),2
+//                                        )
 
                                         Toast.makeText(mContext, "Assigned", Toast.LENGTH_SHORT)
                                             .show()
@@ -296,6 +297,13 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
         lifecycleScope.launch {
             try {
                 notificationViewModel.setNotification(notificationModel).await()
+
+                    FCM().sendFCMNotification(
+                        modelFA.devicetoekn,
+                        notificationModel.notiTitle,
+                        notificationModel.notiData
+                    )
+
                 Toast.makeText(mContext, "Notification sent!!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Toast.makeText(mContext, "Failed to send notification", Toast.LENGTH_SHORT).show()
@@ -363,19 +371,6 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
                                     name.length,
                                     Spannable.SPAN_INCLUSIVE_INCLUSIVE
                                 )
-                              val FA=sharedPrefManager.getFAList().find { it.id.equals(user.fa_id) }
-                                val notificationData =
-                                    "Dear $name, Your financial advisor, ${FA?.firstName}, has been removed. We will assign you a new financial advisor soon."
-                                addNotification(
-                                    NotificationModel(
-                                        "",
-                                        user!!.id,
-                                        getCurrentDateInFormat(),
-                                        "Financial Advisor Unassigned",
-                                        notificationData
-                                    )
-                                )
-
                                 Toast.makeText(
                                     mContext,
                                     "Removed from assigned",

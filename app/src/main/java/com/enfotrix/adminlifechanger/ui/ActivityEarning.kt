@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.enfotrix.adminlifechanger.API.FCM
 import com.enfotrix.adminlifechanger.Adapters.AdapterEarning
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.ModelEarning
@@ -237,6 +238,13 @@ class ActivityEarning : AppCompatActivity(), AdapterEarning.OnItemClickListener 
         lifecycleScope.launch {
             try {
                 notificationViewModel.setNotification(notificationModel).await()
+                modelFA?.devicetoekn?.let {
+                    FCM().sendFCMNotification(
+                        it,
+                        notificationModel.notiTitle,
+                        notificationModel.notiData
+                    )
+                }
                 Toast.makeText(mContext, "Notification sent!!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Toast.makeText(mContext, "Failed to send notification", Toast.LENGTH_SHORT).show()
