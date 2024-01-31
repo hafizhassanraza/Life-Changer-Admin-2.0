@@ -101,8 +101,33 @@ class ActivityAgentWithdrawReqDetails : AppCompatActivity() {
             approvedWithdraw()
 
         }
+
+
+
+        binding.btnReject.setOnClickListener {
+
+            rejectWithdraw()
+
+        }
         setData()
 
+    }
+
+    private fun rejectWithdraw() {
+        utils.startLoadingAnimation()
+        val transactionAmount = agentwithdrawModel?.withdrawBalance?.toInt() ?: 0
+        agentwithdrawModel.status= constants.TRANSACTION_STATUS_REJECT
+        db.collection(constants.WITHDRAW_COLLECTION).document(agentwithdrawModel.id).set(agentwithdrawModel).addOnCompleteListener {task->
+            if(task.isSuccessful){
+                utils.endLoadingAnimation()
+                Toast.makeText(mContext, "Rejected", Toast.LENGTH_SHORT).show()
+                val notificationData = "Dear ${modelFA.firstName}, your request for withdrawal of $transactionAmount PKR has been Rejected"
+                addNotification(NotificationModel("",  modelFA.id, getCurrentDateInFormat(), "Withdrawal Rejected ", notificationData))
+            }
+            utils.endLoadingAnimation()
+
+
+        }
     }
 
 
@@ -182,17 +207,7 @@ class ActivityAgentWithdrawReqDetails : AppCompatActivity() {
                             withdrawAmount.setSpan(StyleSpan(Typeface.BOLD), 0, withdrawAmount.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
 
                             val notificationData = "Dear $name, your request of  $withdrawAmount PKR has been approved"
-                            lifecycleScope.launch {
-                                notificationViewModel.setNotification(NotificationModel("",  modelFA.id, getCurrentDateInFormat(), "Withdrawal Approved ", notificationData)).await()
-                                FCM().sendFCMNotification(
-                                    modelFA.devicetoekn,
-                                    notificationModel.notiTitle,
-                                    notificationModel.notiData
-                                )
-                                Toast.makeText(mContext, "Notification sent!!", Toast.LENGTH_SHORT).show()
-                                startActivity(Intent(mContext,ActivityHome::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
-                                finish()
-                            }
+                             addNotification(NotificationModel("",  modelFA.id, getCurrentDateInFormat(), "Withdrawal Approved ", notificationData))
 
 
 
@@ -264,6 +279,25 @@ class ActivityAgentWithdrawReqDetails : AppCompatActivity() {
 
 
         }*/
+    }
+
+    private fun addNotification(notificationModel: NotificationModel) {
+        lifecycleScope.launch {
+            try {
+                notificationViewModel.setNotification(notificationModel).await()
+
+                FCM().sendFCMNotification(
+                    modelFA.devicetoken,
+                    notificationModel.notiTitle,
+                    notificationModel.notiData
+                )
+
+                Toast.makeText(mContext, "Notification sent!!", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(mContext, "Failed to send notification", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+            }
+        }
     }
 
 

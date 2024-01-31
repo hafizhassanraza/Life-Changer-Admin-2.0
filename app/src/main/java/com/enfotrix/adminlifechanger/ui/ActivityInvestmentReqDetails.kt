@@ -93,7 +93,67 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
             if(intent.getStringExtra("from").toString().equals(constant.FROM_PENDING_WITHDRAW_REQ)) approvedWithdraw()
             else if(intent.getStringExtra("from").toString().equals(constant.FROM_PENDING_INVESTMENT_REQ)) approvedInvestment()
         }
+        binding.btnReject.setOnClickListener{
 
+            if(intent.getStringExtra("from").toString().equals(constant.FROM_PENDING_WITHDRAW_REQ)) rejectWithdraw()
+            else if(intent.getStringExtra("from").toString().equals(constant.FROM_PENDING_INVESTMENT_REQ)) rejectInvestment()
+        }
+
+
+    }
+
+    private fun rejectInvestment() {
+        transactionModel.status=constants.TRANSACTION_STATUS_REJECT
+        val transactionAmount = transactionModel?.amount?.toInt() ?: 0
+        utils.startLoadingAnimation()
+        db.collection(constants.TRANSACTION_REQ_COLLECTION).document(transactionModel.id).set(transactionModel).addOnCompleteListener{task->
+
+            if(task.isSuccessful){
+                utils.endLoadingAnimation()
+                Toast.makeText(mContext, "Rejected", Toast.LENGTH_SHORT).show()
+                val notificationData =
+                    "Dear ${user.firstName}, Your Investment request of $transactionAmount PKR has been Rejected."
+                addNotification(
+                    user,
+                    NotificationModel(
+                        "",
+                        user!!.id,
+                        getCurrentDateInFormat(),
+                        "Investment  Rejected",
+                        notificationData
+                    )
+                )
+            }
+
+        }
+        utils.endLoadingAnimation()
+    }
+
+    private fun rejectWithdraw() {
+        transactionModel.status=constants.TRANSACTION_STATUS_REJECT
+        var transactionAmount = transactionModel?.amount?.toInt() ?: 0
+        utils.startLoadingAnimation()
+        db.collection(constants.TRANSACTION_REQ_COLLECTION).document(transactionModel.id).set(transactionModel).addOnCompleteListener{task->
+
+            if(task.isSuccessful){
+                utils.endLoadingAnimation()
+                Toast.makeText(mContext, "Rejected", Toast.LENGTH_SHORT).show()
+                val notificationData =
+                    "Dear ${user.firstName}, Your withdraw request of $transactionAmount PKR has been Rejected."
+                addNotification(
+                    user,
+                    NotificationModel(
+                        "",
+                        user!!.id,
+                        getCurrentDateInFormat(),
+                        "Withdrawal Rejected",
+                        notificationData
+                    )
+                )
+            }
+
+        }
+        utils.endLoadingAnimation()
 
     }
 
@@ -239,7 +299,6 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
                 utils.endLoadingAnimation()
 
 
-                Toast.makeText(mContext, "Request Approved", Toast.LENGTH_SHORT).show()
 
                 startActivity(Intent(mContext,ActivityHome::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
                 finish()

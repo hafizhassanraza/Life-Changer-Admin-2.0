@@ -96,35 +96,29 @@ class ActivityInActiveInvestment : AppCompatActivity(), AdapterInActiveInvestmen
     }
 
     private fun filter(text: String) {
-        val filteredlist = ArrayList<User>()
-        if (text.isEmpty() || text.equals("") || text == null) {
-            binding.rvInvestors.adapter =
-                AdapterInActiveInvestment(
-                    userlist.filter { it.status.equals(constants.INVESTOR_STATUS_ACTIVE) }
-                        .sortedByDescending { it.createdAt },
-                    investmentList,
-                    this@ActivityInActiveInvestment
-                )
+        val filteredList = if (text.isBlank()) {
+            AdapterInActiveInvestment(
+                userlist.filter { it.status.equals(constants.INVESTOR_STATUS_ACTIVE) }
+                    .sortedByDescending { it.createdAt },
+                investmentList,
+                this@ActivityInActiveInvestment
+            )
         } else {
-            for (user in userlist) {
-                if (user.firstName.toLowerCase().contains(text.lowercase(Locale.getDefault()))) {
-                    filteredlist.add(user)
-                }
+            val filteredUsers = userlist.filter { user ->
+                user.firstName.toLowerCase(Locale.getDefault())
+                    .contains(text.toLowerCase(Locale.getDefault()))
             }
-
-            if (filteredlist.isEmpty()) {
-                Toast.makeText(mContext, "No Data Found..", Toast.LENGTH_SHORT).show()
-            } else {
-                binding.rvInvestors.adapter =
-                    AdapterInActiveInvestment(
-                        filteredlist.filter { it.status.equals(constants.INVESTOR_STATUS_ACTIVE) }
-                            .sortedByDescending { it.createdAt },
-                        investmentList,
-                        this@ActivityInActiveInvestment
-                    )
-            }
+            AdapterInActiveInvestment(
+                filteredUsers.filter { it.status.equals(constants.INVESTOR_STATUS_ACTIVE) }
+                    .sortedByDescending { it.createdAt },
+                investmentList,
+                this@ActivityInActiveInvestment
+            )
         }
+
+        binding.rvInvestors.adapter = filteredList
     }
+
 
     private fun convertInvestment(investmentModel: InvestmentModel) {
         utils.startLoadingAnimation()

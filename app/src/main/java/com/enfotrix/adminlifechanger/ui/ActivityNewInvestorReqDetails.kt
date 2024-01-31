@@ -30,14 +30,10 @@ import com.enfotrix.adminlifechanger.Models.NotificationModel
 import com.enfotrix.adminlifechanger.Models.NotificationViewModel
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityNewInvestorReqDetailsBinding
-import com.enfotrix.lifechanger.Models.ModelBankAccount
-import com.enfotrix.lifechanger.Models.ModelNominee
-import com.enfotrix.lifechanger.Models.TransactionModel
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -110,6 +106,7 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(), AdapterFA.OnItemClick
         }
 
 
+
         setData(user)
 
     }
@@ -156,7 +153,7 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(), AdapterFA.OnItemClick
                             fa.length,
                             Spannable.SPAN_INCLUSIVE_INCLUSIVE
                         )
-
+                        val token=sharedPrefManager.getFAList().find { it.id.equals(faID) }
                         val notificationData =
                             "Dear $fa, You have been assigned as the financial advisor for a new investor Mr.${user.firstName}"
                         faID?.let {
@@ -168,7 +165,7 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(), AdapterFA.OnItemClick
                                 notificationData
                             )
 
-                        }?.let { addNotification(it) }
+                        }?.let { addNotification(it,token) }
 
 //                        val notificationData_ =
 //                            "Dear ${user.firstName}, your account request has been approved."
@@ -213,12 +210,11 @@ class ActivityNewInvestorReqDetails : AppCompatActivity(), AdapterFA.OnItemClick
 
     }
 
-    private fun addNotification(notificationModel: NotificationModel) {
+    private fun addNotification(notificationModel: NotificationModel, token: ModelFA?) {
         lifecycleScope.launch {
             try {
                 notificationViewModel.setNotification(notificationModel).await()
-                val token=sharedPrefManager.getFAList().find { it.id.equals(faID) }
-                token?.devicetoekn?.let {
+                token?.devicetoken?.let {
                     FCM().sendFCMNotification(
                         it,
                         notificationModel.notiTitle,

@@ -5,7 +5,7 @@ import com.google.firebase.Timestamp
 import com.google.gson.Gson
 
 data class ModelFA @JvmOverloads constructor(
-    var devicetoekn: String = "",
+    var devicetoken: String = "",
     var cnic: String = "",
     var firstName: String = "",
     var lastName: String = "",

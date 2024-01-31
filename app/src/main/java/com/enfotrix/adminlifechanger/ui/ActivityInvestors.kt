@@ -113,42 +113,17 @@ class ActivityInvestors : AppCompatActivity() ,  AdapterActiveInvestors.OnItemCl
 
 
     private fun filter(text: String) {
-        // creating a new array list to filter our data.
-        val filteredlist = ArrayList<User>()
-        if(text.isEmpty()||text.equals("")||text==null){
+        val filteredList = userlist.filter { user ->
+            user.firstName.toLowerCase(Locale.getDefault()).startsWith(text.toLowerCase(Locale.getDefault()))
+        }.filter { it.status.equals(constants.INVESTOR_STATUS_ACTIVE) }
+            .sortedByDescending { it.firstName }
 
-            binding.rvInvestors.adapter= AdapterActiveInvestors(userlist, investmentList,this@ActivityInvestors)
-        }
-        else {
-            for (user in userlist) {
-                // checking if the entered string matched with any item of our recycler view.
-                if (user.firstName.toLowerCase().contains(text.lowercase(Locale.getDefault()))) {
-                    // if the item is matched we are
-                    // adding it to our filtered list.
-                    filteredlist.add(user)
-                }
-            }
-
-            if (filteredlist.isEmpty()) {
-                // if no item is added in filtered list we are
-                // displaying a toast message as no data found.
-                Toast.makeText(mContext, "No Data Found..", Toast.LENGTH_SHORT).show()
-
-            } else {
-
-                // at last we are passing that filtered
-                // list to our adapter class.
-
-                binding.rvInvestors.adapter= AdapterActiveInvestors(
-                    filteredlist.filter {  it.status.equals(constants.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.firstName },
-                    investmentList,this@ActivityInvestors)
-
-
-            }
-        }
-        // running a for loop to compare elements.
-
+        binding.rvInvestors.adapter = AdapterActiveInvestors(filteredList, investmentList, this@ActivityInvestors)
     }
+
+
+
+
     override fun onItemClick(user: User) {
         startActivity(Intent(mContext, ActivityInvestorDetails::class.java).putExtra("user",user.toString()))
     }

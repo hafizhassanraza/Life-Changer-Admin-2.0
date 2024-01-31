@@ -107,7 +107,7 @@ class ActivityNotificationAgent : AppCompatActivity() {
             notificationViewModel.setNotification(notificationModel)
                 .addOnSuccessListener { task ->
 
-                    modelFA?.devicetoekn?.let {
+                    modelFA?.devicetoken?.let {
                         FCM().sendFCMNotification(
                             it,
                             notificationModel.notiTitle,

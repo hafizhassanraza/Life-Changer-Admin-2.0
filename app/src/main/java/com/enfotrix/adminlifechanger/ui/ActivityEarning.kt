@@ -238,7 +238,7 @@ class ActivityEarning : AppCompatActivity(), AdapterEarning.OnItemClickListener 
         lifecycleScope.launch {
             try {
                 notificationViewModel.setNotification(notificationModel).await()
-                modelFA?.devicetoekn?.let {
+                modelFA?.devicetoken?.let {
                     FCM().sendFCMNotification(
                         it,
                         notificationModel.notiTitle,

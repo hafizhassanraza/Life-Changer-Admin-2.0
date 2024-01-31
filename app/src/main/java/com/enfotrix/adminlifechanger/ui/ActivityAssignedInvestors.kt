@@ -168,39 +168,25 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
 
     private fun filterclients(text: String) {
         // creating a new array list to filter our data.
-        val filteredlist = ArrayList<User>()
-        if (text.isEmpty() || text.equals("")) {
-            binding.rvClients.adapter =
-                InvestorAdapter(constants.FROM_ASSIGNED_FA, originalFAList, this@ActivityAssignedInvestors)
-
+        val filteredList = if (text.isEmpty() || text.isBlank()) {
+            // If the search text is empty, show the original list
+            originalFAList
         } else {
-            for (user in originalFAList) {
-                if (user.firstName.toLowerCase(Locale.getDefault())
-                        .contains(text.toLowerCase(Locale.getDefault()))
-                ) {
-                    filteredlist.add(user)
-                }
-            }
-            if (filteredlist.isEmpty()) {
-                // if no item is added in filtered list we are
-                // displaying a toast message as no data found.
-                Toast.makeText(mContext, "No Data Found..", Toast.LENGTH_SHORT).show()
-            } else {
-                // at last we are passing that filtered
-                // list to our adapter class.
-
-
-                binding.rvClients.adapter = InvestorAdapter(
-                    constants.FROM_ASSIGNED_FA,
-                    filteredlist,
-                    this@ActivityAssignedInvestors
-                )
-
+            // If there is a search text, filter the original list
+            originalFAList.filter { user ->
+                user.firstName.toLowerCase(Locale.getDefault())
+                    .contains(text.toLowerCase(Locale.getDefault()))
             }
         }
-        // running a for loop to compare elements.
 
+        // Update the RecyclerView with the filtered list
+        binding.rvClients.adapter = InvestorAdapter(
+            constants.FROM_ASSIGNED_FA,
+            filteredList,
+            this@ActivityAssignedInvestors
+        )
     }
+
 
 
     override fun onItemClick(user: User) {
@@ -233,8 +219,8 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
                                         val Name = SpannableString(user?.firstName)
                                         Name.setSpan(StyleSpan(Typeface.BOLD), 0, Name.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
 
-                                        val notification_data = "Dear $Name, You have been assigned a new Financial Advisor ${modelFA.firstName}"
-                                        addNotification(NotificationModel("",  user.id, getCurrentDateInFormat(), "Financial Advisor Assigned", notification_data))
+                                        val notification_data = "Dear ${modelFA.firstName}, You have been assigned a new investor  ${modelFA.firstName}"
+                                        addNotification(NotificationModel("",  modelFA.id, getCurrentDateInFormat(), "Investor Assigned", notification_data))
                                         sharedPrefManager.putUserList(list)
                                         dialog.dismiss()
                                         val name = SpannableString(user?.firstName)
@@ -299,7 +285,7 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
                 notificationViewModel.setNotification(notificationModel).await()
 
                     FCM().sendFCMNotification(
-                        modelFA.devicetoekn,
+                        modelFA.devicetoken,
                         notificationModel.notiTitle,
                         notificationModel.notiData
                     )
@@ -318,34 +304,25 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
         val dateFormat = SimpleDateFormat("dd-MM-yyyy")
         return dateFormat.format(currentDate)
     }
-    private fun filter(text: String) {
-        val filteredList = ArrayList<User>()
-        if (text.isEmpty() || text.isBlank()) {
-            rvInvestors.adapter = InvestorAdapter(
-                constants.FROM_UN_ASSIGNED_FA,
-                originallist,
-                this@ActivityAssignedInvestors
-            )
-        } else {
-            for (user in originallist) {
-                if (user.firstName.toLowerCase(Locale.getDefault())
-                        .contains(text.toLowerCase(Locale.getDefault()))
-                ) {
-                    filteredList.add(user)
-                }
-            }
 
-            if (filteredList.isEmpty()) {
-                Toast.makeText(mContext, "No Data Found..", Toast.LENGTH_SHORT).show()
-            } else {
-                rvInvestors.adapter = InvestorAdapter(
-                    constants.FROM_UN_ASSIGNED_FA,
-                    filteredList,
-                    this@ActivityAssignedInvestors
-                )
+
+    private fun filter(text: String) {
+        val filteredList = if (text.isBlank()) {
+            InvestorAdapter(constants.FROM_UN_ASSIGNED_FA, originallist, this@ActivityAssignedInvestors)
+        } else {
+            val filteredUsers = originallist.filter { user ->
+                user.firstName.toLowerCase(Locale.getDefault())
+                    .contains(text.toLowerCase(Locale.getDefault()))
             }
+            InvestorAdapter(constants.FROM_UN_ASSIGNED_FA, filteredUsers, this@ActivityAssignedInvestors)
         }
+
+        rvInvestors.adapter = filteredList
     }
+
+
+
+
 
 
     override fun onRemoveClick(user: User) {

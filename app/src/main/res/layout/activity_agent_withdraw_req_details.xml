@@ -141,13 +141,14 @@
 
 
                 <Button
+                    android:id="@+id/btnReject"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
                     android:text="Reject"/>
                 <Button
                     android:id="@+id/btnAccept"
-                    android:layout_width="100dp"
+                    android:layout_width="104dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:text="Accept"/>

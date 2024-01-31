@@ -677,7 +677,6 @@
                             android:layout_width="130dp"
                             android:layout_height="100dp"
                             android:layout_centerInParent="true"
-                            android:layout_centerHorizontal="true"
                             android:layout_marginBottom="20dp"
                             android:src="@drawable/ic_withdraw" />
 

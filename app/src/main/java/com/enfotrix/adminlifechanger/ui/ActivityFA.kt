@@ -335,29 +335,17 @@ class ActivityFA : AppCompatActivity(), AdapterFA.OnItemClickListener {
 
 
     private fun filter(text: String) {
-        val filteredList = ArrayList<ModelFA>()
-
-        if (text.isEmpty() || text.isBlank()) {
-            // If the search query is empty or blank, show the entire original data
-            binding.rvFA.adapter = AdapterFA(listFA, this@ActivityFA)
+        val filteredList = if (text.isBlank()) {
+            AdapterFA(listFA, this@ActivityFA)
         } else {
-            // Filter the original data based on the search query
-            for (modelFA in listFA) {
-                if (modelFA.firstName.toLowerCase(Locale.getDefault())
-                        .contains(text.toLowerCase(Locale.getDefault()))
-                ) {
-                    filteredList.add(modelFA)
-                }
+            val filteredModels = listFA.filter { modelFA ->
+                modelFA.firstName.toLowerCase(Locale.getDefault())
+                    .contains(text.toLowerCase(Locale.getDefault()))
             }
-
-            if (filteredList.isEmpty()) {
-                // If no matching data found, show a message
-                Toast.makeText(mContext, "No Data Found..", Toast.LENGTH_SHORT).show()
-            } else {
-                // Update the RecyclerView with the filtered list
-                binding.rvFA.adapter = AdapterFA(filteredList, this@ActivityFA)
-            }
+            AdapterFA(filteredModels, this@ActivityFA)
         }
+
+        binding.rvFA.adapter = filteredList
     }
 
 
