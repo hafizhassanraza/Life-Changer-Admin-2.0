@@ -14,21 +14,15 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.enfotrix.adminlifechanger.Adapters.AdapterActiveInvestment
 import com.enfotrix.adminlifechanger.Adapters.AdapterActiveInvestors
-import com.enfotrix.adminlifechanger.Adapters.InvestorAdapter
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.NomineeViewModel
-import com.enfotrix.adminlifechanger.Pdf.PdfTransaction
 import com.enfotrix.adminlifechanger.Pdf.PdfUsers
-import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.FragmentActiveInvestorsBinding
-import com.enfotrix.adminlifechanger.databinding.FragmentNewInvestersBinding
 import com.enfotrix.adminlifechanger.ui.ActivityInvestorDetails
-import com.enfotrix.adminlifechanger.ui.ActivityNewInvestorReqDetails
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
@@ -120,7 +114,9 @@ class FragmentActiveInvestors : Fragment() ,  AdapterActiveInvestors.OnItemClick
                 if (outputStream != null) {
 
                     val success =
-                        PdfUsers(userlist.filter {  it.status.equals(constant.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.createdAt }).generatePdf(
+                        PdfUsers(
+                            userlist.filter {  it.status.equals(constant.INVESTOR_STATUS_ACTIVE) }.sortedByDescending { it.createdAt }
+                        ).generatePdf(
                             outputStream
                         )
                     outputStream.close()

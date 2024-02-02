@@ -1,6 +1,7 @@
 package com.enfotrix.adminlifechanger.ui
 
 import User
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -9,16 +10,14 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.Adapters.AdapterActiveInvestors
-import com.enfotrix.adminlifechanger.Adapters.AdapterInActiveInvestment
-import com.enfotrix.adminlifechanger.Adapters.InvestorViewPagerAdapter
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.NomineeViewModel
+import com.enfotrix.adminlifechanger.Pdf.PdfUsers
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityInvestorsBinding
 import com.enfotrix.lifechanger.Models.UserViewModel
@@ -77,12 +76,54 @@ class ActivityInvestors : AppCompatActivity() ,  AdapterActiveInvestors.OnItemCl
         setTitle("Investors")
 
         binding.rvInvestors.layoutManager = LinearLayoutManager(mContext)
-
+        binding.pdfAllInvestors.setOnClickListener {
+             generatePDF()
+        }
 
 
         setData()
 
     }
+
+
+
+
+    private fun generatePDF() {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/pdf"
+            putExtra(Intent.EXTRA_TITLE, "All Investors.pdf")
+        }
+        startActivityForResult(intent, 123)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 123 && resultCode == Activity.RESULT_OK) {
+            data?.data?.let { uri ->
+                val outputStream = mContext.contentResolver.openOutputStream(uri)
+                if (outputStream != null) {
+                    val success =
+                        PdfUsers(
+                            sharedPrefManager.getUsersList().filter { it.status==constant.INVESTOR_STATUS_ACTIVE}
+                        ).generatePdf(
+                            outputStream
+                        )
+                    outputStream.close()
+                    if (success) {
+                        Toast.makeText(mContext, "Saved successfully", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(mContext, "Failed to save", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }
+        }
+    }
+
+
 
     private fun setData() {
 

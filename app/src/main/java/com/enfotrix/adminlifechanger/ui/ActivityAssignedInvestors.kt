@@ -1,6 +1,7 @@
 package com.enfotrix.adminlifechanger.ui
 
 import User
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -12,10 +13,9 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
+import android.view.LayoutInflater
 import android.view.Window
-import android.widget.Button
-import android.widget.EditText
-import android.widget.SearchView
+import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -25,20 +25,20 @@ import com.enfotrix.adminlifechanger.API.FCM
 import com.enfotrix.adminlifechanger.Adapters.AdapterFA
 import com.enfotrix.adminlifechanger.Adapters.InvestorAdapter
 import com.enfotrix.adminlifechanger.Constants
-import com.enfotrix.adminlifechanger.Models.AgentTransactionModel
 import com.enfotrix.adminlifechanger.Models.AgentTransactionviewModel
 import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.Models.NotificationModel
 import com.enfotrix.adminlifechanger.Models.NotificationViewModel
+import com.enfotrix.adminlifechanger.Pdf.PdfUsers
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityAssignedInvestorsBinding
-import com.enfotrix.adminlifechanger.databinding.ActivityFadetailsBinding
+import com.enfotrix.adminlifechanger.databinding.DialogDatepickerBinding
+
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
@@ -72,6 +72,7 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
     private lateinit var constants: Constants
     private lateinit var sharedPrefManager: SharedPrefManager
     private lateinit var adapter: InvestorAdapter
+    private var InvestorsList: List<User>? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,25 +87,19 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
 
         supportActionBar?.title = "Assigned Investors"
         modelFA = ModelFA.fromString(intent.getStringExtra("Fa").toString())!!
-        binding.fbAddClient.setOnClickListener {
-            showClientDialog()
-        }
-
-
         getData()
-
-
         originalFAList = userViewModel.getusers(modelFA.id)
         originallist = userViewModel.getusers2(modelFA.id)
 
-
-
-
-
-
-
-
-
+        binding.fbAddClient.setOnClickListener {
+            showClientDialog()
+        }
+        binding.pdfAssignedInvestors.setOnClickListener {
+            InvestorsList = sharedPrefManager.getUsersList()
+                .filter { it.status == constants.INVESTOR_STATUS_ACTIVE && it.fa_id == modelFA.id }
+            Toast.makeText(mContext, "size "+InvestorsList!!.size, Toast.LENGTH_SHORT).show()
+            generatePDF()
+        }
 
 
 
@@ -128,6 +123,46 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
 
 
 
+
+
+
+
+    private fun generatePDF() {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/pdf"
+            putExtra(Intent.EXTRA_TITLE, "${modelFA.firstName} Assigned Clients.pdf")
+        }
+        startActivityForResult(intent, 123)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 123 && resultCode == Activity.RESULT_OK) {
+            data?.data?.let { uri ->
+                val outputStream = mContext.contentResolver.openOutputStream(uri)
+                if (outputStream != null) {
+
+                    val success =
+                        InvestorsList?.let {
+                            PdfUsers(it).generatePdf(
+                                outputStream
+                            )
+                        }
+                    outputStream.close()
+                    if (success == true) {
+                        Toast.makeText(mContext, "Saved successfully", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(mContext, "Failed to save", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }
+        }
+    }
+
+
     fun getData() {
 
         binding.rvClients.adapter = userViewModel.getAssignedInvestorsAdapter(
@@ -147,7 +182,10 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
         rvInvestors = dialog.findViewById<RecyclerView>(R.id.rvInvestors) as RecyclerView
         rvInvestors.layoutManager = LinearLayoutManager(mContext)
         rvInvestors.adapter =
-            userViewModel.getInvestorsAdapter(constant.FROM_UN_ASSIGNED_FA, this@ActivityAssignedInvestors)
+            userViewModel.getInvestorsAdapter(
+                constant.FROM_UN_ASSIGNED_FA,
+                this@ActivityAssignedInvestors
+            )
         dialog.show()
         val svFadetail = dialog.findViewById<androidx.appcompat.widget.SearchView>(R.id.svFadetail)
         svFadetail?.setOnQueryTextListener(object :
@@ -167,26 +205,20 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
 
 
     private fun filterclients(text: String) {
-        // creating a new array list to filter our data.
         val filteredList = if (text.isEmpty() || text.isBlank()) {
-            // If the search text is empty, show the original list
             originalFAList
         } else {
-            // If there is a search text, filter the original list
             originalFAList.filter { user ->
                 user.firstName.toLowerCase(Locale.getDefault())
                     .contains(text.toLowerCase(Locale.getDefault()))
             }
         }
-
-        // Update the RecyclerView with the filtered list
         binding.rvClients.adapter = InvestorAdapter(
             constants.FROM_ASSIGNED_FA,
             filteredList,
             this@ActivityAssignedInvestors
         )
     }
-
 
 
     override fun onItemClick(user: User) {
@@ -217,10 +249,24 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
 
 
                                         val Name = SpannableString(user?.firstName)
-                                        Name.setSpan(StyleSpan(Typeface.BOLD), 0, Name.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                                        Name.setSpan(
+                                            StyleSpan(Typeface.BOLD),
+                                            0,
+                                            Name.length,
+                                            Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                                        )
 
-                                        val notification_data = "Dear ${modelFA.firstName}, You have been assigned a new investor  ${modelFA.firstName}"
-                                        addNotification(NotificationModel("",  modelFA.id, getCurrentDateInFormat(), "Investor Assigned", notification_data))
+                                        val notification_data =
+                                            "Dear ${modelFA.firstName}, You have been assigned a new investor  ${modelFA.firstName}"
+                                        addNotification(
+                                            NotificationModel(
+                                                "",
+                                                modelFA.id,
+                                                getCurrentDateInFormat(),
+                                                "Investor Assigned",
+                                                notification_data
+                                            )
+                                        )
                                         sharedPrefManager.putUserList(list)
                                         dialog.dismiss()
                                         val name = SpannableString(user?.firstName)
@@ -232,7 +278,7 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
                                         )
 
 
-                                   //     val FA=sharedPrefManager.getFAList().find { it.id.equals(user.fa_id) }
+                                        //     val FA=sharedPrefManager.getFAList().find { it.id.equals(user.fa_id) }
 //                                        val notificationData =
 //                                            "Dear $name, Your financial advisor, ${modelFA.firstName}, has been removed. We will assign you a new financial advisor soon."
 //                                        addNotification(
@@ -279,16 +325,17 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
 
 
     }
+
     private fun addNotification(notificationModel: NotificationModel) {
         lifecycleScope.launch {
             try {
                 notificationViewModel.setNotification(notificationModel).await()
 
-                    FCM().sendFCMNotification(
-                        modelFA.devicetoken,
-                        notificationModel.notiTitle,
-                        notificationModel.notiData
-                    )
+                FCM().sendFCMNotification(
+                    modelFA.devicetoken,
+                    notificationModel.notiTitle,
+                    notificationModel.notiData
+                )
 
                 Toast.makeText(mContext, "Notification sent!!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
@@ -308,21 +355,25 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
 
     private fun filter(text: String) {
         val filteredList = if (text.isBlank()) {
-            InvestorAdapter(constants.FROM_UN_ASSIGNED_FA, originallist, this@ActivityAssignedInvestors)
+            InvestorAdapter(
+                constants.FROM_UN_ASSIGNED_FA,
+                originallist,
+                this@ActivityAssignedInvestors
+            )
         } else {
             val filteredUsers = originallist.filter { user ->
                 user.firstName.toLowerCase(Locale.getDefault())
                     .contains(text.toLowerCase(Locale.getDefault()))
             }
-            InvestorAdapter(constants.FROM_UN_ASSIGNED_FA, filteredUsers, this@ActivityAssignedInvestors)
+            InvestorAdapter(
+                constants.FROM_UN_ASSIGNED_FA,
+                filteredUsers,
+                this@ActivityAssignedInvestors
+            )
         }
 
         rvInvestors.adapter = filteredList
     }
-
-
-
-
 
 
     override fun onRemoveClick(user: User) {
@@ -381,7 +432,6 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
     override fun onDeleteClick(modelFA: ModelFA) {
         TODO("Not yet implemented")
     }
-
 
 
 }

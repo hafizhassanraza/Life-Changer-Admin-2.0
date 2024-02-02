@@ -1,7 +1,7 @@
 package com.enfotrix.adminlifechanger.Pdf
 
-import com.enfotrix.adminlifechanger.Models.ModelFA
-import com.enfotrix.lifechanger.Models.TransactionModel
+
+import com.enfotrix.adminlifechanger.Models.ModelEarning
 import com.itextpdf.text.BaseColor
 import com.itextpdf.text.Document
 import com.itextpdf.text.Element
@@ -14,7 +14,7 @@ import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class pdfFA(var List: List<ModelFA>) {
+class PdfAgentStatement(val filteredApprovedInvesmentList: List<ModelEarning>, val firstName: String) {
     fun generatePdf(outputStream: OutputStream): Boolean {
         val document = Document()
 
@@ -23,30 +23,35 @@ class pdfFA(var List: List<ModelFA>) {
             document.open()
             val titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18f, BaseColor.BLACK)
 
-            val title: Paragraph = Paragraph("Financial Advisors", titleFont)
+            val title: Paragraph = Paragraph("$firstName E-statement ", titleFont)
+
 
             title.alignment = Element.ALIGN_CENTER
             document.add(title)
             document.add(Paragraph("\n"))
+
             val table = PdfPTable(4)
             table.widthPercentage = 100f
             val headers = arrayOf(
-                Paragraph("Name", titleFont),
-                Paragraph("Phone", titleFont),
-                Paragraph("CNIC", titleFont),
-                Paragraph("Status", titleFont)
+                Paragraph("Old Balance", titleFont),
+                Paragraph("Earning Amount", titleFont),
+                Paragraph("Date", titleFont),
+                Paragraph("Remarks", titleFont),
             )
             for (header in headers) {
                 val cell = PdfPCell(Phrase(header))
                 cell.horizontalAlignment = Element.ALIGN_CENTER
                 table.addCell(cell)
             }
-            for (item in List) {
-                table.addCell(item.firstName+item.lastName)
-                table.addCell(item.phone)
-                table.addCell(item.cnic)
-                table.addCell(item.status)
+            for (item in filteredApprovedInvesmentList) {
+                table.addCell(item.balance)
+                table.addCell(item.amount)
+                table.addCell(
+                    SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(item.createdAt?.toDate())
+                )
+                table.addCell(item.disc)
             }
+
             document.add(table)
             document.close()
             return true
@@ -55,5 +60,4 @@ class pdfFA(var List: List<ModelFA>) {
             return false
         }
     }
-
 }
