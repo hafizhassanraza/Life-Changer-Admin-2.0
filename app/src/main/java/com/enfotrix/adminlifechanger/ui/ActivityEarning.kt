@@ -79,8 +79,9 @@ class ActivityEarning : AppCompatActivity(), AdapterEarning.OnItemClickListener 
         binding.rvStatment.layoutManager = LinearLayoutManager(mContext)
         modelFA = ModelFA.fromString(intent.getStringExtra("Fa").toString())!!
         binding.fbAddEarning.setOnClickListener { addEarningDialog() }
-
         setData()
+
+
 
         binding.pdfEstatment.setOnClickListener{
             dialogWithdrawDetails()
@@ -90,9 +91,6 @@ class ActivityEarning : AppCompatActivity(), AdapterEarning.OnItemClickListener 
 
 
     }
-
-
-
 
 
 

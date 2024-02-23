@@ -287,6 +287,16 @@ modelFA.id=documents.id
         }
         return result
     }
+    suspend fun deleteNotifications(notificationModel: NotificationModel): Task<Void> {
+
+        return NotificationCollection.document(notificationModel.id).delete()
+
+    }
+    suspend fun deleteTransactionReq(transactionModel: TransactionModel): Task<Void> {
+
+        return TransactionsReqCollection.document(transactionModel.id).delete()
+
+    }
     suspend fun setTransactionReq(transactionModel: TransactionModel): Task<Void> {
 
         return TransactionsReqCollection.document(transactionModel.id).set(transactionModel)

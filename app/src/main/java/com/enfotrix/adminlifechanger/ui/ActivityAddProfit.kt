@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.airbnb.lottie.parser.IntegerParser
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
@@ -69,7 +70,13 @@ class ActivityAddProfit : AppCompatActivity() {
         utils = Utils(mContext)
         constants= Constants()
         binding.btnTemp.setOnClickListener {
-            tempCode()
+            //tempCode()
+            //tempGetTodayActiveInvestment()
+            //deductProfit()
+            //deleteProfitTransactions()
+
+            //deleteProfitNotifications()
+
         }
         sharedPrefManager = SharedPrefManager(mContext)
 
@@ -123,15 +130,242 @@ class ActivityAddProfit : AppCompatActivity() {
         val startOfNextDay = calendar.time
 
         val dateFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
-        val list_February_16_2024_Profit = sharedPrefManager.getTransactionList().filter {
+        val filtered_list_February_16_2024_Profit = sharedPrefManager.getTransactionList().filter {
             it.type == constants.TRANSACTION_TYPE_PROFIT &&
                     dateFormatter.format(it.createdAt.toDate()) == dateFormatter.format(startOfDay)
-        }.count()
+        }
 
-        Toast.makeText(mContext, list_February_16_2024_Profit.toString(), Toast.LENGTH_SHORT).show()
+        //val sum = filtered_list_February_16_2024_Profit.sumOf { it.amount.toIntOrNull() ?: 0 }
+
+        // Deduct Profit
+
+
+
+        //filtered_list_February_16_2024_Profit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //Toast.makeText(mContext, sum.toString(), Toast.LENGTH_SHORT).show()
+    }
+    private fun tempGetTodayActiveInvestment (){
+        //var list_February_16_2024_Profit = sharedPrefManager.getTransactionList().filter { it.type.equals(constants.TRANSACTION_TYPE_PROFIT) && it.createdAt.equals() }.count()
+
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC+5"))
+        calendar.set(2024, Calendar.FEBRUARY, 23, 0, 0, 0)
+        val startOfDay = calendar.time
+
+        calendar.set(2024, Calendar.FEBRUARY, 17, 0, 0, 0)
+        val startOfNextDay = calendar.time
+
+        val dateFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+
+        val usersIDs=""
+        val filtered_list_February_23_2024_ActiveInvestment = sharedPrefManager.getNotificationList().filter {
+            it.notiTitle.equals("Investment Activation") &&
+                    dateFormatter.format(it.createdAt.toDate()) == dateFormatter.format(startOfDay)
+        }
+
+
+
+
+
+            //val sum = filtered_list_February_16_2024_Profit.sumOf { it.amount.toIntOrNull() ?: 0 }
+
+
+
+        Toast.makeText(mContext, filtered_list_February_23_2024_ActiveInvestment.count().toString(), Toast.LENGTH_SHORT).show()
     }
 
 
+
+
+    private fun deductProfit() {
+
+        utils.startLoadingAnimation()
+
+        val totalInvestments = listInvestmentModel.size
+
+        var EffectedSum= 0
+
+
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC+5"))
+        calendar.set(2024, Calendar.FEBRUARY, 23, 0, 0, 0)
+        val startOfDay = calendar.time
+
+        calendar.set(2024, Calendar.FEBRUARY, 17, 0, 0, 0)
+        val startOfNextDay = calendar.time
+
+        val dateFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+        val listTransactionsOfTodayEffectedProfit = sharedPrefManager.getTransactionList().filter {
+            it.type == constants.TRANSACTION_TYPE_PROFIT &&
+                    dateFormatter.format(it.createdAt.toDate()) == dateFormatter.format(startOfDay)
+        }
+
+
+
+        // loop for  all  investments
+        for ((index, investmentModel) in listInvestmentModel.withIndex()) {
+
+
+
+            // 1 by 1 total Profit
+            val totalProfit = investmentModel.lastProfit
+
+            if (!totalProfit.isNullOrEmpty()) {
+
+
+               val effectedProfitSumOfUser= listTransactionsOfTodayEffectedProfit.filter { it.investorID.equals(investmentModel.investorID) }.sumOf { it.amount.toInt() }
+                var totalProfit_ = totalProfit.toInt()
+
+
+                var  newTotalProfit_ = totalProfit_ - effectedProfitSumOfUser
+
+                EffectedSum = EffectedSum+effectedProfitSumOfUser
+
+                investmentModel.lastProfit = newTotalProfit_.toString()
+
+
+                lifecycleScope.launch {
+                    val setInvestmentTask = investmentViewModel.setInvestment(investmentModel)
+
+                    Tasks.whenAllComplete(setInvestmentTask)
+                        .addOnCompleteListener {
+
+                            if (index == totalInvestments - 1) {
+                                utils.endLoadingAnimation()
+                                Toast.makeText(mContext, "Profit Deduct Successfully!", Toast.LENGTH_SHORT).show()
+                            }
+
+                        }
+                }
+
+
+            }
+        }
+
+
+
+        Toast.makeText(mContext, EffectedSum.toString() , Toast.LENGTH_SHORT).show()
+    }
+
+
+
+    private fun deleteProfitTransactions() {
+
+        utils.startLoadingAnimation()
+
+
+
+
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC+5"))
+        calendar.set(2024, Calendar.FEBRUARY, 23, 0, 0, 0)
+        val startOfDay = calendar.time
+
+        calendar.set(2024, Calendar.FEBRUARY, 17, 0, 0, 0)
+        val startOfNextDay = calendar.time
+
+        val dateFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+        val listTransactionsOfTodayEffectedProfit = sharedPrefManager.getTransactionList().filter {
+            it.type == constants.TRANSACTION_TYPE_PROFIT &&
+                    dateFormatter.format(it.createdAt.toDate()) == dateFormatter.format(startOfDay)
+        }
+
+
+
+
+        var totalTransactions= listTransactionsOfTodayEffectedProfit.count()
+
+
+        // loop for  all  investments
+        for ((index, transactionModel)   in listTransactionsOfTodayEffectedProfit.withIndex()) {
+
+            lifecycleScope.launch {
+                val setInvestmentTask =  investmentViewModel.deleteTransactionReq(transactionModel)
+
+                Tasks.whenAllComplete(setInvestmentTask)
+                    .addOnCompleteListener {
+
+                        if (index == totalTransactions - 1) {
+
+                            utils.endLoadingAnimation()
+
+                            Toast.makeText(mContext, "Transaction Deleted Successfully!", Toast.LENGTH_SHORT).show()
+
+                        }
+
+                    }
+            }
+        }
+
+    }
+
+
+    private fun deleteProfitNotifications() {
+
+        utils.startLoadingAnimation()
+
+
+
+
+
+
+
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC+5"))
+        calendar.set(2024, Calendar.FEBRUARY, 23, 0, 0, 0)
+        val startOfDay = calendar.time
+
+        calendar.set(2024, Calendar.FEBRUARY, 17, 0, 0, 0)
+        val startOfNextDay = calendar.time
+
+        val dateFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+        val filtered_list_February_23_2024_ProfitNotifications = sharedPrefManager.getNotificationList().filter {
+            it.notiTitle.equals("Profit Credited") &&
+                    dateFormatter.format(it.createdAt.toDate()) == dateFormatter.format(startOfDay)
+        }
+
+
+
+
+        var totalTransactions= filtered_list_February_23_2024_ProfitNotifications.count()
+
+
+
+
+        // loop for  all  investments
+        for ((index, notificationModel)   in filtered_list_February_23_2024_ProfitNotifications.withIndex()) {
+
+            lifecycleScope.launch {
+                val setInvestmentTask =  investmentViewModel.deleteNotifications(notificationModel)
+
+                Tasks.whenAllComplete(setInvestmentTask)
+                    .addOnCompleteListener {
+
+                        if (index == totalTransactions - 1) {
+
+                            utils.endLoadingAnimation()
+
+                            Toast.makeText(mContext, "Notification Deleted Successfully!", Toast.LENGTH_SHORT).show()
+
+                        }
+
+                    }
+            }
+        }
+
+    }
 
 
     private fun addProfit(percentage: Double, percentage_: String) {
@@ -141,6 +375,7 @@ class ActivityAddProfit : AppCompatActivity() {
         val totalInvestments = listInvestmentModel.size
 
         for ((index, investmentModel) in listInvestmentModel.withIndex()) {
+
             ///for notification
             val User=sharedPrefManager.getUsersList().find { it.id.equals(investmentModel.investorID) }
             val notificationData = "Dear ${User?.firstName}, Your previous profit of $"

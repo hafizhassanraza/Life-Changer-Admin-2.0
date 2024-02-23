@@ -37,6 +37,12 @@ class InvestmentViewModel(context: Application) : AndroidViewModel(context) {
     suspend fun setTransactionReq(transactionModel: TransactionModel): Task<Void> {
         return userRepo.setTransactionReq(transactionModel)
     }
+    suspend fun deleteTransactionReq(transactionModel: TransactionModel): Task<Void> {
+        return userRepo.deleteTransactionReq(transactionModel)
+    }
+    suspend fun deleteNotifications(notificationModel: NotificationModel): Task<Void> {
+        return userRepo.deleteNotifications(notificationModel)
+    }
     fun getProfitAdapter( from:String): ProfitTaxAdapter {
         return ProfitTaxAdapter(from,sharedPrefManager.getProfitTaxList().filter{ it.type.equals(constants.PROFIT_TYPE) }.sortedByDescending { it.createdAt })
     }
