@@ -26,7 +26,6 @@ import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.Models.NotificationModel
 import com.enfotrix.adminlifechanger.Models.NotificationViewModel
 import com.enfotrix.adminlifechanger.databinding.ActivityAgentWithdrawReqDetailsBinding
-import com.enfotrix.adminlifechanger.databinding.ActivityInvestmentReqDetailsBinding
 import com.enfotrix.lifechanger.Models.TransactionModel
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager

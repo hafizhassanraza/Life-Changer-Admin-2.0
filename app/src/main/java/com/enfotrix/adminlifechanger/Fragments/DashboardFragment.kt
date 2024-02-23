@@ -94,12 +94,6 @@ class DashboardFragment : Fragment() {
         sharedPrefManager = SharedPrefManager(mContext)
 
 
-
-
-
-        announce()
-
-
         binding.laynews.setOnClickListener { startActivity(Intent(requireContext(), ActivityAnnouncement::class.java)) }
         binding.layAccounts.setOnClickListener { startActivity(Intent(requireContext(), ActivityAccounts::class.java)) }
 
@@ -182,7 +176,6 @@ class DashboardFragment : Fragment() {
                                         sharedPrefManager.putNomineeList(listNominee)
 
                                         utils.endLoadingAnimation()
-
                                         db.collection(constants.FA_COLLECTION).get()
                                             .addOnCompleteListener { task ->
                                                 if (task.isSuccessful) {
@@ -382,24 +375,6 @@ class DashboardFragment : Fragment() {
     }
 
 
-    fun announce() {
-
-        announcementListener = db.collection("Admin Announcement")
-            .orderBy("createdAt", com.google.firebase.firestore.Query.Direction.DESCENDING)
-            .limit(1)
-            .addSnapshotListener { querySnapshot, error ->
-                if (error != null) {
-                    // Handle error
-                    return@addSnapshotListener
-                }
-
-                if (querySnapshot != null && !querySnapshot.isEmpty) {
-                    val latestAnnouncement = querySnapshot.documents[0].getString("announcement")
-                    binding.tvAnnouncement.text = latestAnnouncement
-                }
-            }
-
-    }
 
 
     override fun onDestroyView() {

@@ -110,7 +110,6 @@ class ActivityFADetails : AppCompatActivity(), InvestorAdapter.OnItemClickListen
         }
         binding.layEarning.setOnClickListener() {
 
-            //Toast.makeText(mContext, "debug", Toast.LENGTH_SHORT).show()
             startActivity(Intent(mContext,ActivityEarning::class.java).putExtra("Fa",modelFA.toString()))
 
         }

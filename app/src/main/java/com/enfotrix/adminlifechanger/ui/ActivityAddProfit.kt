@@ -3,6 +3,7 @@ package com.enfotrix.adminlifechanger.ui
 import User
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -16,6 +17,8 @@ import com.enfotrix.adminlifechanger.Models.NotificationModel
 import com.enfotrix.adminlifechanger.Models.NotificationViewModel
 import com.enfotrix.adminlifechanger.databinding.ActivityAddProfitBinding
 import com.enfotrix.lifechanger.Models.TransactionModel
+import java.util.*
+import java.util.Calendar.*
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
@@ -65,6 +68,9 @@ class ActivityAddProfit : AppCompatActivity() {
         mContext=this@ActivityAddProfit
         utils = Utils(mContext)
         constants= Constants()
+        binding.btnTemp.setOnClickListener {
+            tempCode()
+        }
         sharedPrefManager = SharedPrefManager(mContext)
 
 
@@ -94,6 +100,11 @@ class ActivityAddProfit : AppCompatActivity() {
 
             convertProfit()
         }
+        binding.btnAllInvestorsAccept.setOnClickListener {
+            startActivity(Intent(mContext, ActivityExcludeInvestors::class.java))
+        }
+
+
         /*binding.btnConvertInvestment.setOnClickListener{
 
 
@@ -101,6 +112,26 @@ class ActivityAddProfit : AppCompatActivity() {
         }*/
 
     }
+    private fun tempCode (){
+        //var list_February_16_2024_Profit = sharedPrefManager.getTransactionList().filter { it.type.equals(constants.TRANSACTION_TYPE_PROFIT) && it.createdAt.equals() }.count()
+
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC+5"))
+        calendar.set(2024, Calendar.FEBRUARY, 23, 0, 0, 0)
+        val startOfDay = calendar.time
+
+        calendar.set(2024, Calendar.FEBRUARY, 17, 0, 0, 0)
+        val startOfNextDay = calendar.time
+
+        val dateFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+        val list_February_16_2024_Profit = sharedPrefManager.getTransactionList().filter {
+            it.type == constants.TRANSACTION_TYPE_PROFIT &&
+                    dateFormatter.format(it.createdAt.toDate()) == dateFormatter.format(startOfDay)
+        }.count()
+
+        Toast.makeText(mContext, list_February_16_2024_Profit.toString(), Toast.LENGTH_SHORT).show()
+    }
+
+
 
 
     private fun addProfit(percentage: Double, percentage_: String) {

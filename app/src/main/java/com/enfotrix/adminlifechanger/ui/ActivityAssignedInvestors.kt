@@ -2,7 +2,6 @@ package com.enfotrix.adminlifechanger.ui
 
 import User
 import android.app.Activity
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -13,9 +12,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
-import android.view.LayoutInflater
 import android.view.Window
-import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -33,7 +30,6 @@ import com.enfotrix.adminlifechanger.Models.NotificationViewModel
 import com.enfotrix.adminlifechanger.Pdf.PdfUsers
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityAssignedInvestorsBinding
-import com.enfotrix.adminlifechanger.databinding.DialogDatepickerBinding
 
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
@@ -61,8 +57,6 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
     private val userViewModel: UserViewModel by viewModels()
     private val agentTransactionviewModel: AgentTransactionviewModel by viewModels()
     private lateinit var modelFA: ModelFA
-
-
     private lateinit var mContext: Context
     private lateinit var binding: ActivityAssignedInvestorsBinding
 

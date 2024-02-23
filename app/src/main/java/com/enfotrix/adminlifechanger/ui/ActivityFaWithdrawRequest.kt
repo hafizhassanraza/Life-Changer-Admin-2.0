@@ -18,8 +18,6 @@ import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.Models.NomineeViewModel
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityFaWithdrawRequestBinding
-import com.enfotrix.adminlifechanger.databinding.ActivityInvestmentRequestBinding
-import com.enfotrix.adminlifechanger.databinding.ActivityWithdrawRequestBinding
 import com.enfotrix.lifechanger.Adapters.AgentTransactionsAdapter
 import com.enfotrix.lifechanger.Adapters.TransactionsAdapter
 import com.enfotrix.lifechanger.Models.TransactionModel

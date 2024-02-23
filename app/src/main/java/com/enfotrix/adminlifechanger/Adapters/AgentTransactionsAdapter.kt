@@ -59,9 +59,7 @@ class AgentTransactionsAdapter (val data: List<AgentWithdrawModel>, val financia
             itemBinding.tvInvestorName.text="${modelFA!!.firstName}"
             itemBinding.tvPreviousBalance.text="${agentWithdrawModel.lastWithdrawBalance}"
             itemBinding.tvInvestmentDate.text="${SimpleDateFormat( "hh:mm a dd/MM/yy", Locale.getDefault()).format(agentWithdrawModel.lastWithdrawReqDate!!.toDate()).toString()}"
-
             itemBinding.tvInvestment.text="${agentWithdrawModel.withdrawBalance}"
-
             itemBinding.tvInvestWithdrawHeader1.visibility= View.GONE
             itemBinding.layPreviousBalance.visibility= View.GONE
 

@@ -1,7 +1,6 @@
 package com.enfotrix.adminlifechanger.Adapters
 
 import User
-import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.R
-import com.enfotrix.adminlifechanger.databinding.ItemInvestorAccountBinding
 import com.enfotrix.adminlifechanger.databinding.ItemUserBinding
 
-class InvestorAdapter (var activity:String, val data: List<User>, val listener: OnItemClickListener)
+class InvestorAdapter(var activity:String, val data: List<User>, val listener: OnItemClickListener)
     : RecyclerView.Adapter<InvestorAdapter.ViewHolder>() {
 
     var constant= Constants()

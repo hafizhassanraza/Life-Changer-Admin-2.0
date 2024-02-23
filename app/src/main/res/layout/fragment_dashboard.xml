@@ -8,17 +8,11 @@
     tools:context=".Fragments.DashboardFragment">
 
 
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-
-
-        <RelativeLayout
+    <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="255dp">
             <TextView
@@ -118,24 +112,25 @@
             <LinearLayout
                 android:id="@+id/laynews"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_column="1"
-                app:layout_row="0"
-                app:layout_columnWeight="1"
-                app:layout_rowWeight="1"
+                android:layout_height="match_parent"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_column="1"
+                app:layout_columnWeight="1"
+                app:layout_row="0"
+                app:layout_rowWeight="1">
 
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:tint="@color/primary"
-                    android:src="@drawable/announcement"/>
+                    android:src="@drawable/announcement"
+                    android:tint="@color/primary" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/primary"
-                    android:text="News"/>
+                    android:text="Announcement"
+                    android:textColor="@color/primary" />
 
 
             </LinearLayout>
@@ -148,6 +143,7 @@
             android:layout_height="2dp"
             android:background="@color/secondary"
             android:layout_marginBottom="10dp"
+            android:visibility="gone"
             android:layout_gravity="center_horizontal"/>
 
         <TextView
@@ -156,6 +152,7 @@
             android:text="Connected With Us!"
             android:layout_marginLeft="20dp"
             android:textStyle="bold"
+            android:visibility="gone"
             android:textSize="16dp"
             android:textColor="@color/secondary"/>
 
@@ -167,6 +164,7 @@
             android:layout_marginVertical="10dp"
             android:layout_marginHorizontal="15dp"
             app:columnCount="4"
+            android:visibility="gone"
             app:rowCount="2">
 
 
@@ -186,31 +184,6 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:tint="@color/primary"
-                    android:src="@drawable/about_us"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/primary"
-                    android:text="About Us"/>
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-
-                app:layout_column="1"
-                app:layout_row="0"
-                app:layout_columnWeight="1"
-                app:layout_rowWeight="1"
-
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:tint="@color/primary"
                     android:src="@drawable/contact_us_"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -220,127 +193,7 @@
 
 
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
 
-                app:layout_column="2"
-                app:layout_row="0"
-                app:layout_columnWeight="1"
-                app:layout_rowWeight="1"
-
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:tint="@color/primary"
-                    android:src="@drawable/services"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/primary"
-                    android:text="Services"/>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_column="3"
-                app:layout_row="0"
-                app:layout_columnWeight="1"
-                app:layout_rowWeight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:tint="@color/primary"
-                    android:src="@drawable/company"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/primary"
-                    android:text="Company"/>
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                app:layout_column="0"
-                app:layout_row="1"
-                app:layout_columnWeight="1"
-                app:layout_rowWeight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:tint="@color/primary"
-                    android:src="@drawable/feedback"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/primary"
-                    android:text="Feedback"/>
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                app:layout_column="1"
-                app:layout_row="1"
-                app:layout_columnWeight="1"
-                app:layout_rowWeight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:tint="@color/primary"
-                    android:src="@drawable/share"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/primary"
-                    android:text="Share"/>
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                app:layout_column="2"
-                app:layout_row="1"
-                app:layout_columnWeight="1"
-                app:layout_rowWeight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:tint="@color/primary"
-                    android:src="@drawable/investment_planss"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/primary"
-                    android:text="Invest Plans"/>
-
-
-            </LinearLayout>
 
 
 

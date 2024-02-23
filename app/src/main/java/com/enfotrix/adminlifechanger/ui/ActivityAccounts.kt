@@ -131,8 +131,6 @@ class ActivityAccounts : AppCompatActivity()  , AdapterAccounts.OnItemClickListe
     fun deleteAdminBankAccount(modelBankAccount: ModelBankAccount) {
 
         utils.startLoadingAnimation()
-
-
         db.collection(constants.ACCOUNTS_COLLECTION).document(modelBankAccount.docID).delete()
             .addOnCompleteListener {task->
                 if(task.isSuccessful){

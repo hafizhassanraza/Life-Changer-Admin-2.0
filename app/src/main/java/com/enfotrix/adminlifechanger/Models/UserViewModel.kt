@@ -5,10 +5,9 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.enfotrix.adminlifechanger.Adapters.AdapterFA
+import com.enfotrix.adminlifechanger.Adapters.AdapterExcludeInvestors
 import com.enfotrix.adminlifechanger.Adapters.InvestorAdapter
 import com.enfotrix.adminlifechanger.Constants
-import com.enfotrix.lifechanger.Adapters.InvestorAccountsAdapter
 import com.enfotrix.lifechanger.Data.Repo
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.google.android.gms.tasks.Task
@@ -110,6 +109,7 @@ class UserViewModel(context: Application) : AndroidViewModel(context) {
             listener
         )
     }
+
 
     fun getAssignedInvestorsAdapter(
         fa_ID: String,

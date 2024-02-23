@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/secondary"
+        android:layout_marginBottom="3dp"
+        app:cardCornerRadius="10dp"
+        android:layout_below="@+id/v1">
+
+        <RelativeLayout
+            android:id="@+id/layUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ivprofile"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginVertical="3dp"
+                    android:layout_marginTop="3dp"
+                    android:src="@color/ic_launcher_background"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical"
+                    android:layout_gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvInvestorName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mr. Ramzan"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="S/D/O"
+                            android:visibility="gone"
+                            android:textSize="10dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:textColor="@color/gray"/>
+
+                        <TextView
+                            android:id="@+id/tvInvestorFatherName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="---"
+                            android:textSize="15dp"
+                            android:visibility="gone"
+                            android:layout_marginLeft="3dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:textColor="@color/gray"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvCNIC"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="68585456454551"
+                        android:visibility="gone"
+                        android:layout_below="@+id/tvUserName"
+                        android:layout_alignParentLeft="true"
+                        android:textColor="@color/SecondaryVariant"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <!-- Buttons LinearLayout -->
+                <LinearLayout
+                    android:id="@+id/buttonsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/btnRemove"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="25dp"
+                        android:gravity="end"
+                        android:visibility="gone"
+                        android:textColor="@color/primary"
+                        android:textSize="17dp"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:layout_marginEnd="14dp"
+                        android:text="Remove" />
+
+                    <TextView
+                        android:id="@+id/btnAdd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="25dp"
+                        android:gravity="end"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:textColor="@color/primary"
+                        android:textSize="17dp"
+                        android:layout_marginEnd="14dp"
+                        android:text="Add" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

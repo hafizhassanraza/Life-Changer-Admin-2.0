@@ -11,7 +11,6 @@ data class TransactionModel @JvmOverloads constructor(
     var amount: String = "",
     var receiverAccountID: String = "", // account id
     var previousBalance: String = "", //
-
     var senderAccountID: String = "",// account id
     var id: String = "",
     var newBalance: String = "", //

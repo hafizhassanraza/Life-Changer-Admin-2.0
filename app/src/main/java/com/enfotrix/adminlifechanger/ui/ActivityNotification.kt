@@ -19,12 +19,12 @@ import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.NotificationModel
 import com.enfotrix.adminlifechanger.Models.NotificationViewModel
 import com.enfotrix.adminlifechanger.R
-import com.enfotrix.adminlifechanger.databinding.ActivityFaWithdrawRequestBinding
 import com.enfotrix.adminlifechanger.databinding.ActivityNotificationBinding
+import com.enfotrix.adminlifechanger.databinding.DialogAddNotificationBinding
+
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
-import com.enfotrix.adminlifechanger.databinding.DialogAddNotificationBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -95,8 +95,6 @@ class ActivityNotification : AppCompatActivity() {
             if (title.isNotEmpty() && notificationData.isNotEmpty()) {
 
                 AddNotification(NotificationModel("", user.id, getCurrentDateInFormat(), title, notificationData))
-
-                // Dismiss the dialog
                 addNotificationDialog.dismiss()
             } else {
                 Toast.makeText(mContext, "Please enter valid data", Toast.LENGTH_SHORT).show()
@@ -116,7 +114,6 @@ class ActivityNotification : AppCompatActivity() {
                         notificationModel.notiTitle,
                         notificationModel.notiData
                     )
-
                     FirebaseFirestore.getInstance().collection(constants.NOTIFICATION_COLLECTION)
                         .addSnapshotListener { snapshot, firebaseFirestoreException ->
                             firebaseFirestoreException?.let {

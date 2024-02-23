@@ -155,6 +155,7 @@ class FragmentActiveInvestors : Fragment() ,  AdapterActiveInvestors.OnItemClick
                 // displaying a toast message as no data found.
                 Toast.makeText(mContext, "No Data Found..", Toast.LENGTH_SHORT).show()
 
+
             } else {
 
                 // at last we are passing that filtered

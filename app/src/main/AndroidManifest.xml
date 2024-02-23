@@ -17,6 +17,9 @@
         android:theme="@style/Theme.LifeChanger"
         tools:targetApi="31">
         <activity
+            android:name=".ui.ActivityExcludeInvestors"
+            android:exported="false" />
+        <activity
             android:name=".ui.ActivityAgentWithdraw"
             android:exported="false" />
         <activity
