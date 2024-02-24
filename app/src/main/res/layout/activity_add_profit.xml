@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,43 +7,255 @@
     android:orientation="vertical"
     tools:context=".ui.ActivityAddProfit">
 
-
-    <EditText
-        android:id="@+id/etProfit"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Percentage"/>
-    <Button
-        android:id="@+id/btnAddProfit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add Profit"/>
+        android:orientation="vertical"
+        android:layout_marginBottom="40dp">
 
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Convert Profit to Investments"/>
-    <Button
-        android:id="@+id/btnConvertProfit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Convert" />
-    <Button
-        android:id="@+id/btnAllInvestorsAccept"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="All Investors Accept" />
-    <Button
-        android:id="@+id/btnTemp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="temp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="10dp"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center_horizontal">
 
 
-</LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="#D9E4D9"
+                        app:cardElevation="3dp"
+                        android:layout_margin="10dp"
+                        app:cardCornerRadius="6dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Selected Investors :"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="22dp"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginVertical="5dp"
+                                android:text="00"/>
+                            <Button
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Exclude"/>
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="#E4D9D9"
+
+                        app:cardElevation="3dp"
+                        android:layout_margin="10dp"
+                        app:cardCornerRadius="6dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Excluded Investors :"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="22dp"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginVertical="5dp"
+                                android:text="00"/>
+                            <Button
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Include"/>
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/etProfit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:hint="Percentage"/>
+
+                <Button
+                    android:id="@+id/btnAddProfit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Add Profit"
+                    android:layout_marginHorizontal="10dp"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Profit History"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginBottom="5dp"/>
+
+
+
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+
+
+
+        </LinearLayout>
+
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="20dp"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="10dp"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Available Profit :"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="22dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginVertical="5dp"
+                        android:text="00"/>
+
+                </LinearLayout>
+
+
+
+
+                <Button
+                    android:id="@+id/btnConvertProfit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Convert Profit" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="10dp"
+            android:layout_marginBottom="40dp"
+            android:layout_gravity="center_horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+
+                <CalendarView
+                    android:id="@+id/calendarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:id="@+id/btnRemoveProfit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:text="Remove Profits" />
+
+                <Button
+                    android:id="@+id/btnRemoveProfitTransactions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:text="Remove Profit Records" />
+                <Button
+                    android:id="@+id/btnRemoveProfitNotifications"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="Remove Profit Notifications" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+
+
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+</ScrollView>

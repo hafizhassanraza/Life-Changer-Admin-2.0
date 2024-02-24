@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.airbnb.lottie.parser.IntegerParser
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
@@ -57,6 +56,7 @@ class ActivityAddProfit : AppCompatActivity() {
     private lateinit var user: User
     private  var listInvestmentModel= ArrayList<InvestmentModel>()
 
+    private lateinit var selectedDay: Date
 
 
 
@@ -69,15 +69,37 @@ class ActivityAddProfit : AppCompatActivity() {
         mContext=this@ActivityAddProfit
         utils = Utils(mContext)
         constants= Constants()
-        binding.btnTemp.setOnClickListener {
-            //tempCode()
-            //tempGetTodayActiveInvestment()
-            //deductProfit()
-            //deleteProfitTransactions()
 
-            //deleteProfitNotifications()
+
+        binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+
+             val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC+5"))
+             calendar.set(year, month, dayOfMonth, 0, 0, 0)
+                selectedDay = calendar.time
 
         }
+
+
+        binding.btnRemoveProfit.setOnClickListener {
+            deductProfit(selectedDay)
+        }
+        binding.btnRemoveProfitTransactions.setOnClickListener {
+            deleteProfitTransactions(selectedDay)
+        }
+        binding.btnRemoveProfitNotifications.setOnClickListener {
+            deleteProfitNotifications(selectedDay)
+        }
+
+//        binding.btnTemp.setOnClickListener {
+//            //tempCode()
+//            //tempGetTodayActiveInvestment()
+//
+//            //deductProfit()
+//            //deleteProfitTransactions()
+//
+//            //deleteProfitNotifications()
+//
+//        }
         sharedPrefManager = SharedPrefManager(mContext)
 
 
@@ -107,9 +129,9 @@ class ActivityAddProfit : AppCompatActivity() {
 
             convertProfit()
         }
-        binding.btnAllInvestorsAccept.setOnClickListener {
+        /*binding.btnAllInvestorsAccept.setOnClickListener {
             startActivity(Intent(mContext, ActivityExcludeInvestors::class.java))
-        }
+        }*/
 
 
         /*binding.btnConvertInvestment.setOnClickListener{
@@ -119,21 +141,24 @@ class ActivityAddProfit : AppCompatActivity() {
         }*/
 
     }
+
+
+
     private fun tempCode (){
-        //var list_February_16_2024_Profit = sharedPrefManager.getTransactionList().filter { it.type.equals(constants.TRANSACTION_TYPE_PROFIT) && it.createdAt.equals() }.count()
+
+
 
         val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC+5"))
         calendar.set(2024, Calendar.FEBRUARY, 23, 0, 0, 0)
         val startOfDay = calendar.time
-
-        calendar.set(2024, Calendar.FEBRUARY, 17, 0, 0, 0)
-        val startOfNextDay = calendar.time
-
         val dateFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
         val filtered_list_February_16_2024_Profit = sharedPrefManager.getTransactionList().filter {
             it.type == constants.TRANSACTION_TYPE_PROFIT &&
                     dateFormatter.format(it.createdAt.toDate()) == dateFormatter.format(startOfDay)
         }
+
+
+
 
         //val sum = filtered_list_February_16_2024_Profit.sumOf { it.amount.toIntOrNull() ?: 0 }
 
@@ -192,7 +217,7 @@ class ActivityAddProfit : AppCompatActivity() {
 
 
 
-    private fun deductProfit() {
+    private fun deductProfit(selectedDay: Date) {
 
         utils.startLoadingAnimation()
 
@@ -201,17 +226,10 @@ class ActivityAddProfit : AppCompatActivity() {
         var EffectedSum= 0
 
 
-        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC+5"))
-        calendar.set(2024, Calendar.FEBRUARY, 23, 0, 0, 0)
-        val startOfDay = calendar.time
-
-        calendar.set(2024, Calendar.FEBRUARY, 17, 0, 0, 0)
-        val startOfNextDay = calendar.time
-
         val dateFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
         val listTransactionsOfTodayEffectedProfit = sharedPrefManager.getTransactionList().filter {
             it.type == constants.TRANSACTION_TYPE_PROFIT &&
-                    dateFormatter.format(it.createdAt.toDate()) == dateFormatter.format(startOfDay)
+                    dateFormatter.format(it.createdAt.toDate()) == dateFormatter.format(selectedDay)
         }
 
 
@@ -257,30 +275,22 @@ class ActivityAddProfit : AppCompatActivity() {
         }
 
 
-
-        Toast.makeText(mContext, EffectedSum.toString() , Toast.LENGTH_SHORT).show()
     }
 
 
 
-    private fun deleteProfitTransactions() {
+    private fun deleteProfitTransactions(selectedDay: Date) {
 
         utils.startLoadingAnimation()
 
 
 
 
-        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC+5"))
-        calendar.set(2024, Calendar.FEBRUARY, 23, 0, 0, 0)
-        val startOfDay = calendar.time
-
-        calendar.set(2024, Calendar.FEBRUARY, 17, 0, 0, 0)
-        val startOfNextDay = calendar.time
 
         val dateFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
         val listTransactionsOfTodayEffectedProfit = sharedPrefManager.getTransactionList().filter {
             it.type == constants.TRANSACTION_TYPE_PROFIT &&
-                    dateFormatter.format(it.createdAt.toDate()) == dateFormatter.format(startOfDay)
+                    dateFormatter.format(it.createdAt.toDate()) == dateFormatter.format(selectedDay)
         }
 
 
@@ -313,7 +323,7 @@ class ActivityAddProfit : AppCompatActivity() {
     }
 
 
-    private fun deleteProfitNotifications() {
+    private fun deleteProfitNotifications(selectedDay: Date) {
 
         utils.startLoadingAnimation()
 
@@ -323,17 +333,12 @@ class ActivityAddProfit : AppCompatActivity() {
 
 
 
-        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC+5"))
-        calendar.set(2024, Calendar.FEBRUARY, 23, 0, 0, 0)
-        val startOfDay = calendar.time
 
-        calendar.set(2024, Calendar.FEBRUARY, 17, 0, 0, 0)
-        val startOfNextDay = calendar.time
 
         val dateFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
         val filtered_list_February_23_2024_ProfitNotifications = sharedPrefManager.getNotificationList().filter {
             it.notiTitle.equals("Profit Credited") &&
-                    dateFormatter.format(it.createdAt.toDate()) == dateFormatter.format(startOfDay)
+                    dateFormatter.format(it.createdAt.toDate()) == dateFormatter.format(selectedDay)
         }
 
 
