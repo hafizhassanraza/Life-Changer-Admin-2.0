@@ -20,7 +20,7 @@ import com.enfotrix.adminlifechanger.Adapters.AdapterExcludeInvestors
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.Locale
 
-class ActivityExcludeInvestors : AppCompatActivity(), AdapterExcludeInvestors.OnItemClickListener {
+class ActivityExcludeInvestors : AppCompatActivity() {
 
     private lateinit var mContext: Context
     private lateinit var binding: ActivityExcludeInvestorsBinding
@@ -51,131 +51,114 @@ class ActivityExcludeInvestors : AppCompatActivity(), AdapterExcludeInvestors.On
 
         binding.removeClients.setOnClickListener {
             frombtn="remove"
-            showClientDialog()
+//            showClientDialog()
         }
         binding.selectClients.setOnClickListener {
             frombtn="select"
-            showClientDialog()
+//            showClientDialog()
         }
 
 
     }
 
-    fun showClientDialog() {
-        dialog = BottomSheetDialog(mContext)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.setContentView(R.layout.bottom_sheet_investors)
-        rvInvestors = dialog.findViewById<RecyclerView>(R.id.rvInvestors) as RecyclerView
-        rvInvestors.layoutManager = LinearLayoutManager(mContext)
-        if(frombtn=="remove"){
-            val adapter = frombtn?.let {
-                AdapterExcludeInvestors(constant.FROM_ACTIVITYEXCLUDEINVESTORS, investorsList, this,
-                    it
-                )
-
-            }
-            rvInvestors.adapter = adapter
-
-        }
-        else {
-
-            val adapter = frombtn?.let {
-                AdapterExcludeInvestors(constant.FROM_ACTIVITYEXCLUDEINVESTORS, removedList, this,
-                    it
-                )
-
-            }
-            rvInvestors.adapter = adapter
-        }
-
-
-        dialog.show()
-
-        if(frombtn=="remove"){
-            val svFadetail = dialog.findViewById<androidx.appcompat.widget.SearchView>(R.id.svFadetail)
-            svFadetail?.setOnQueryTextListener(object :
-                androidx.appcompat.widget.SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String): Boolean {
-                    return false
-                }
-                override fun onQueryTextChange(newText: String): Boolean {
-                    filter(newText,investorsList,"remove")
-                    return false
-                }
-            })
-        }
-        else {
-
-                val svFadetail = dialog.findViewById<androidx.appcompat.widget.SearchView>(R.id.svFadetail)
-                svFadetail?.setOnQueryTextListener(object :
-                    androidx.appcompat.widget.SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String): Boolean {
-                        return false
-                    }
-                    override fun onQueryTextChange(newText: String): Boolean {
-                        filter(newText,removedList,"select")
-                        return false
-                    }
-                })
-
-        }
-
-    }
-
-    override fun onItemClick(user: User) {
-        binding.removedClients.text = removedList.size.toString()
-        investorsList.add(user)
-        removedList = ArrayList(removedList.filter { it.id != user.id })
-        update()
-    }
-
-    override fun onAssignClick(user: User) {
-    }
-
-    override fun onRemoveClick(user: User) {
-        binding.selectedClients.text = investorsList.size.toString()
-        investorsList = ArrayList(investorsList.filter { it.id != user.id })
-        removedList.add(user)
-        updateAdapter()
+//    fun showClientDialog() {
+//        dialog = BottomSheetDialog(mContext)
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        dialog.setContentView(R.layout.bottom_sheet_investors)
+//        rvInvestors = dialog.findViewById<RecyclerView>(R.id.rvInvestors) as RecyclerView
+//        rvInvestors.layoutManager = LinearLayoutManager(mContext)
+//        if(frombtn=="remove"){
+//            val adapter = frombtn?.let {
+//                AdapterExcludeInvestors(constant.FROM_ACTIVITYEXCLUDEINVESTORS, investorsList, this,
+//                    it
+//                )
+//
+//            }
+//            rvInvestors.adapter = adapter
+//
+//        }
+//        else {
+//
+//            val adapter = frombtn?.let {
+//                AdapterExcludeInvestors(constant.FROM_ACTIVITYEXCLUDEINVESTORS, removedList, this,
+//                    it
+//                )
+//
+//            }
+//            rvInvestors.adapter = adapter
+//        }
+//
+//
+//        dialog.show()
+//
+//        if(frombtn=="remove"){
+//            val svFadetail = dialog.findViewById<androidx.appcompat.widget.SearchView>(R.id.svFadetail)
+//            svFadetail?.setOnQueryTextListener(object :
+//                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+//                override fun onQueryTextSubmit(query: String): Boolean {
+//                    return false
+//                }
+//                override fun onQueryTextChange(newText: String): Boolean {
+//                    filter(newText,investorsList,"remove")
+//                    return false
+//                }
+//            })
+//        }
+//        else {
+//
+//                val svFadetail = dialog.findViewById<androidx.appcompat.widget.SearchView>(R.id.svFadetail)
+//                svFadetail?.setOnQueryTextListener(object :
+//                    androidx.appcompat.widget.SearchView.OnQueryTextListener {
+//                    override fun onQueryTextSubmit(query: String): Boolean {
+//                        return false
+//                    }
+//                    override fun onQueryTextChange(newText: String): Boolean {
+//                        filter(newText,removedList,"select")
+//                        return false
+//                    }
+//                })
+//
+//        }
+//
+//    }
 
 
-    }
     private fun filter(text: String, list: ArrayList<User>, s: String) {
         list.filter { user ->
             user.firstName.toLowerCase(Locale.getDefault())
                 .contains(text.toLowerCase(Locale.getDefault()))
         }
-
-            val adapter = frombtn?.let {
-                AdapterExcludeInvestors(constant.FROM_UN_ASSIGNED_FA, list, this,
-                    it
-                )
-            }
-            rvInvestors.adapter = adapter
+//
+//            val adapter = frombtn?.let {
+//                AdapterExcludeInvestors(constant.FROM_UN_ASSIGNED_FA, list, this,
+//                    it
+//                )
+//            }
+//            rvInvestors.adapter = adapter
 
 
     }
 
-    private fun updateAdapter() {
-        binding.removedClients.text = removedList.size.toString()
-        binding.selectedClients.text = investorsList.size.toString()
-        val adapter = frombtn?.let {
-            AdapterExcludeInvestors(constant.FROM_UN_ASSIGNED_FA, investorsList, this,
-                it
-            )
-        }
-        rvInvestors.adapter = adapter
-    }
-    private fun update() {
-        binding.removedClients.text = removedList.size.toString()
-        binding.selectedClients.text = investorsList.size.toString()
-
-        val adapter = frombtn?.let {
-            AdapterExcludeInvestors(constant.FROM_UN_ASSIGNED_FA, removedList, this,
-                it
-            )
-        }
-        rvInvestors.adapter = adapter
-    }
+//    private fun updateAdapter() {
+//        binding.removedClients.text = removedList.size.toString()
+//        binding.selectedClients.text = investorsList.size.toString()
+//        val adapter = frombtn?.let {
+//            AdapterExcludeInvestors(constant.FROM_UN_ASSIGNED_FA, investorsList, this,
+//                it
+//            )
+//        }
+//        rvInvestors.adapter = adapter
+//    }
+//    private fun update() {
+//        binding.removedClients.text = removedList.size.toString()
+//        binding.selectedClients.text = investorsList.size.toString()
+//
+//        val adapter = frombtn?.let {
+//            AdapterExcludeInvestors(constant.FROM_UN_ASSIGNED_FA, removedList, this,
+//                it
+//            )
+//        }
+//        rvInvestors.adapter = adapter
+//    }
 }

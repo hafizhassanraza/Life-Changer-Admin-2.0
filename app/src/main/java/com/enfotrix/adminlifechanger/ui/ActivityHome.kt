@@ -16,6 +16,7 @@ import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.ModelEarning
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.Models.NotificationModel
+import com.enfotrix.adminlifechanger.Models.ProfitModel
 import com.enfotrix.adminlifechanger.databinding.ActivityHomeBinding
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
@@ -180,6 +181,7 @@ class ActivityHome : AppCompatActivity() {
             constants.NOMINEE_COLLECTION,
             constants.ANNOUNCEMENT_COLLECTION,
             constants.AGENT_EARNING_COLLECTION,
+            constants.PROFIT_COLLECTION,
             constants.WITHDRAW_COLLECTION // Agent Withdraw
 
         )
@@ -221,6 +223,10 @@ class ActivityHome : AppCompatActivity() {
 
                             constants.NOMINEE_COLLECTION -> sharedPrefManager.putNomineeList(task.documents.mapNotNull { document ->
                                 document.toObject(ModelNominee::class.java)
+                                    ?.apply { docID = document.id }
+                            })
+                            constants.PROFIT_COLLECTION -> sharedPrefManager.putProfitHistory(task.documents.mapNotNull { document ->
+                                document.toObject(ProfitModel::class.java)
                                     ?.apply { docID = document.id }
                             })
 

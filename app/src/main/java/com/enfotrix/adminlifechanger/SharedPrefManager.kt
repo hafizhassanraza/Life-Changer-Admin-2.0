@@ -8,6 +8,7 @@ import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.ModelEarning
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.Models.NotificationModel
+import com.enfotrix.adminlifechanger.Models.ProfitModel
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
 import com.enfotrix.lifechanger.Models.ModelProfitTax
@@ -239,6 +240,18 @@ class SharedPrefManager(context: Context) {
             emptyList()
         }
     }
+    fun getProfitHistory(): List<ProfitModel>{
+
+        val json = sharedPref.getString("ListProfitHistory", "") ?: ""
+        val type: Type = object : TypeToken<List<ProfitModel?>?>() {}.getType()
+        //return Gson().fromJson(json, type)
+
+        return if (!json.isNullOrEmpty()) {
+            Gson().fromJson(json, type) ?: emptyList()
+        } else {
+            emptyList()
+        }
+    }
 
     fun getAgentWithdrawList(): List<AgentWithdrawModel>{
 
@@ -270,6 +283,9 @@ class SharedPrefManager(context: Context) {
     }
     fun putNomineeList(list: List<ModelNominee>) {
         editor.putString("ListNominee", Gson().toJson(list))
+        editor.commit()
+    } fun putProfitHistory(list: List<ProfitModel>) {
+        editor.putString("ListProfitHistory", Gson().toJson(list))
         editor.commit()
     }
     fun putAgentEarningList(list: List<ModelEarning>) {

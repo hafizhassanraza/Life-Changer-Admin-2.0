@@ -1,20 +1,33 @@
 package com.enfotrix.adminlifechanger.ui
 
 import User
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.Window
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.enfotrix.adminlifechanger.Adapters.AdapterExcludeInvestors
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.NotificationModel
 import com.enfotrix.adminlifechanger.Models.NotificationViewModel
+import com.enfotrix.adminlifechanger.Models.ProfitModel
+import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityAddProfitBinding
 import com.enfotrix.lifechanger.Models.TransactionModel
 import java.util.*
@@ -23,6 +36,7 @@ import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
 import com.google.android.gms.tasks.Tasks
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -30,8 +44,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.concurrent.CountDownLatch
 
-class ActivityAddProfit : AppCompatActivity() {
+class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemClickListener{
 
     private val db = Firebase.firestore
 
@@ -43,9 +58,9 @@ class ActivityAddProfit : AppCompatActivity() {
     private val faViewModel: FAViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
     var constant= Constants()
+    var profitModel: ProfitModel? =null
     private val notificationViewModel: NotificationViewModel by viewModels()
-
-
+    private var frombtn: String? =null
     private lateinit var binding: ActivityAddProfitBinding
     private lateinit var utils: Utils
     private lateinit var mContext: Context
@@ -54,9 +69,14 @@ class ActivityAddProfit : AppCompatActivity() {
     private lateinit var dialog : Dialog
     private lateinit var transactionModel: TransactionModel
     private lateinit var user: User
+    private var profitCounter:Int?=null
+    private var remarks:String?=null
     private  var listInvestmentModel= ArrayList<InvestmentModel>()
-
+    private lateinit var rvInvestors: RecyclerView
+    private var investorsList = ArrayList<User>()
+    private var removedList = ArrayList<User>()
     private lateinit var selectedDay: Date
+    private lateinit var dialogPinUpdate: Dialog
 
 
 
@@ -69,6 +89,13 @@ class ActivityAddProfit : AppCompatActivity() {
         mContext=this@ActivityAddProfit
         utils = Utils(mContext)
         constants= Constants()
+        sharedPrefManager = SharedPrefManager(mContext)
+        investorsList = sharedPrefManager.getUsersList().filter { it.status == constants.INVESTOR_STATUS_ACTIVE } as ArrayList<User>
+        binding.included.text = investorsList.size.toString()
+        binding.excluded.text = removedList?.size.toString()
+        binding.availableProfit.text = sharedPrefManager.getInvestmentList()
+            .sumOf { it.lastProfit.takeIf { profit -> profit.isNotBlank() }?.toInt() ?: 0 }
+            .toString()
 
 
         binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
@@ -79,16 +106,53 @@ class ActivityAddProfit : AppCompatActivity() {
 
         }
 
+        binding.btnProfitHistory.setOnClickListener {
+           startActivity(Intent(mContext,ActivityProfitHistory::class.java))
+        }
+
 
         binding.btnRemoveProfit.setOnClickListener {
-            deductProfit(selectedDay)
+            checkPin(object : PinCheckCallback {
+                override fun onPinChecked(isValid: Boolean) {
+                    if (isValid) {
+                        Toast.makeText(mContext, "success", Toast.LENGTH_SHORT).show()
+                        // deductProfit(selectedDay)
+                    } else {
+                        Toast.makeText(mContext, "Enter valid pin please", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
         }
+
         binding.btnRemoveProfitTransactions.setOnClickListener {
-            deleteProfitTransactions(selectedDay)
+            checkPin(object : PinCheckCallback {
+                override fun onPinChecked(isValid: Boolean) {
+                    if (isValid) {
+                        Toast.makeText(mContext, "success", Toast.LENGTH_SHORT).show()
+                        // deleteProfitTransactions(selectedDay)
+                    } else {
+                        Toast.makeText(mContext, "Enter valid pin please", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
         }
+
         binding.btnRemoveProfitNotifications.setOnClickListener {
-            deleteProfitNotifications(selectedDay)
+            checkPin(object : PinCheckCallback {
+                override fun onPinChecked(isValid: Boolean) {
+                    if (isValid) {
+                        Toast.makeText(mContext, "success", Toast.LENGTH_SHORT).show()
+                        // deleteProfitNotifications(selectedDay)
+                    } else {
+                        Toast.makeText(mContext, "Enter valid pin please", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
         }
+
+
+
+
 
 //        binding.btnTemp.setOnClickListener {
 //            //tempCode()
@@ -100,7 +164,6 @@ class ActivityAddProfit : AppCompatActivity() {
 //            //deleteProfitNotifications()
 //
 //        }
-        sharedPrefManager = SharedPrefManager(mContext)
 
 
         //41//1111
@@ -114,21 +177,84 @@ class ActivityAddProfit : AppCompatActivity() {
 
          }*/
 
-
-
         getData()
+        binding.btnExclude.setOnClickListener {
+            frombtn="remove"
+            showClientDialog()
+        }
+        binding.btnInclude.setOnClickListener {
+            frombtn="select"
+          showClientDialog()
+        }
+
+
 
         binding.btnAddProfit.setOnClickListener{
 
             val percentage = binding.etProfit.text.toString()
+//            addProfit(percentage.toDouble() / 100,percentage)
 
-            addProfit(percentage.toDouble() / 100,percentage)
         }
-        binding.btnConvertProfit.setOnClickListener{
 
 
-            convertProfit()
+
+
+        binding.btnAddProfit.setOnClickListener {
+            val percentage = binding.etProfit.text.toString()
+            val dialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_varify_profit_pin, null)
+            val builder = AlertDialog.Builder(mContext)
+            builder.setView(dialogView)
+            val alertDialog = builder.create()
+            val passwordEditText = dialogView.findViewById<EditText>(R.id.password)
+            val remarksEditText = dialogView.findViewById<EditText>(R.id.etRemarks)
+            val enterButton = dialogView.findViewById<Button>(R.id.btnEnter)
+            enterButton.setOnClickListener {
+                val enteredPassword = passwordEditText.text.toString()
+                if (enteredPassword == "123789") {
+                    Toast.makeText(mContext, "Success", Toast.LENGTH_SHORT).show()
+//                  addProfit(percentage.toDouble() / 100,percentage)
+                    remarks=remarksEditText.text.toString()
+                    alertDialog.dismiss()
+
+                    // Perform other actions as needed after successful password verification
+                    // ...
+
+                } else {
+                    // Password is incorrect, show an error message or take appropriate action
+                    Toast.makeText(mContext, "Incorrect password. Please try again.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            // Show the dialog
+            alertDialog.show()
         }
+
+
+
+
+
+
+
+
+
+
+        binding.btnConvertProfit.setOnClickListener {
+            checkPin(object : PinCheckCallback {
+                override fun onPinChecked(isValid: Boolean) {
+                    if (isValid) {
+                        Toast.makeText(mContext, "success", Toast.LENGTH_SHORT).show()
+                        //   convertProfit()
+                    } else {
+                        Toast.makeText(mContext, "Enter valid pin please", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
+        }
+
+
+
+
+
         /*binding.btnAllInvestorsAccept.setOnClickListener {
             startActivity(Intent(mContext, ActivityExcludeInvestors::class.java))
         }*/
@@ -215,6 +341,113 @@ class ActivityAddProfit : AppCompatActivity() {
     }
 
 
+    fun showClientDialog() {
+        dialog = BottomSheetDialog(mContext)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(R.layout.bottom_sheet_investors)
+        rvInvestors = dialog.findViewById<RecyclerView>(R.id.rvInvestors) as RecyclerView
+        rvInvestors.layoutManager = LinearLayoutManager(mContext)
+        if(frombtn=="remove"){
+            val adapter = frombtn?.let {
+                AdapterExcludeInvestors(constant.FROM_ACTIVITYEXCLUDEINVESTORS, investorsList, this,
+                    it
+                )
+
+            }
+            rvInvestors.adapter = adapter
+
+        }
+        else {
+
+            val adapter = frombtn?.let {
+                AdapterExcludeInvestors(constant.FROM_ACTIVITYEXCLUDEINVESTORS, removedList, this,
+                    it
+                )
+
+            }
+            rvInvestors.adapter = adapter
+        }
+
+
+        dialog.show()
+
+        if(frombtn=="remove"){
+            val svFadetail = dialog.findViewById<androidx.appcompat.widget.SearchView>(R.id.svFadetail)
+            svFadetail?.setOnQueryTextListener(object :
+                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    return false
+                }
+                override fun onQueryTextChange(newText: String): Boolean {
+                    filter(newText,investorsList,"remove")
+                    return false
+                }
+            })
+        }
+        else {
+
+            val svFadetail = dialog.findViewById<androidx.appcompat.widget.SearchView>(R.id.svFadetail)
+            svFadetail?.setOnQueryTextListener(object :
+                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    return false
+                }
+                override fun onQueryTextChange(newText: String): Boolean {
+                    filter(newText,removedList,"select")
+                    return false
+                }
+            })
+
+        }
+
+    }
+
+
+    fun filter(query: String, dataList: List<User>, action: String) {
+        val filteredList = dataList.filter { investor ->
+            val fullName = "${investor.firstName} ${investor.lastName}".replace("\\s".toRegex(), "")
+
+            if (action == "remove") {
+                fullName.contains(query.replace("\\s".toRegex(), ""), ignoreCase = true)
+            } else {
+                fullName.contains(query.replace("\\s".toRegex(), ""), ignoreCase = true)
+            }
+        }
+
+        when (action) {
+            "remove" -> {
+                val adapter = AdapterExcludeInvestors(
+                    constant.FROM_ACTIVITYEXCLUDEINVESTORS,
+                    filteredList as ArrayList<User>,
+                    this,
+                    "remove"
+                )
+                rvInvestors.adapter = adapter
+                investorsList.clear()
+                investorsList.addAll(filteredList)
+            }
+            "select" -> {
+                val adapter = AdapterExcludeInvestors(
+                    constant.FROM_ACTIVITYEXCLUDEINVESTORS,
+                    filteredList as ArrayList<User>,
+                    this,
+                    "select"
+                )
+                rvInvestors.adapter = adapter
+                investorsList.clear()
+                investorsList.addAll(filteredList)
+            }
+        }
+    }
+
+
+    fun yourFunctionName(newText: String): Boolean {
+        filter(newText.orEmpty(), investorsList, frombtn!!)
+        return false
+    }
+
+
 
 
     private fun deductProfit(selectedDay: Date) {
@@ -222,6 +455,7 @@ class ActivityAddProfit : AppCompatActivity() {
         utils.startLoadingAnimation()
 
         val totalInvestments = listInvestmentModel.size
+
 
         var EffectedSum= 0
 
@@ -414,12 +648,8 @@ class ActivityAddProfit : AppCompatActivity() {
                 val newProfit = previousProfit_ + profit
 
                 investmentModel.lastProfit = newProfit.toString()
-
-
-
-
                 val newTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
-
+                profitCounter = profitCounter?.plus(profit.toInt())
 
                 val profitModel = TransactionModel(
                     investmentModel.investorID,
@@ -445,7 +675,6 @@ class ActivityAddProfit : AppCompatActivity() {
                         .addOnCompleteListener {
 
                             if (index == totalInvestments - 1) {
-                                utils.endLoadingAnimation()
                                 Toast.makeText(mContext, "Profit Added Successfully!", Toast.LENGTH_SHORT).show()
                             }
 
@@ -453,7 +682,38 @@ class ActivityAddProfit : AppCompatActivity() {
                 }
             }
         }
+
+        saveProfitHistory(profitCounter)
+
     }
+
+    private fun saveProfitHistory(profit_counter: Int?) {
+        val lastProfitModel = sharedPrefManager.getProfitHistory().lastOrNull()
+//        profitModel?.previousProfit= lastProfitModel?.newProfit.toString()
+//        profitModel?.newProfit=profit_counter.toString()
+//        profitModel?.remarks= remarks.toString()
+        lifecycleScope.launch {
+            investmentViewModel.setProfitHistory(ProfitModel("", lastProfitModel?.newProfit.toString(),profit_counter.toString(),remarks!!)).addOnCompleteListener {task->
+                if(task.isSuccessful){
+                    utils.endLoadingAnimation()
+
+                }
+                else
+                {
+                    utils.endLoadingAnimation()
+                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+
+
+
+
+
+    }
+
+
     fun getTextFromInvestment(value: String?): String {
         return if (value.isNullOrEmpty()) "0" else value
     }
@@ -661,4 +921,85 @@ class ActivityAddProfit : AppCompatActivity() {
 
             }
     }
+
+
+
+    override fun onItemClick(user: User) {
+       binding.excluded.text = removedList.size.toString()
+        investorsList.add(user)
+        removedList = ArrayList(removedList.filter { it.id != user.id })
+        update()
+    }
+
+    override fun onAssignClick(user: User) {
+
+    }
+
+    override fun onRemoveClick(user: User) {
+        binding.included.text = investorsList.size.toString()
+        investorsList = ArrayList(investorsList.filter { it.id != user.id })
+        removedList.add(user)
+       updateAdapter()
+    }
+       private fun updateAdapter() {
+    binding.excluded.text = removedList.size.toString()
+        binding.included.text = investorsList.size.toString()
+        val adapter = frombtn?.let {
+            AdapterExcludeInvestors(constant.FROM_UN_ASSIGNED_FA, investorsList, this,
+                it
+            )
+        }
+        rvInvestors.adapter = adapter
+    }
+
+    private fun update() {
+        binding.excluded.text = removedList.size.toString()
+       binding.included.text = investorsList.size.toString()
+
+        val adapter = frombtn?.let {
+            AdapterExcludeInvestors(constant.FROM_UN_ASSIGNED_FA, removedList, this,
+                it
+            )
+        }
+        rvInvestors.adapter = adapter
+    }
+
+
+    private fun checkPin(callback: PinCheckCallback) {
+        dialogPinUpdate = Dialog(mContext)
+        dialogPinUpdate.setContentView(R.layout.dialog_varify_pin)
+        dialogPinUpdate.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogPinUpdate.setCancelable(true)
+
+        val pin1 = dialogPinUpdate.findViewById<EditText>(R.id.etPin1)
+        val pin2 = dialogPinUpdate.findViewById<EditText>(R.id.etPin2)
+        val pin3 = dialogPinUpdate.findViewById<EditText>(R.id.etPin3)
+        val pin4 = dialogPinUpdate.findViewById<EditText>(R.id.etPin4)
+        val pin5 = dialogPinUpdate.findViewById<EditText>(R.id.etPin5)
+        val pin6 = dialogPinUpdate.findViewById<EditText>(R.id.etPin6)
+        val btnSetPin = dialogPinUpdate.findViewById<Button>(R.id.btnSetpin)
+
+        pin1.requestFocus()
+        utils.moveFocus(listOf(pin1, pin2, pin3, pin4, pin5, pin6))
+
+        val tvClearAll = dialogPinUpdate.findViewById<TextView>(R.id.tvClearAll)
+        tvClearAll.setOnClickListener {
+            utils.clearAll(listOf(pin1, pin2, pin3, pin4, pin5, pin6))
+            pin1.requestFocus()
+        }
+
+        btnSetPin.setOnClickListener {
+            val completePin = "${pin1.text}${pin2.text}${pin3.text}${pin4.text}${pin5.text}${pin6.text}"
+       //     Toast.makeText(mContext, "Entered PIN: $completePin", Toast.LENGTH_SHORT).show()
+            callback.onPinChecked(completePin == "123789")
+            dialogPinUpdate.dismiss()
+        }
+
+        dialogPinUpdate.show()
+    }
+    interface PinCheckCallback {
+        fun onPinChecked(isValid: Boolean)
+    }
+
+
 }

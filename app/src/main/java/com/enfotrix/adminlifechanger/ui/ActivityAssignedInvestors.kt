@@ -348,6 +348,7 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
 
 
     private fun filter(text: String) {
+
         val filteredList = if (text.isBlank()) {
             InvestorAdapter(
                 constants.FROM_UN_ASSIGNED_FA,
@@ -365,6 +366,7 @@ class ActivityAssignedInvestors : AppCompatActivity(), InvestorAdapter.OnItemCli
                 this@ActivityAssignedInvestors
             )
         }
+
 
         rvInvestors.adapter = filteredList
     }

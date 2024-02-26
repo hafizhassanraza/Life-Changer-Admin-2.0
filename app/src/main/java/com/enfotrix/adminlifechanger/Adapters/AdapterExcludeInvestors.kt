@@ -60,8 +60,7 @@ class AdapterExcludeInvestors(
                 .placeholder(R.drawable.ic_launcher_background) // Placeholder image while loading
                 .into(itemBinding.ivprofile)
 
-            // Common listener for all activities
-//            itemBinding.layUser.setOnClickListener { listener.onItemClick(user) }
+
         }
     }
 }

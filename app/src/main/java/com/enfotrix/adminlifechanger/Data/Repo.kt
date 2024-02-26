@@ -12,6 +12,7 @@ import com.enfotrix.adminlifechanger.Models.AgentWithdrawModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.Models.NotificationModel
+import com.enfotrix.adminlifechanger.Models.ProfitModel
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
 import com.enfotrix.lifechanger.Models.TransactionModel
@@ -55,6 +56,7 @@ class Repo(val context: Context) {
     private val ProfitTaxCollection = db.collection(constants.PROFIT_TAX_COLLECTION)
     private val WithdrawCollection = db.collection(constants.WITHDRAW_COLLECTION)
     private val NotificationCollection = db.collection(constants.NOTIFICATION_COLLECTION)
+    private val ProfitCollection = db.collection(constants.PROFIT_COLLECTION)
 
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -510,6 +512,11 @@ modelFA.id=documents.id
     fun saveNotification(notification: NotificationModel): Task<DocumentReference> {
 
         return NotificationCollection.add(notification)
+
+    }
+
+    fun setProfitHistory(profitModel: ProfitModel): Task<DocumentReference> {
+        return  ProfitCollection.add(profitModel)
 
     }
 

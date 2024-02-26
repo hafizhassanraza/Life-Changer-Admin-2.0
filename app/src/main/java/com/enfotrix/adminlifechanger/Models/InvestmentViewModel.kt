@@ -10,6 +10,7 @@ import com.enfotrix.lifechanger.Data.Repo
 import com.enfotrix.lifechanger.Models.TransactionModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 
@@ -26,6 +27,9 @@ class InvestmentViewModel(context: Application) : AndroidViewModel(context) {
     }
     suspend fun setInvestment(investment: InvestmentModel): Task<Void> {
         return userRepo.setInvestment(investment)
+    }
+    suspend fun setProfitHistory(profit: ProfitModel): Task<DocumentReference> {
+        return userRepo.setProfitHistory(profit)
     }
     suspend fun getProfitTax(token: String): Task<QuerySnapshot> {
         return userRepo.getProfitTax(token)
