@@ -49,6 +49,10 @@ class AdapterExcludeInvestors(
                 itemBinding.btnRemove.visibility=View.GONE
                 itemBinding.btnAdd.visibility=View.VISIBLE
             }
+            else if(frombtn=="profitDeatails"){
+                itemBinding.btnRemove.visibility=View.GONE
+                itemBinding.btnAdd.visibility=View.GONE
+            }
 
             itemBinding.btnRemove.setOnClickListener { listener.onRemoveClick(user) }
             itemBinding.btnAdd.setOnClickListener { listener.onItemClick(user) }

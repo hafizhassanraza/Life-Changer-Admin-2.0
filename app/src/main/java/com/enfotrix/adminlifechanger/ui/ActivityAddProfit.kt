@@ -49,11 +49,6 @@ import java.util.concurrent.CountDownLatch
 class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemClickListener{
 
     private val db = Firebase.firestore
-
-
-
-
-
     private val investmentViewModel: InvestmentViewModel by viewModels()
     private val faViewModel: FAViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
@@ -105,10 +100,11 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
                 selectedDay = calendar.time
 
         }
-
         binding.btnProfitHistory.setOnClickListener {
-           startActivity(Intent(mContext,ActivityProfitHistory::class.java))
+            val intent = Intent(mContext, ActivityProfitHistory::class.java)
+            startActivity(intent)
         }
+
 
 
         binding.btnRemoveProfit.setOnClickListener {
@@ -202,9 +198,11 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
         binding.btnAddProfit.setOnClickListener {
             val percentage = binding.etProfit.text.toString()
             val dialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_varify_profit_pin, null)
+
             val builder = AlertDialog.Builder(mContext)
             builder.setView(dialogView)
             val alertDialog = builder.create()
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             val passwordEditText = dialogView.findViewById<EditText>(R.id.password)
             val remarksEditText = dialogView.findViewById<EditText>(R.id.etRemarks)
             val enterButton = dialogView.findViewById<Button>(R.id.btnEnter)
@@ -688,27 +686,27 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
     }
 
     private fun saveProfitHistory(profit_counter: Int?) {
-        val lastProfitModel = sharedPrefManager.getProfitHistory().lastOrNull()
-//        profitModel?.previousProfit= lastProfitModel?.newProfit.toString()
-//        profitModel?.newProfit=profit_counter.toString()
-//        profitModel?.remarks= remarks.toString()
-        lifecycleScope.launch {
-            investmentViewModel.setProfitHistory(ProfitModel("", lastProfitModel?.newProfit.toString(),profit_counter.toString(),remarks!!)).addOnCompleteListener {task->
-                if(task.isSuccessful){
-                    utils.endLoadingAnimation()
-
-                }
-                else
-                {
-                    utils.endLoadingAnimation()
-                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-
-
-
-
+//        val lastProfitModel = sharedPrefManager.getProfitHistory().lastOrNull()
+////        profitModel?.previousProfit= lastProfitModel?.newProfit.toString()
+////        profitModel?.newProfit=profit_counter.toString()
+////        profitModel?.remarks= remarks.toString()
+//        lifecycleScope.launch {
+//            investmentViewModel.setProfitHistory(ProfitModel("", lastProfitModel?.newProfit.toString(),profit_counter.toString(),remarks!!)).addOnCompleteListener {task->
+//                if(task.isSuccessful){
+//                    utils.endLoadingAnimation()
+//
+//                }
+//                else
+//                {
+//                    utils.endLoadingAnimation()
+//                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        }
+//
+//
+//
+//
 
 
     }

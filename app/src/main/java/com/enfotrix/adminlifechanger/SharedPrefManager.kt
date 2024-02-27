@@ -8,6 +8,7 @@ import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.ModelEarning
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.Models.NotificationModel
+import com.enfotrix.adminlifechanger.Models.ProfitHistory
 import com.enfotrix.adminlifechanger.Models.ProfitModel
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
@@ -240,10 +241,10 @@ class SharedPrefManager(context: Context) {
             emptyList()
         }
     }
-    fun getProfitHistory(): List<ProfitModel>{
+    fun getProfitHistory(): List<ProfitHistory>{
 
         val json = sharedPref.getString("ListProfitHistory", "") ?: ""
-        val type: Type = object : TypeToken<List<ProfitModel?>?>() {}.getType()
+        val type: Type = object : TypeToken<List<ProfitHistory?>?>() {}.getType()
         //return Gson().fromJson(json, type)
 
         return if (!json.isNullOrEmpty()) {
@@ -284,7 +285,7 @@ class SharedPrefManager(context: Context) {
     fun putNomineeList(list: List<ModelNominee>) {
         editor.putString("ListNominee", Gson().toJson(list))
         editor.commit()
-    } fun putProfitHistory(list: List<ProfitModel>) {
+    } fun putProfitHistory(list: List<ProfitHistory>) {
         editor.putString("ListProfitHistory", Gson().toJson(list))
         editor.commit()
     }

@@ -18,7 +18,7 @@ public class Constants  {
     public var PROFIT_TAX_COLLECTION="ProfitTax"
     public var WITHDRAW_COLLECTION="Agent Withdraw"
     public var NOTIFICATION_COLLECTION="Notification"
-    public var PROFIT_COLLECTION="Profit"
+    public var PROFIT_COLLECTION="Profit History"
 
 
 

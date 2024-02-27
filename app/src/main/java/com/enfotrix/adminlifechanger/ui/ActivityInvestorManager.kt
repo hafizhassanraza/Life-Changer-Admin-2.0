@@ -10,15 +10,11 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.Adapters.AdapterActiveInvestors
-import com.enfotrix.adminlifechanger.Adapters.AdapterInvestorManager
-import com.enfotrix.adminlifechanger.Adapters.InvestorAdapter
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.NomineeViewModel
-import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityInvestorManagerBinding
-import com.enfotrix.adminlifechanger.databinding.ActivityNewInvestorsReqBinding
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils

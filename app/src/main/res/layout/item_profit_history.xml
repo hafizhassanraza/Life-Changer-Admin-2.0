@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/white"
+    app:cardElevation="8dp"
+    android:id="@+id/lay"
+    android:layout_marginRight="4dp"
+    app:cardCornerRadius="12dp"
+>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="26 february 2024"
+            android:textSize="12sp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/gray"/>
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Available Balance :"
+            android:layout_marginTop="7dp"
+            android:layout_below="@id/date"
+            android:textSize="12sp"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/primary"/>
+        <TextView
+            android:id="@+id/availableBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="383838383"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/date"
+            android:textSize="12sp"
+            android:layout_toEndOf="@id/tv1"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/gray"/>
+
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Active Investment:"
+            android:layout_marginTop="7dp"
+            android:textSize="12sp"
+            android:layout_below="@id/availableBalance"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/primary"/>
+        <TextView
+            android:id="@+id/activeInvestments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4564"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/availableBalance"
+            android:textSize="12sp"
+            android:layout_toEndOf="@id/tv2"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/gray"/>
+        <TextView
+            android:id="@+id/tv3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="InActive Investment:"
+            android:layout_marginTop="7dp"
+            android:layout_below="@id/activeInvestments"
+            android:layout_marginLeft="20dp"
+            android:textSize="12sp"
+            android:textColor="@color/primary"/>
+        <TextView
+            android:id="@+id/tvinactiveInvestments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4564"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/activeInvestments"
+            android:textSize="12sp"
+            android:layout_toEndOf="@id/tv3"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/gray"/>
+        <TextView
+            android:id="@+id/tv4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New profit amount:"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/tvinactiveInvestments"
+            android:textSize="12sp"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/primary"/>
+        <TextView
+            android:id="@+id/newProfitAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4564"
+            android:layout_marginTop="8dp"
+            android:textSize="12sp"
+            android:layout_marginLeft="3dp"
+            android:layout_below="@id/tvinactiveInvestments"
+            android:layout_toEndOf="@id/tv4"
+            android:textColor="@color/gray"/>
+
+        <TextView
+            android:id="@+id/tv5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New profit percentage:"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/tv4"
+            android:textSize="12sp"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/primary"/>
+        <TextView
+            android:id="@+id/newProfitPercentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5%"
+            android:layout_marginTop="8dp"
+            android:textSize="12sp"
+            android:layout_marginLeft="3dp"
+            android:layout_below="@id/newProfitAmount"
+            android:layout_toEndOf="@id/tv5"
+            android:textColor="@color/gray"/>
+
+        <TextView
+            android:id="@+id/tv7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/tv5"
+            android:layout_marginTop="10dp"
+            android:text="Investors strength:"
+            android:textColor="@color/primary"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/investorsStrength"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv5"
+            android:layout_toEndOf="@id/tv7"
+            android:layout_marginTop="12dp"
+            android:text="311"
+            android:layout_marginLeft="3dp"
+
+            android:textColor="@color/gray"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remarks:"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/tv7"
+            android:textSize="12sp"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/primary"/>
+        <TextView
+            android:id="@+id/etRemarks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="12dp"
+            android:layout_below="@id/tv7"
+            android:layout_toEndOf="@id/tv6"
+            android:text="Added by Mr. Mujahid AND HE IS ELIGBLE FO JSJ "
+            android:textColor="@color/gray"
+            android:textSize="11sp" />
+
+        <Button
+            android:id="@+id/btnSeeInvestors"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            android:layout_below="@id/etRemarks"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="13dp"
+            android:layout_marginBottom="10dp"
+            android:text="View  Investors" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

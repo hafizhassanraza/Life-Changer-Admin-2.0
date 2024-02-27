@@ -16,6 +16,7 @@ import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.ModelEarning
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.Models.NotificationModel
+import com.enfotrix.adminlifechanger.Models.ProfitHistory
 import com.enfotrix.adminlifechanger.Models.ProfitModel
 import com.enfotrix.adminlifechanger.databinding.ActivityHomeBinding
 import com.enfotrix.lifechanger.Models.ModelBankAccount
@@ -226,7 +227,7 @@ class ActivityHome : AppCompatActivity() {
                                     ?.apply { docID = document.id }
                             })
                             constants.PROFIT_COLLECTION -> sharedPrefManager.putProfitHistory(task.documents.mapNotNull { document ->
-                                document.toObject(ProfitModel::class.java)
+                                document.toObject(ProfitHistory::class.java)
                                     ?.apply { docID = document.id }
                             })
 

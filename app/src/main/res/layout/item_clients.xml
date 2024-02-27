@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        app:cardCornerRadius="10dp"
+        android:layout_below="@+id/v1">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <ImageView
+                android:id="@+id/photo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginRight="4dp"
+                android:src="@color/ic_launcher_background"
+                android:visibility="visible"
+                />
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="M.hussain"
+                android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@id/photo"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/primary"
+                />
+            <TextView
+                android:id="@+id/cnic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="38402-5049292-1"
+                android:textSize="13dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@id/photo"
+                android:layout_below="@id/name"
+                android:textColor="@color/gray"
+                />
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profit: "
+                android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@id/photo"
+                android:layout_marginTop="4dp"
+                android:layout_below="@id/cnic"
+                android:textColor="@color/primary"
+                />
+            <TextView
+                android:id="@+id/profit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="23232"
+                android:layout_marginTop="4dp"
+                android:layout_toEndOf="@id/tv1"
+                android:layout_below="@id/cnic"
+                android:textColor="@color/gray"
+                />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

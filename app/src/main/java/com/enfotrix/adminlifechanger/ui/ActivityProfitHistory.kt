@@ -1,5 +1,6 @@
 package com.enfotrix.adminlifechanger.ui
 
+import User
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
@@ -12,27 +13,26 @@ import android.view.LayoutInflater
 import android.view.Window
 import android.widget.NumberPicker
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.enfotrix.adminlifechanger.Adapters.AdapterProfitHistory
 import com.enfotrix.adminlifechanger.Constants
-import com.enfotrix.adminlifechanger.Models.ProfitModel
-import com.enfotrix.adminlifechanger.Pdf.PdfProfitHistory
+import com.enfotrix.adminlifechanger.Models.ProfitHistory
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityProfitHistoryBinding
 import com.enfotrix.adminlifechanger.databinding.DialogDatepickerBinding
-import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
+import com.google.gson.Gson
 
-class ActivityProfitHistory : AppCompatActivity() {
+class ActivityProfitHistory : AppCompatActivity(), AdapterProfitHistory.OnItemClickListener {
     private lateinit var binding: ActivityProfitHistoryBinding
 
     private lateinit var utils: Utils
     private lateinit var mContext: Context
     private lateinit var constants: Constants
     private lateinit var sharedPrefManager: SharedPrefManager
-    private lateinit var listProfitHistory: List<ProfitModel>
+    private lateinit var listProfitHistory: List<ProfitHistory>
+    private lateinit var investorsList: List<User>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfitHistoryBinding.inflate(layoutInflater)
@@ -44,17 +44,20 @@ class ActivityProfitHistory : AppCompatActivity() {
         constants = Constants()
         sharedPrefManager = SharedPrefManager(mContext)
         binding.rvStatment.layoutManager = LinearLayoutManager(mContext)
-        setData()
-        listProfitHistory = sharedPrefManager.getProfitHistory().sortedByDescending { it.createdAt }
-        binding.pdfEstatment.setOnClickListener {
-            dialogWithdrawDetails()
-        }
+            setData()
+
+
+
+//        listProfitHistory = sharedPrefManager.getProfitHistory().sortedByDescending { it.createdAt }
+//        binding.pdfEstatment.setOnClickListener {
+//            dialogWithdrawDetails()
+//        }
     }
 
     private fun setData() {
 
         binding.rvStatment.adapter = AdapterProfitHistory(
-            sharedPrefManager.getProfitHistory().sortedByDescending { it.createdAt }, mContext)
+            sharedPrefManager.getProfitHistory().sortedByDescending { it.createdAt }, mContext,this)
 
     }
 
@@ -120,21 +123,37 @@ class ActivityProfitHistory : AppCompatActivity() {
         if (requestCode == 123 && resultCode == Activity.RESULT_OK) {
             data?.data?.let { uri ->
                 val outputStream = mContext.contentResolver.openOutputStream(uri)
-                if (outputStream != null) {
-                    val success = PdfProfitHistory(listProfitHistory!!).generatePdf(
-                        outputStream
-                    )
-                    outputStream.close()
-                    if (success == true) {
-                        Toast.makeText(mContext, "Saved successfully", Toast.LENGTH_SHORT)
-                            .show()
-                    } else {
-                        Toast.makeText(mContext, "Failed to save", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
+//                if (outputStream != null) {
+//                    val success = PdfProfitHistory(listProfitHistory!!).generatePdf(
+//                        outputStream
+//                    )
+//                    outputStream.close()
+//                    if (success == true) {
+//                        Toast.makeText(mContext, "Saved successfully", Toast.LENGTH_SHORT)
+//                            .show()
+//                    } else {
+//                        Toast.makeText(mContext, "Failed to save", Toast.LENGTH_SHORT)
+//                            .show()
+//                    }
+//                }
             }
         }
     }
+    override fun onItemClick(profitModel: ProfitHistory) {
+        val prfitModelJason = Gson().toJson(profitModel)
+
+        startActivity(
+            Intent(mContext, ActivityProfitDetails::class.java)
+                .putExtra("profitModel", prfitModelJason)
+        )
+
+    }
+
+    override fun onAssignClick(profitModel: ProfitHistory) {
+    }
+
+    override fun onRemoveClick(profitModel: ProfitHistory) {
+    }
+
 }
 
