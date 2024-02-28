@@ -173,7 +173,7 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
 
          }*/
 
-        getData()
+        //getData()
         binding.btnExclude.setOnClickListener {
             frombtn="remove"
             showClientDialog()
@@ -185,12 +185,12 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
 
 
 
-        binding.btnAddProfit.setOnClickListener{
-
-            val percentage = binding.etProfit.text.toString()
-//            addProfit(percentage.toDouble() / 100,percentage)
-
-        }
+//        binding.btnAddProfit.setOnClickListener{
+//
+//            val percentage = binding.etProfit.text.toString()
+////            addProfit(percentage.toDouble() / 100,percentage)
+//
+//        }
 
 
 
@@ -210,12 +210,11 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
                 val enteredPassword = passwordEditText.text.toString()
                 if (enteredPassword == "123789") {
                     Toast.makeText(mContext, "Success", Toast.LENGTH_SHORT).show()
-//                  addProfit(percentage.toDouble() / 100,percentage)
+                    addProfit(percentage.toDouble() / 100,percentage)
                     remarks=remarksEditText.text.toString()
+
                     alertDialog.dismiss()
 
-                    // Perform other actions as needed after successful password verification
-                    // ...
 
                 } else {
                     // Password is incorrect, show an error message or take appropriate action
@@ -268,6 +267,8 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
 
 
 
+
+
     private fun tempCode (){
 
 
@@ -288,27 +289,16 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
 
         // Deduct Profit
 
-
-
         //filtered_list_February_16_2024_Profit
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //Toast.makeText(mContext, sum.toString(), Toast.LENGTH_SHORT).show()
+
+
+
     }
+
+
+
     private fun tempGetTodayActiveInvestment (){
         //var list_February_16_2024_Profit = sharedPrefManager.getTransactionList().filter { it.type.equals(constants.TRANSACTION_TYPE_PROFIT) && it.createdAt.equals() }.count()
 
@@ -334,8 +324,10 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
             //val sum = filtered_list_February_16_2024_Profit.sumOf { it.amount.toIntOrNull() ?: 0 }
 
 
-
         Toast.makeText(mContext, filtered_list_February_23_2024_ActiveInvestment.count().toString(), Toast.LENGTH_SHORT).show()
+
+
+
     }
 
 
@@ -445,7 +437,7 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
         return false
     }
 
-
+    
 
 
     private fun deductProfit(selectedDay: Date) {
@@ -463,7 +455,6 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
             it.type == constants.TRANSACTION_TYPE_PROFIT &&
                     dateFormatter.format(it.createdAt.toDate()) == dateFormatter.format(selectedDay)
         }
-
 
 
         // loop for  all  investments
@@ -607,81 +598,85 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
 
     private fun addProfit(percentage: Double, percentage_: String) {
 
-        utils.startLoadingAnimation()
-
-        val totalInvestments = listInvestmentModel.size
-
-        for ((index, investmentModel) in listInvestmentModel.withIndex()) {
-
-            ///for notification
-            val User=sharedPrefManager.getUsersList().find { it.id.equals(investmentModel.investorID) }
-            val notificationData = "Dear ${User?.firstName}, Your previous profit of $"
-            if (User != null) {
-                addNotification(
-                    NotificationModel(
-                        "",
-                        User.id,
-                        getCurrentDateInFormat(),
-                        "Profit Credited",
-                        notificationData
-                    )
-                )
-            }
+        //utils.startLoadingAnimation()
 
 
-            val previousBalance = investmentModel.investmentBalance
-            val previousTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
-
-            var previousProfit = investmentModel.lastProfit
-
-            if (!previousBalance.isNullOrEmpty()) {
-
-
-
-                if(previousProfit.isNullOrEmpty()) previousProfit="0"
-
-                val previousBalance_ = previousBalance.toInt()
-                val previousProfit_ = previousProfit.toInt()
-                val profit = (previousBalance_ * percentage).toInt()
-                val newProfit = previousProfit_ + profit
-
-                investmentModel.lastProfit = newProfit.toString()
-                val newTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
-                profitCounter = profitCounter?.plus(profit.toInt())
-
-                val profitModel = TransactionModel(
-                    investmentModel.investorID,
-                    "Profit",
-                    "Approved",
-                    profit.toString(),  // Current (weekly) Profit
-                    "",
-                    previousTotalBalance.toString(), // Previous Total (Investment + profit + inactiveInvestment)
-                    "",
-                    "",
-                    newTotalBalance.toString(),  //  New Total (Investment + profit + inactiveInvestment)
-                    Timestamp.now(),
-                    Timestamp.now()
-                )
-
-
-
-                lifecycleScope.launch {
-                    val setInvestmentTask = investmentViewModel.setInvestment(investmentModel)
-                    val addTransactionTask = db.collection(constants.TRANSACTION_REQ_COLLECTION).add(profitModel)
-
-                    Tasks.whenAllComplete(setInvestmentTask, addTransactionTask)
-                        .addOnCompleteListener {
-
-                            if (index == totalInvestments - 1) {
-                                Toast.makeText(mContext, "Profit Added Successfully!", Toast.LENGTH_SHORT).show()
-                            }
-
-                        }
-                }
-            }
+        val filteredInvestmentList = listInvestmentModel.filter { investment ->
+            investorsList.any { investor -> investor.id == investment.investorID }
         }
+        val totalInvestments = filteredInvestmentList.size
 
-        saveProfitHistory(profitCounter)
+        Toast.makeText(mContext, totalInvestments.toString(), Toast.LENGTH_SHORT).show()
+//        for ((index, investmentModel) in filteredInvestmentList.withIndex()) {
+//
+//            ///for notification
+//            val User=investorsList.find { it.id.equals(investmentModel.investorID) }
+//            val notificationData = "Dear ${User?.firstName}, Your previous profit of $"
+//            if (User != null) {
+//                addNotification(
+//                    NotificationModel(
+//                        "",
+//                        User.id,
+//                        getCurrentDateInFormat(),
+//                        "Profit Credited",
+//                        notificationData
+//                    )
+//                )
+//            }
+//
+//
+//            val previousBalance = investmentModel.investmentBalance
+//            val previousTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
+//
+//            var previousProfit = investmentModel.lastProfit
+//
+//            if (!previousBalance.isNullOrEmpty()) {
+//
+//
+//
+//                if(previousProfit.isNullOrEmpty()) previousProfit="0"
+//
+//                val previousBalance_ = previousBalance.toInt()
+//                val previousProfit_ = previousProfit.toInt()
+//                val profit = (previousBalance_ * percentage).toInt()
+//                val newProfit = previousProfit_ + profit
+//
+//                investmentModel.lastProfit = newProfit.toString()
+//                val newTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
+//                profitCounter = profitCounter?.plus(profit.toInt())
+//
+//                val profitModel = TransactionModel(
+//                    investmentModel.investorID,
+//                    "Profit",
+//                    "Approved",
+//                    profit.toString(),  // Current (weekly) Profit
+//                    "",
+//                    previousTotalBalance.toString(), // Previous Total (Investment + profit + inactiveInvestment)
+//                    "",
+//                    "",
+//                    newTotalBalance.toString(),  //  New Total (Investment + profit + inactiveInvestment)
+//                    Timestamp.now(),
+//                    Timestamp.now()
+//                )
+//
+//
+//
+//                lifecycleScope.launch {
+//                    val setInvestmentTask = investmentViewModel.setInvestment(investmentModel)
+//                    val addTransactionTask = db.collection(constants.TRANSACTION_REQ_COLLECTION).add(profitModel)
+//
+//                    Tasks.whenAllComplete(setInvestmentTask, addTransactionTask)
+//                        .addOnCompleteListener {
+//
+//                            if (index == totalInvestments - 1) {
+//                                Toast.makeText(mContext, "Profit Added Successfully!", Toast.LENGTH_SHORT).show()
+//                            }
+//
+//                        }
+//                }
+//            }
+//        }
+//        saveProfitHistory(profitCounter)
 
     }
 
@@ -937,10 +932,10 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
         binding.included.text = investorsList.size.toString()
         investorsList = ArrayList(investorsList.filter { it.id != user.id })
         removedList.add(user)
-       updateAdapter()
+        updateAdapter()
     }
        private fun updateAdapter() {
-    binding.excluded.text = removedList.size.toString()
+        binding.excluded.text = removedList.size.toString()
         binding.included.text = investorsList.size.toString()
         val adapter = frombtn?.let {
             AdapterExcludeInvestors(constant.FROM_UN_ASSIGNED_FA, investorsList, this,

@@ -254,17 +254,26 @@ class SharedPrefManager(context: Context) {
         }
     }
 
+
+
     fun getAgentWithdrawList(): List<AgentWithdrawModel>{
+
 
         val json = sharedPref.getString("ListAgentWithdraw", "") ?: ""
         val type: Type = object : TypeToken<List<AgentWithdrawModel?>?>() {}.getType()
         //return Gson().fromJson(json, type)
+
         return if (!json.isNullOrEmpty()) {
             Gson().fromJson(json, type) ?: emptyList()
         } else {
             emptyList()
         }
+
     }
+
+
+
+
 
     fun saveNominee(nominee: ModelNominee) {
         /*val gson = Gson()
