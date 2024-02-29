@@ -102,4 +102,5 @@ class ActivityWithdrawRequest : AppCompatActivity() ,  TransactionsAdapter.OnIte
     override fun onDeleteClick(transactionModel: TransactionModel) {
     }
 
+
 }

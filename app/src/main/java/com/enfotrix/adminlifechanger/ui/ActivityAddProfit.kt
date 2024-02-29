@@ -19,6 +19,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.enfotrix.adminlifechanger.API.FCM
 import com.enfotrix.adminlifechanger.Adapters.AdapterExcludeInvestors
 import com.enfotrix.adminlifechanger.Constants
 import com.enfotrix.adminlifechanger.Models.FAViewModel
@@ -26,12 +27,12 @@ import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.InvestmentViewModel
 import com.enfotrix.adminlifechanger.Models.NotificationModel
 import com.enfotrix.adminlifechanger.Models.NotificationViewModel
+import com.enfotrix.adminlifechanger.Models.ProfitHistory
 import com.enfotrix.adminlifechanger.Models.ProfitModel
 import com.enfotrix.adminlifechanger.R
 import com.enfotrix.adminlifechanger.databinding.ActivityAddProfitBinding
 import com.enfotrix.lifechanger.Models.TransactionModel
 import java.util.*
-import java.util.Calendar.*
 import com.enfotrix.lifechanger.Models.UserViewModel
 import com.enfotrix.lifechanger.SharedPrefManager
 import com.enfotrix.lifechanger.Utils
@@ -44,7 +45,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.concurrent.CountDownLatch
 
 class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemClickListener{
 
@@ -86,6 +86,7 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
         constants= Constants()
         sharedPrefManager = SharedPrefManager(mContext)
         investorsList = sharedPrefManager.getUsersList().filter { it.status == constants.INVESTOR_STATUS_ACTIVE } as ArrayList<User>
+        listInvestmentModel= sharedPrefManager.getInvestmentList() as ArrayList<InvestmentModel>
         binding.included.text = investorsList.size.toString()
         binding.excluded.text = removedList?.size.toString()
         binding.availableProfit.text = sharedPrefManager.getInvestmentList()
@@ -112,7 +113,7 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
                 override fun onPinChecked(isValid: Boolean) {
                     if (isValid) {
                         Toast.makeText(mContext, "success", Toast.LENGTH_SHORT).show()
-                        // deductProfit(selectedDay)
+                         deductProfit(selectedDay)
                     } else {
                         Toast.makeText(mContext, "Enter valid pin please", Toast.LENGTH_SHORT).show()
                     }
@@ -125,7 +126,7 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
                 override fun onPinChecked(isValid: Boolean) {
                     if (isValid) {
                         Toast.makeText(mContext, "success", Toast.LENGTH_SHORT).show()
-                        // deleteProfitTransactions(selectedDay)
+                         deleteProfitTransactions(selectedDay)
                     } else {
                         Toast.makeText(mContext, "Enter valid pin please", Toast.LENGTH_SHORT).show()
                     }
@@ -138,7 +139,7 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
                 override fun onPinChecked(isValid: Boolean) {
                     if (isValid) {
                         Toast.makeText(mContext, "success", Toast.LENGTH_SHORT).show()
-                        // deleteProfitNotifications(selectedDay)
+                        deleteProfitNotifications(selectedDay)
                     } else {
                         Toast.makeText(mContext, "Enter valid pin please", Toast.LENGTH_SHORT).show()
                     }
@@ -165,15 +166,8 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
         //41//1111
 
 
-        /* binding.btnAccept.setOnClickListener{
 
-             if(intent.getStringExtra("from").toString().equals(constant.FROM_PENDING_WITHDRAW_REQ)) approvedWithdraw()
-             else approved()
-
-
-         }*/
-
-        //getData()
+        getData()
         binding.btnExclude.setOnClickListener {
             frombtn="remove"
             showClientDialog()
@@ -182,15 +176,6 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
             frombtn="select"
           showClientDialog()
         }
-
-
-
-//        binding.btnAddProfit.setOnClickListener{
-//
-//            val percentage = binding.etProfit.text.toString()
-////            addProfit(percentage.toDouble() / 100,percentage)
-//
-//        }
 
 
 
@@ -207,18 +192,17 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
             val remarksEditText = dialogView.findViewById<EditText>(R.id.etRemarks)
             val enterButton = dialogView.findViewById<Button>(R.id.btnEnter)
             enterButton.setOnClickListener {
+                remarks=remarksEditText.text.toString()
                 val enteredPassword = passwordEditText.text.toString()
-                if (enteredPassword == "123789") {
+                if (enteredPassword != "123789"&& remarks!!.isEmpty()) {
+                    Toast.makeText(mContext, "Please Enter Remarks", Toast.LENGTH_SHORT).show()}
+
+
+                 else {
                     Toast.makeText(mContext, "Success", Toast.LENGTH_SHORT).show()
                     addProfit(percentage.toDouble() / 100,percentage)
-                    remarks=remarksEditText.text.toString()
-
                     alertDialog.dismiss()
 
-
-                } else {
-                    // Password is incorrect, show an error message or take appropriate action
-                    Toast.makeText(mContext, "Incorrect password. Please try again.", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -240,7 +224,7 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
                 override fun onPinChecked(isValid: Boolean) {
                     if (isValid) {
                         Toast.makeText(mContext, "success", Toast.LENGTH_SHORT).show()
-                        //   convertProfit()
+                          convertProfit()
                     } else {
                         Toast.makeText(mContext, "Enter valid pin please", Toast.LENGTH_SHORT).show()
                     }
@@ -414,8 +398,8 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
                     "remove"
                 )
                 rvInvestors.adapter = adapter
-                investorsList.clear()
-                investorsList.addAll(filteredList)
+//                investorsList.clear()
+//                investorsList.addAll(filteredList)
             }
             "select" -> {
                 val adapter = AdapterExcludeInvestors(
@@ -425,8 +409,8 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
                     "select"
                 )
                 rvInvestors.adapter = adapter
-                investorsList.clear()
-                investorsList.addAll(filteredList)
+//                investorsList.clear()
+//                investorsList.addAll(filteredList)
             }
         }
     }
@@ -598,110 +582,124 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
 
     private fun addProfit(percentage: Double, percentage_: String) {
 
-        //utils.startLoadingAnimation()
-
+      utils.startLoadingAnimation()
 
         val filteredInvestmentList = listInvestmentModel.filter { investment ->
             investorsList.any { investor -> investor.id == investment.investorID }
         }
         val totalInvestments = filteredInvestmentList.size
 
-        Toast.makeText(mContext, totalInvestments.toString(), Toast.LENGTH_SHORT).show()
-//        for ((index, investmentModel) in filteredInvestmentList.withIndex()) {
-//
-//            ///for notification
-//            val User=investorsList.find { it.id.equals(investmentModel.investorID) }
-//            val notificationData = "Dear ${User?.firstName}, Your previous profit of $"
-//            if (User != null) {
-//                addNotification(
-//                    NotificationModel(
-//                        "",
-//                        User.id,
-//                        getCurrentDateInFormat(),
-//                        "Profit Credited",
-//                        notificationData
-//                    )
-//                )
-//            }
-//
-//
-//            val previousBalance = investmentModel.investmentBalance
-//            val previousTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
-//
-//            var previousProfit = investmentModel.lastProfit
-//
-//            if (!previousBalance.isNullOrEmpty()) {
-//
-//
-//
-//                if(previousProfit.isNullOrEmpty()) previousProfit="0"
-//
-//                val previousBalance_ = previousBalance.toInt()
-//                val previousProfit_ = previousProfit.toInt()
-//                val profit = (previousBalance_ * percentage).toInt()
-//                val newProfit = previousProfit_ + profit
-//
-//                investmentModel.lastProfit = newProfit.toString()
-//                val newTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
-//                profitCounter = profitCounter?.plus(profit.toInt())
-//
-//                val profitModel = TransactionModel(
-//                    investmentModel.investorID,
-//                    "Profit",
-//                    "Approved",
-//                    profit.toString(),  // Current (weekly) Profit
-//                    "",
-//                    previousTotalBalance.toString(), // Previous Total (Investment + profit + inactiveInvestment)
-//                    "",
-//                    "",
-//                    newTotalBalance.toString(),  //  New Total (Investment + profit + inactiveInvestment)
-//                    Timestamp.now(),
-//                    Timestamp.now()
-//                )
-//
-//
-//
-//                lifecycleScope.launch {
-//                    val setInvestmentTask = investmentViewModel.setInvestment(investmentModel)
-//                    val addTransactionTask = db.collection(constants.TRANSACTION_REQ_COLLECTION).add(profitModel)
-//
-//                    Tasks.whenAllComplete(setInvestmentTask, addTransactionTask)
-//                        .addOnCompleteListener {
-//
-//                            if (index == totalInvestments - 1) {
-//                                Toast.makeText(mContext, "Profit Added Successfully!", Toast.LENGTH_SHORT).show()
-//                            }
-//
-//                        }
-//                }
-//            }
-//        }
-//        saveProfitHistory(profitCounter)
+        Toast.makeText(mContext, "invest$totalInvestments", Toast.LENGTH_SHORT).show()
+        for ((index, investmentModel) in filteredInvestmentList.withIndex()) {
+
+
+
+
+            val previousBalance = investmentModel.investmentBalance
+            val previousTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
+
+            var previousProfit = investmentModel.lastProfit
+
+            if (!previousBalance.isNullOrEmpty()) {
+
+
+
+                if(previousProfit.isNullOrEmpty()) previousProfit="0"
+
+                val previousBalance_ = previousBalance.toInt()
+                val previousProfit_ = previousProfit.toInt()
+                val profit = (previousBalance_ * percentage).toInt()
+                val newProfit = previousProfit_ + profit
+
+                investmentModel.lastProfit = newProfit.toString()
+                val newTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
+//                   profitCounter = profitCounter?.plus(profit.toInt()) ?: profit.toInt()
+                profitCounter = (profitCounter ?: 0) + profit.toInt()
+                //for notification
+                val User=investorsList.find { it.id.equals(investmentModel.investorID) }
+                val notificationData = "Dear ${User?.firstName}, The profit of ${profit} has been credited to your account"
+                if (User != null) {
+                    addNotification(
+                        NotificationModel(
+                            "",
+                            User.id,
+                            getCurrentDateInFormat(),
+                            "Profit Credited",
+                            notificationData
+                        ),
+ user
+                    )
+                }
+
+                val profitModel = TransactionModel(
+                    investmentModel.investorID,
+                    "Profit",
+                    "Approved",
+                    profit.toString(),  // Current (weekly) Profit
+                    "",
+                    previousTotalBalance.toString(), // Previous Total (Investment + profit + inactiveInvestment)
+                    "",
+                    "",
+                    newTotalBalance.toString(),  //  New Total (Investment + profit + inactiveInvestment)
+                    Timestamp.now(),
+                    Timestamp.now()
+                )
+
+
+                lifecycleScope.launch {
+                    val setInvestmentTask = investmentViewModel.setInvestment(investmentModel)
+                    val addTransactionTask = db.collection(constants.TRANSACTION_REQ_COLLECTION).add(profitModel)
+
+                    Tasks.whenAllComplete(setInvestmentTask, addTransactionTask)
+                        .addOnCompleteListener {
+                            if (index == totalInvestments - 1) {
+                                utils.endLoadingAnimation()
+                                saveProfitHistory(profitCounter,percentage_)
+                            }
+
+
+
+                        }
+                }
+            }
+        }
 
     }
 
-    private fun saveProfitHistory(profit_counter: Int?) {
-//        val lastProfitModel = sharedPrefManager.getProfitHistory().lastOrNull()
-////        profitModel?.previousProfit= lastProfitModel?.newProfit.toString()
-////        profitModel?.newProfit=profit_counter.toString()
-////        profitModel?.remarks= remarks.toString()
-//        lifecycleScope.launch {
-//            investmentViewModel.setProfitHistory(ProfitModel("", lastProfitModel?.newProfit.toString(),profit_counter.toString(),remarks!!)).addOnCompleteListener {task->
-//                if(task.isSuccessful){
-//                    utils.endLoadingAnimation()
-//
-//                }
-//                else
-//                {
-//                    utils.endLoadingAnimation()
-//                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
-//
-//
-//
-//
+    private fun saveProfitHistory(newProfitAmount: Int?, newProfitPercentage: String) {
+        var ActiveInvestment =sharedPrefManager. getInvestmentList().sumOf {
+            it.investmentBalance.takeIf { it.isNotBlank() }?.toInt() ?: 0
+        }.toInt()
+        var totalProfit =
+            sharedPrefManager. getInvestmentList().sumOf { it.lastProfit.takeIf { it.isNotBlank() }?.toInt() ?: 0 }
+                .toInt()
+        var InActiveInvestment =
+            sharedPrefManager. getInvestmentList().sumOf { it.lastInvestment.takeIf { it.isNotBlank() }?.toInt() ?: 0 }
+                .toInt()
+        var totalSum = ActiveInvestment + InActiveInvestment + totalProfit
+
+
+
+        lifecycleScope.launch {
+            investmentViewModel.setProfitHistory(ProfitHistory("",
+                totalProfit.toString(),ActiveInvestment.toString(),totalSum.toString(), InActiveInvestment.toString(),investorsList?.size.toString()
+                ,newProfitAmount.toString(),newProfitPercentage.toString(),remarks!!,
+                Timestamp.now())).addOnCompleteListener { task->
+                if(task.isSuccessful){
+                    utils.endLoadingAnimation()
+                    Toast.makeText(mContext, "Profit Added Successfully!", Toast.LENGTH_SHORT).show()
+                }
+                else
+                {
+                    utils.endLoadingAnimation()
+                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+
+
+
 
 
     }
@@ -710,10 +708,16 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
     fun getTextFromInvestment(value: String?): String {
         return if (value.isNullOrEmpty()) "0" else value
     }
-    private fun addNotification(notificationModel: NotificationModel) {
+    private fun addNotification(notificationModel: NotificationModel, user_: User) {
         lifecycleScope.launch {
             try {
                 notificationViewModel.setNotification(notificationModel).await()
+                FCM().sendFCMNotification(
+                    user_.userdevicetoken,
+                    notificationModel.notiTitle,
+                    notificationModel.notiData
+                )
+                Toast.makeText(mContext, "Notification sent!!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Toast.makeText(mContext, "Failed to send notification", Toast.LENGTH_SHORT).show()
                 e.printStackTrace()
@@ -743,8 +747,9 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
                         User.id,
                         getCurrentDateInFormat(),
                         "Profit Converted to Investment",
-                        notificationData
-                    )
+                        notificationData,
+
+                    ), user
                 )
             }
 
@@ -892,7 +897,6 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     utils.endLoadingAnimation()
-
                     if(task.result.size()>0){
 
                         var balance:Int=0
@@ -993,6 +997,12 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
     interface PinCheckCallback {
         fun onPinChecked(isValid: Boolean)
     }
+
+
+
+
+
+
 
 
 }

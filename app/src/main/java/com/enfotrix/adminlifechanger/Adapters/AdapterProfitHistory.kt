@@ -47,6 +47,7 @@ class AdapterProfitHistory(
             itemBinding.tvinactiveInvestments.text =profitModel.inActiveInvestments
             itemBinding.newProfitAmount.text =profitModel.newProfitAmount
             itemBinding.etRemarks.text =profitModel.remarks
+            itemBinding.oldProfitAmount.text =profitModel.oldTotalProfit
             itemBinding.investorsStrength.text=getStrength(profitModel)
             val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
             itemBinding.date.text = dateFormat.format(profitModel.createdAt.toDate())

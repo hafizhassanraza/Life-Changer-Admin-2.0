@@ -344,7 +344,6 @@ class ActivityFA : AppCompatActivity(), AdapterFA.OnItemClickListener {
             }
             AdapterFA(filteredModels, this@ActivityFA)
         }
-
         binding.rvFA.adapter = filteredList
     }
 
@@ -363,7 +362,6 @@ class ActivityFA : AppCompatActivity(), AdapterFA.OnItemClickListener {
                                     ModelBankAccount::class.java
                                 ).apply { docID = document.id })
                             sharedPrefManager.putAccountList(list)
-
                         }
                     } else Toast.makeText(
                         mContext,

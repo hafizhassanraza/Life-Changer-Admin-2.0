@@ -181,7 +181,6 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
         transactionModel.status=constants.TRANSACTION_STATUS_APPROVED
         transactionModel.transactionAt= Timestamp.now()
         var transactionAmount = transactionModel?.amount?.toInt() ?: 0
-
         investmentModel?.let {
             var investment = it.investmentBalance.toInt()
 
@@ -233,10 +232,8 @@ class ActivityInvestmentReqDetails : AppCompatActivity() {
 
 
         utils.startLoadingAnimation()
-
         db.collection(constants.INVESTMENT_COLLECTION).document(investmentModel.investorID).set(investmentModel)
             .addOnSuccessListener {
-
                 db.collection(constants.TRANSACTION_REQ_COLLECTION).document(transactionModel.id).set(transactionModel)
                     .addOnSuccessListener {
 

@@ -12,6 +12,7 @@ import com.enfotrix.adminlifechanger.Models.AgentWithdrawModel
 import com.enfotrix.adminlifechanger.Models.InvestmentModel
 import com.enfotrix.adminlifechanger.Models.ModelFA
 import com.enfotrix.adminlifechanger.Models.NotificationModel
+import com.enfotrix.adminlifechanger.Models.ProfitHistory
 import com.enfotrix.adminlifechanger.Models.ProfitModel
 import com.enfotrix.lifechanger.Models.ModelBankAccount
 import com.enfotrix.lifechanger.Models.ModelNominee
@@ -515,7 +516,7 @@ modelFA.id=documents.id
 
     }
 
-    fun setProfitHistory(profitModel: ProfitModel): Task<DocumentReference> {
+    fun setProfitHistory(profitModel: ProfitHistory): Task<DocumentReference> {
         return  ProfitCollection.add(profitModel)
 
     }

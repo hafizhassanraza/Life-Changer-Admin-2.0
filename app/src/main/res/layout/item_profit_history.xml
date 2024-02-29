@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/white"
     app:cardElevation="8dp"
+    android:layout_marginTop="10dp"
     android:id="@+id/lay"
     android:layout_marginRight="4dp"
     app:cardCornerRadius="12dp"
@@ -88,12 +89,34 @@
             android:layout_marginLeft="10dp"
             android:textColor="@color/gray"/>
         <TextView
+            android:id="@+id/tv10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Old Profit:"
+            android:layout_marginTop="7dp"
+            android:layout_below="@id/tvinactiveInvestments"
+            android:layout_marginLeft="20dp"
+            android:textSize="12sp"
+            android:textColor="@color/primary"/>
+        <TextView
+            android:id="@+id/oldProfitAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="344"
+            android:layout_marginTop="8dp"
+            android:textSize="12sp"
+            android:layout_marginLeft="3dp"
+            android:layout_below="@id/tvinactiveInvestments"
+            android:layout_toEndOf="@id/tv4"
+            android:textColor="@color/gray"/>
+
+        <TextView
             android:id="@+id/tv4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New profit amount:"
             android:layout_marginTop="8dp"
-            android:layout_below="@id/tvinactiveInvestments"
+            android:layout_below="@id/tv10"
             android:textSize="12sp"
             android:layout_marginLeft="20dp"
             android:textColor="@color/primary"/>
@@ -105,7 +128,7 @@
             android:layout_marginTop="8dp"
             android:textSize="12sp"
             android:layout_marginLeft="3dp"
-            android:layout_below="@id/tvinactiveInvestments"
+            android:layout_below="@id/oldProfitAmount"
             android:layout_toEndOf="@id/tv4"
             android:textColor="@color/gray"/>
 
