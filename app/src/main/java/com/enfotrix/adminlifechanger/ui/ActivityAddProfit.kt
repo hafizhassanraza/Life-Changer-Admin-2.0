@@ -182,38 +182,38 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
 
         binding.btnAddProfit.setOnClickListener {
             val percentage = binding.etProfit.text.toString()
-            val dialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_varify_profit_pin, null)
+            val check: Double? = percentage.toDoubleOrNull()
+            if(check==null){
+                Toast.makeText(mContext, "Please Enter Valid Amount", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                val dialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_varify_profit_pin, null)
+                val builder = AlertDialog.Builder(mContext)
+                builder.setView(dialogView)
+                val alertDialog = builder.create()
+                alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                val passwordEditText = dialogView.findViewById<EditText>(R.id.password)
+                val remarksEditText = dialogView.findViewById<EditText>(R.id.etRemarks)
+                val enterButton = dialogView.findViewById<Button>(R.id.btnEnter)
+                enterButton.setOnClickListener {
+                    remarks=remarksEditText.text.toString()
+                    val enteredPassword = passwordEditText.text.toString()
+                    Toast.makeText(mContext, "percentage $percentage", Toast.LENGTH_SHORT).show()
+                    if (enteredPassword != "123789"&& remarks!!.isEmpty()) {
+                        Toast.makeText(mContext, "Please Enter Remarks", Toast.LENGTH_SHORT).show()
+                    }
 
-            val builder = AlertDialog.Builder(mContext)
-            builder.setView(dialogView)
-            val alertDialog = builder.create()
-            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            val passwordEditText = dialogView.findViewById<EditText>(R.id.password)
-            val remarksEditText = dialogView.findViewById<EditText>(R.id.etRemarks)
-            val enterButton = dialogView.findViewById<Button>(R.id.btnEnter)
-            enterButton.setOnClickListener {
-                remarks=remarksEditText.text.toString()
-                val enteredPassword = passwordEditText.text.toString()
-                if (enteredPassword != "123789"&& remarks!!.isEmpty()) {
-                    Toast.makeText(mContext, "Please Enter Remarks", Toast.LENGTH_SHORT).show()}
-
-
-                 else {
-                    Toast.makeText(mContext, "Success", Toast.LENGTH_SHORT).show()
-                    addProfit(percentage.toDouble() / 100,percentage)
-                    alertDialog.dismiss()
-
+                    else {
+                        Toast.makeText(mContext, "Success", Toast.LENGTH_SHORT).show()
+                        addProfit(percentage.toDouble() / 100,percentage)
+                        alertDialog.dismiss()
+                    }
                 }
+
+                alertDialog.show()
             }
 
-            // Show the dialog
-            alertDialog.show()
         }
-
-
-
-
-
 
 
 

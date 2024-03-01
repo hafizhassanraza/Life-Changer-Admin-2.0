@@ -116,7 +116,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
-                    android:inputType="number"
                     android:hint="Percentage"/>
 
                 <Button
@@ -124,6 +123,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Add Profit"
+                    android:inputType="numberDecimal"
                     android:layout_marginHorizontal="10dp"/>
                 <Button
                     android:id="@+id/btnProfitHistory"
