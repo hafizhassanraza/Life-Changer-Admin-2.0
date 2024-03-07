@@ -53,6 +53,7 @@ class Repo(val context: Context) {
     private val NomineesCollection = db.collection(constants.NOMINEE_COLLECTION)
     private val AccountsCollection = db.collection(constants.ACCOUNTS_COLLECTION)
     private val InvestmentCollection = db.collection(constants.INVESTMENT_COLLECTION)
+    private val TestInvestmentCollection = db.collection(constants.TEST_INVESTMENT_COLLECTION)
     private val TransactionsReqCollection = db.collection(constants.TRANSACTION_REQ_COLLECTION)
     private val ProfitTaxCollection = db.collection(constants.PROFIT_TAX_COLLECTION)
     private val WithdrawCollection = db.collection(constants.WITHDRAW_COLLECTION)
@@ -317,6 +318,14 @@ modelFA.id=documents.id
         return InvestmentCollection.document(investment.investorID).set(investment)
 
     }
+
+  suspend fun setTestInvestment(investment: InvestmentModel): Task<Void> {
+        return TestInvestmentCollection.document(investment.investorID).set(investment)
+
+    }
+
+
+
     suspend fun setAgentWithdraw(agentWithdrawModel: AgentWithdrawModel): Task<Void> {
 
         return WithdrawCollection.document(agentWithdrawModel.id).set(agentWithdrawModel)

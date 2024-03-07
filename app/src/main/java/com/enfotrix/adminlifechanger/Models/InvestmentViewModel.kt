@@ -28,6 +28,9 @@ class InvestmentViewModel(context: Application) : AndroidViewModel(context) {
     suspend fun setInvestment(investment: InvestmentModel): Task<Void> {
         return userRepo.setInvestment(investment)
     }
+    suspend fun setTestInvestment(investment: InvestmentModel): Task<Void> {
+        return userRepo.setTestInvestment(investment)
+    }
     suspend fun setProfitHistory(profit: ProfitHistory): Task<DocumentReference> {
         return userRepo.setProfitHistory(profit)
     }
