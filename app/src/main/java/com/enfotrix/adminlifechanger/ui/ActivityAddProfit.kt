@@ -66,13 +66,14 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
     private lateinit var user: User
     private var profitCounter:Int?=null
     private var remarks:String?=null
-    private  var listInvestmentModel= ArrayList<InvestmentModel>()
+    private lateinit var listInvestmentModel: List<InvestmentModel>
     private lateinit var rvInvestors: RecyclerView
     private var investorsList = ArrayList<User>()
     private var removedList = ArrayList<User>()
     private lateinit var selectedDay: Date
     private lateinit var dialogPinUpdate: Dialog
 
+    
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,7 +87,7 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
         constants= Constants()
         sharedPrefManager = SharedPrefManager(mContext)
         investorsList = sharedPrefManager.getUsersList().filter { it.status == constants.INVESTOR_STATUS_ACTIVE } as ArrayList<User>
-        listInvestmentModel= sharedPrefManager.getInvestmentList() as ArrayList<InvestmentModel>
+        listInvestmentModel= sharedPrefManager.getInvestmentList()
         binding.included.text = investorsList.size.toString()
         binding.excluded.text = removedList?.size.toString()
         binding.availableProfit.text = sharedPrefManager.getInvestmentList()
@@ -167,7 +168,7 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
 
 
 
-        getData()
+        //getData()
         binding.btnExclude.setOnClickListener {
             frombtn="remove"
             showClientDialog()
@@ -199,14 +200,15 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
                     remarks=remarksEditText.text.toString()
                     val enteredPassword = passwordEditText.text.toString()
                     Toast.makeText(mContext, "percentage $percentage", Toast.LENGTH_SHORT).show()
-                    if (enteredPassword != "123789"&& remarks!!.isEmpty()) {
+
+                    if (enteredPassword != "123789" && remarks!!.isEmpty()) {
                         Toast.makeText(mContext, "Please Enter Remarks", Toast.LENGTH_SHORT).show()
                     }
-
                     else {
-                        Toast.makeText(mContext, "Success", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(mContext, "Success", Toast.LENGTH_SHORT).show()
+                        //alertDialog.dismiss()
                         addProfit(percentage.toDouble() / 100,percentage)
-                        alertDialog.dismiss()
+
                     }
                 }
 
@@ -568,7 +570,6 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
                         if (index == totalTransactions - 1) {
 
                             utils.endLoadingAnimation()
-
                             Toast.makeText(mContext, "Notification Deleted Successfully!", Toast.LENGTH_SHORT).show()
 
                         }
@@ -584,12 +585,19 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
 
       utils.startLoadingAnimation()
 
+
+        //Toast.makeText(mContext, listInvestmentModel.size.toString(), Toast.LENGTH_SHORT).show()
+
+
+
         val filteredInvestmentList = listInvestmentModel.filter { investment ->
             investorsList.any { investor -> investor.id == investment.investorID }
         }
         val totalInvestments = filteredInvestmentList.size
 
-        Toast.makeText(mContext, "invest$totalInvestments", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(mContext, "invest$totalInvestments", Toast.LENGTH_SHORT).show()
+
+
         for ((index, investmentModel) in filteredInvestmentList.withIndex()) {
 
 
@@ -614,22 +622,23 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
                 investmentModel.lastProfit = newProfit.toString()
                 val newTotalBalance = getTextFromInvestment(investmentModel.investmentBalance).toDouble()+ getTextFromInvestment(investmentModel.lastProfit).toDouble() + getTextFromInvestment(investmentModel.lastInvestment).toDouble()
 //                   profitCounter = profitCounter?.plus(profit.toInt()) ?: profit.toInt()
+
                 profitCounter = (profitCounter ?: 0) + profit.toInt()
+
                 //for notification
-                val User=investorsList.find { it.id.equals(investmentModel.investorID) }
-                val notificationData = "Dear ${User?.firstName}, The profit of ${profit} has been credited to your account"
-                if (User != null) {
-                    addNotification(
-                        NotificationModel(
-                            "",
-                            User.id,
-                            getCurrentDateInFormat(),
-                            "Profit Credited",
-                            notificationData
-                        ),
- user
-                    )
-                }
+//                val User=investorsList.find { it.id.equals(investmentModel.investorID) }
+//                val notificationData = "Dear ${User?.firstName}, The profit of ${profit} has been credited to your account"
+//                if (User != null) {
+//                    addNotification(
+//                        NotificationModel(
+//                            "",
+//                            User.id,
+//                            getCurrentDateInFormat(),
+//                            "Profit Credited",
+//                            notificationData
+//                        ), user
+//                    )
+//                }
 
                 val profitModel = TransactionModel(
                     investmentModel.investorID,
@@ -656,8 +665,6 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
                                 utils.endLoadingAnimation()
                                 saveProfitHistory(profitCounter,percentage_)
                             }
-
-
 
                         }
                 }
@@ -892,32 +899,32 @@ class ActivityAddProfit : AppCompatActivity() , AdapterExcludeInvestors.OnItemCl
 
         }*/
 
-    private fun getData() {
-        db.collection(constants.INVESTMENT_COLLECTION).get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    utils.endLoadingAnimation()
-                    if(task.result.size()>0){
-
-                        var balance:Int=0
-                        for (document in task.result){
-                            var investmentModel=document.toObject(InvestmentModel::class.java)
-                            listInvestmentModel.add( document.toObject(InvestmentModel::class.java))
-                            if (investmentModel!=null) balance=balance+ investmentModel.investmentBalance.toInt()
-                        }
-
-
-
-                    }
-                }
-                else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
-
-            }
-            .addOnFailureListener{
-                Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
-
-            }
-    }
+//    private fun getData() {
+//        db.collection(constants.INVESTMENT_COLLECTION).get()
+//            .addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    utils.endLoadingAnimation()
+//                    if(task.result.size()>0){
+//
+//                        var balance:Int=0
+//                        for (document in task.result){
+//                            var investmentModel=document.toObject(InvestmentModel::class.java)
+//                            listInvestmentModel.add( document.toObject(InvestmentModel::class.java))
+//                            if (investmentModel!=null) balance=balance+ investmentModel.investmentBalance.toInt()
+//                        }
+//
+//
+//
+//                    }
+//                }
+//                else Toast.makeText(mContext, constants.SOMETHING_WENT_WRONG_MESSAGE, Toast.LENGTH_SHORT).show()
+//
+//            }
+//            .addOnFailureListener{
+//                Toast.makeText(mContext, it.message+"", Toast.LENGTH_SHORT).show()
+//
+//            }
+//    }
 
 
 
